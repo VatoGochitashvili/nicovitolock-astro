@@ -9,21 +9,58 @@ interface Props {
   service?: string;
   /** Preselect an area */
   area?: string;
+  /** Hide the heading/intro (sidebar use) */
   compact?: boolean;
+  /**
+   * 'full'  — every field (contact page)
+   * 'short' — name, phone, service only. Fewer fields converts better in a
+   *           hero, where the visitor has not committed to anything yet.
+   */
+  variant?: 'full' | 'short';
+  /** Dark card for placing on a light surface */
+  tone?: 'light' | 'dark';
+  class?: string;
 }
-const { service = '', area = '', compact = false } = Astro.props;
+const {
+  service = '',
+  area = '',
+  compact = false,
+  variant = 'full',
+  tone = 'light',
+  class: className = '',
+} = Astro.props;
+
+const short = variant === 'short';
+
+// Unique per instance so two forms can coexist on one page. Derived from the
+// props rather than randomised, so the markup stays byte-stable across builds.
+const uid =
+  [variant, service, area]
+    .filter(Boolean)
+    .join('-')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '') || 'main';
 
 const brooklyn = serviceAreas.filter((a) => a.region === 'Brooklyn');
 const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
+
+const field =
+  'w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition';
+const label = 'block text-sm font-bold text-navy-900 mb-1.5';
 ---
 <form
-  id="quote-form"
-  class="card p-6 md:p-8"
+  data-quote-form
+  id={`quote-form-${uid}`}
+  class:list={[
+    tone === 'dark' ? 'bg-white rounded-xl p-6 md:p-7 shadow-2xl' : 'card p-6 md:p-8',
+    className,
+  ]}
   method="POST"
   action="/api/contact"
   novalidate
 >
-  {!compact && (
+  {!compact && !short && (
     <>
       <h2 class="display text-navy-900 text-2xl">Request a quote or callback</h2>
       <p class="mt-2 text-muted text-[0.95rem]">
@@ -33,44 +70,49 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
     </>
   )}
 
-  <div class="mt-6 grid gap-4 sm:grid-cols-2">
-    <div class="sm:col-span-1">
-      <label for="qf-name" class="block text-sm font-bold text-navy-900 mb-1.5">
+  {short && (
+    <>
+      <h2 class="display text-navy-900 text-[1.45rem] leading-tight">Get a price in 2 minutes</h2>
+      <p class="mt-1.5 text-muted text-[0.9rem]">
+        Tell us what you need and we'll call you straight back — usually within minutes.
+      </p>
+    </>
+  )}
+
+  <div class:list={['grid gap-4', short ? 'mt-5' : 'mt-6 sm:grid-cols-2']}>
+    <div>
+      <label for={`qf-name-${uid}`} class={label}>
         Name <span class="text-brick-500">*</span>
       </label>
       <input
-        id="qf-name" name="name" type="text" required autocomplete="name"
-        class="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition"
-        placeholder="Your name"
+        id={`qf-name-${uid}`} name="name" type="text" required autocomplete="name"
+        class={field} placeholder="Your name"
       />
     </div>
 
-    <div class="sm:col-span-1">
-      <label for="qf-phone" class="block text-sm font-bold text-navy-900 mb-1.5">
+    <div>
+      <label for={`qf-phone-${uid}`} class={label}>
         Phone <span class="text-brick-500">*</span>
       </label>
       <input
-        id="qf-phone" name="phone" type="tel" required autocomplete="tel"
-        class="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition"
-        placeholder="(347) 000-0000"
+        id={`qf-phone-${uid}`} name="phone" type="tel" required autocomplete="tel"
+        class={field} placeholder="(347) 000-0000"
       />
     </div>
 
-    <div class="sm:col-span-2">
-      <label for="qf-email" class="block text-sm font-bold text-navy-900 mb-1.5">Email</label>
-      <input
-        id="qf-email" name="email" type="email" autocomplete="email"
-        class="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition"
-        placeholder="you@example.com (optional)"
-      />
-    </div>
+    {!short && (
+      <div class="sm:col-span-2">
+        <label for={`qf-email-${uid}`} class={label}>Email</label>
+        <input
+          id={`qf-email-${uid}`} name="email" type="email" autocomplete="email"
+          class={field} placeholder="you@example.com (optional)"
+        />
+      </div>
+    )}
 
-    <div class="sm:col-span-1">
-      <label for="qf-service" class="block text-sm font-bold text-navy-900 mb-1.5">What do you need?</label>
-      <select
-        id="qf-service" name="service"
-        class="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition"
-      >
+    <div>
+      <label for={`qf-service-${uid}`} class={label}>What do you need?</label>
+      <select id={`qf-service-${uid}`} name="service" class={field}>
         <option value="">Select a service…</option>
         {services.map((s) => (
           <option value={s.name} selected={s.slug === service || s.name === service}>{s.name}</option>
@@ -79,12 +121,9 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
       </select>
     </div>
 
-    <div class="sm:col-span-1">
-      <label for="qf-area" class="block text-sm font-bold text-navy-900 mb-1.5">Where are you?</label>
-      <select
-        id="qf-area" name="area"
-        class="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition"
-      >
+    <div>
+      <label for={`qf-area-${uid}`} class={label}>Where are you?</label>
+      <select id={`qf-area-${uid}`} name="area" class={field}>
         <option value="">Select your neighborhood…</option>
         <optgroup label="Brooklyn">
           {brooklyn.map((a) => (
@@ -99,43 +138,61 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
       </select>
     </div>
 
-    <div class="sm:col-span-2">
-      <label for="qf-message" class="block text-sm font-bold text-navy-900 mb-1.5">Details</label>
-      <textarea
-        id="qf-message" name="message" rows="4"
-        class="w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition resize-y"
-        placeholder="Tell us about the door, the lock, or the car — the more detail, the more accurate the price."
-      ></textarea>
-    </div>
+    {!short && (
+      <div class="sm:col-span-2">
+        <label for={`qf-message-${uid}`} class={label}>Details</label>
+        <textarea
+          id={`qf-message-${uid}`} name="message" rows="4"
+          class:list={[field, 'resize-y']}
+          placeholder="Tell us about the door, the lock, or the car — the more detail, the more accurate the price."
+        ></textarea>
+      </div>
+    )}
   </div>
 
   <!-- honeypot: bots fill this, humans never see it -->
   <div class="hidden" aria-hidden="true">
-    <label for="qf-company">Company</label>
-    <input id="qf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+    <label for={`qf-company-${uid}`}>Company</label>
+    <input id={`qf-company-${uid}`} name="company" type="text" tabindex="-1" autocomplete="off" />
   </div>
 
-  <button type="submit" class="btn btn-brass w-full mt-6" id="qf-submit">
+  <button type="submit" class="btn btn-brass w-full mt-5" data-qf-submit>
     <Icon name="arrow" size={18} />
-    Send request
+    {short ? 'Get my price' : 'Send request'}
   </button>
 
-  <p class="mt-3 text-xs text-muted text-center">
-    We reply during business hours — every day, 7 AM to 11 PM. For anything urgent, call.
-  </p>
+  {short ? (
+    <p class="mt-3 text-center text-[0.82rem] text-muted">
+      Or call now —
+      <a href={`tel:${business.phoneHref}`} class="link-brass" data-call-cta="hero-form">
+        {business.phoneDisplay}
+      </a>
+    </p>
+  ) : (
+    <p class="mt-3 text-xs text-muted text-center">
+      We reply during business hours — every day, 7 AM to 11 PM. For anything urgent, call.
+    </p>
+  )}
 
-  <div id="qf-status" class="mt-4 hidden rounded-lg px-4 py-3 text-sm" role="status" aria-live="polite"></div>
+  <div data-qf-status class="mt-4 hidden rounded-lg px-4 py-3 text-sm" role="status" aria-live="polite"></div>
 </form>
 
 <script is:inline define:vars={{ phone: business.phoneDisplay, phoneHref: business.phoneHref, email: business.email }}>
   (function () {
-    function initForm() {
-      var form = document.getElementById('quote-form');
-      if (!form || form.dataset.bound) return;
+    // Bind EVERY form on the page, not a single hardcoded id — the homepage
+    // hero and a sidebar form can both be present.
+    function initForms() {
+      var forms = document.querySelectorAll('form[data-quote-form]');
+      for (var i = 0; i < forms.length; i++) bindForm(forms[i]);
+    }
+
+    function bindForm(form) {
+      if (form.dataset.bound) return;
       form.dataset.bound = '1';
 
-      var status = document.getElementById('qf-status');
-      var submit = document.getElementById('qf-submit');
+      var status = form.querySelector('[data-qf-status]');
+      var submit = form.querySelector('[data-qf-submit]');
+      var submitLabel = submit ? submit.innerHTML : '';
 
       function show(kind, html) {
         status.className =
@@ -161,9 +218,10 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
         submit.disabled = true;
         submit.textContent = 'Sending…';
 
-        var data = new FormData(form);
-        fetch(form.action, { method: 'POST', body: data })
-          .then(function (r) { return r.ok ? r.json().catch(function(){return {ok:true};}) : Promise.reject(r); })
+        fetch(form.action, { method: 'POST', body: new FormData(form) })
+          .then(function (r) {
+            return r.ok ? r.json().catch(function () { return { ok: true }; }) : Promise.reject(r);
+          })
           .then(function () {
             form.reset();
             show('ok', "<strong>Got it.</strong> We'll call you back shortly. If it's urgent, ring <a class='underline font-semibold' href='tel:" + phoneHref + "'>" + phone + '</a>.');
@@ -173,10 +231,10 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
             var body = encodeURIComponent(
               'Name: ' + name +
               '\nPhone: ' + tel +
-              '\nEmail: ' + (form.email.value || '—') +
-              '\nService: ' + (form.service.value || '—') +
-              '\nArea: ' + (form.area.value || '—') +
-              '\n\n' + (form.message.value || '')
+              '\nEmail: ' + ((form.email && form.email.value) || '—') +
+              '\nService: ' + ((form.service && form.service.value) || '—') +
+              '\nArea: ' + ((form.area && form.area.value) || '—') +
+              '\n\n' + ((form.message && form.message.value) || '')
             );
             show(
               'warn',
@@ -188,15 +246,16 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
           })
           .finally(function () {
             submit.disabled = false;
-            submit.textContent = 'Send request';
+            submit.innerHTML = submitLabel;
           });
       });
     }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initForm);
+      document.addEventListener('DOMContentLoaded', initForms);
     } else {
-      initForm();
+      initForms();
     }
-    document.addEventListener('astro:page-load', initForm);
+    document.addEventListener('astro:page-load', initForms);
   })();
 </script>

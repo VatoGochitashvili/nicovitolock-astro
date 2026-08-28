@@ -268,7 +268,18 @@
    it is absolutely positioned and must stay that way. */
 .tex-navy > *:not(.hero-bg) { position: relative; z-index: 1; }
 .hero-bg { z-index: 0; }
-.tex-navy h1, .tex-navy h2, .tex-navy h3, .tex-navy h4 { color: #fff; }
+/* Headings default to white inside a dark section — but this MUST sit in
+   @layer base. Unlayered CSS beats every @layer regardless of specificity, and
+   Tailwind's colour utilities live in @layer utilities, so an unlayered rule
+   here made `text-navy-900` unusable inside .tex-navy: the hero quote form's
+   heading rendered white-on-white. In @layer base, utilities win as intended
+   and a light card inside a dark section behaves. */
+@layer base {
+  .tex-navy h1,
+  .tex-navy h2,
+  .tex-navy h3,
+  .tex-navy h4 { color: #fff; }
+}
 
 /* Quiet alternate surface — no grid, no texture. */
 .tex-stone {

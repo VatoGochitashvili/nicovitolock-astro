@@ -31,23 +31,18 @@ const nav = [
 </div>
 
 <header class="sticky top-0 z-50 bg-white/92 backdrop-blur-md border-b border-line-cool">
-  <div class="container-x flex items-center justify-between gap-6 py-2.5 md:py-3">
-    <a href="/" class="flex items-center gap-3 md:gap-4 shrink-0 group" aria-label={`${business.name} — home`}>
+  <div class="container-x flex items-center justify-between gap-6 py-2">
+    <!-- The logo already reads "NICO & VITO LOCKSMITH" around the badge, so a
+         separate wordmark would just repeat it. The alt text carries the
+         business name for screen readers and for search. -->
+    <a href="/" class="shrink-0 group" aria-label={`${business.name} — home`}>
       <img
         src="/brand/logo-512.png"
-        alt={`${business.name} logo`}
+        alt={`${business.name} — Bay Ridge, Brooklyn`}
         width="512"
         height="512"
-        class="h-14 w-14 sm:h-16 sm:w-16 md:h-[4.75rem] md:w-[4.75rem] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+        class="h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 md:h-[5.5rem] md:w-[5.5rem] object-contain transition-transform duration-300 group-hover:scale-[1.05]"
       />
-      <span class="leading-none">
-        <span class="block display text-navy-900 text-[1.15rem] sm:text-[1.35rem] md:text-[1.6rem] tracking-tight">
-          Nico &amp; Vito
-        </span>
-        <span class="block font-display text-[0.6rem] sm:text-[0.68rem] md:text-[0.75rem] font-bold uppercase tracking-[0.3em] text-brass-500 mt-1">
-          Locksmith
-        </span>
-      </span>
     </a>
 
     <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main">

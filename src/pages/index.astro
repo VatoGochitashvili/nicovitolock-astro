@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import HeroBg from '@/components/HeroBg.astro';
+import ContactForm from '@/components/ContactForm.astro';
 import TrustBar from '@/components/TrustBar.astro';
 import ServiceCard from '@/components/ServiceCard.astro';
 import Reviews from '@/components/Reviews.astro';
@@ -63,47 +64,60 @@ const steps = [
 
 <BaseLayout title={title} description={description} schema={schema} canonical="/">
   <!-- ================= HERO ================= -->
-  <!-- Full-bleed Bay Ridge row houses, dimmed. No competing image card —
-       the neighborhood IS the picture, the copy sits on the dark left. -->
+  <!-- Dimmed Bay Ridge row houses behind; the quote form is the brightest
+       object on the page by a wide margin, which is the point. -->
   <section class="relative tex-navy overflow-hidden">
     <HeroBg variant="neighborhood" strength={42} />
 
-    <div class="container-x relative py-20 md:py-28 lg:py-36">
-      <div class="max-w-2xl">
-        <p class="eyebrow eyebrow--light mb-5">Bay Ridge, Brooklyn</p>
+    <div class="container-x relative py-12 md:py-20 lg:py-24">
+      <!-- Explicit grid placement so the form sits beside the copy on desktop
+           but directly under the headline on mobile — ahead of the supporting
+           detail, not buried below it. -->
+      <div class="grid gap-8 lg:grid-cols-12 lg:gap-x-14 lg:gap-y-7 lg:items-center">
 
-        <h1 class="display text-white text-[2.6rem] sm:text-[3.4rem] lg:text-[4.25rem] leading-[1.02]">
-          Locked out in Brooklyn?<br />
-          <span class="text-brass-400">We're a few blocks away.</span>
-        </h1>
+        <!-- 1. The hook -->
+        <div class="lg:col-span-7 lg:col-start-1 lg:row-start-1">
+          <p class="eyebrow eyebrow--light mb-4">Bay Ridge, Brooklyn</p>
 
-        <p class="mt-6 text-navy-100 text-lg md:text-xl leading-relaxed max-w-xl">
-          A licensed, family-run locksmith based in Bay Ridge — covering every
-          neighborhood in <strong class="text-white font-semibold">Brooklyn</strong> and
-          <strong class="text-white font-semibold">Staten Island</strong>.
-          Priced before we start.
-        </p>
+          <h1 class="display text-white text-[2.3rem] sm:text-[3rem] lg:text-[3.8rem] leading-[1.03]">
+            Locked out in Brooklyn?<br />
+            <span class="text-brass-400">We're a few blocks away.</span>
+          </h1>
 
-        <div class="mt-9 flex flex-col sm:flex-row gap-3">
-          <a href={`tel:${business.phoneHref}`} class="btn btn-brass btn-lg" data-call-cta="hero-primary">
+          <p class="mt-5 text-navy-100 text-lg md:text-xl leading-relaxed max-w-xl">
+            A licensed, family-run locksmith based in Bay Ridge — covering every
+            neighborhood in <strong class="text-white font-semibold">Brooklyn</strong> and
+            <strong class="text-white font-semibold">Staten Island</strong>.
+            Priced before we start.
+          </p>
+        </div>
+
+        <!-- 2. The conversion point. Brightest object on the page, and on
+                mobile it lands immediately after the headline. -->
+        <div class="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 lg:self-center">
+          <ContactForm variant="short" tone="dark" />
+        </div>
+
+        <!-- 3. Supporting detail -->
+        <div class="lg:col-span-7 lg:col-start-1 lg:row-start-2">
+          <a href={`tel:${business.phoneHref}`} class="btn btn-brass btn-lg w-full sm:w-auto" data-call-cta="hero-primary">
             <Icon name="phone" size={20} />
             {business.phoneDisplay}
           </a>
-          <a href="/contact" class="btn btn-ghost btn-lg">Request a quote</a>
-        </div>
 
-        <ul class="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-[0.92rem]">
-          {[
-            { i: 'clock', t: 'Open daily 7 AM – 11 PM' },
-            { i: 'badge', t: 'Licensed & insured' },
-            { i: 'bolt',  t: '20–30 min typical arrival' },
-          ].map((x) => (
-            <li class="flex items-center gap-2 text-navy-100">
-              <Icon name={x.i} size={16} class="text-brass-400 shrink-0" />
-              {x.t}
-            </li>
-          ))}
-        </ul>
+          <ul class="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[0.92rem]">
+            {[
+              { i: 'clock', t: 'Open daily 7 AM – 11 PM' },
+              { i: 'badge', t: 'Licensed & insured' },
+              { i: 'bolt',  t: '20–30 min typical arrival' },
+            ].map((x) => (
+              <li class="flex items-center gap-2 text-navy-100">
+                <Icon name={x.i} size={16} class="text-brass-400 shrink-0" />
+                {x.t}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </section>
