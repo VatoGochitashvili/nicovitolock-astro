@@ -1,0 +1,48 @@
+---
+import Icon from './Icon.astro';
+import { business } from '@/data/business';
+
+interface Props {
+  heading?: string;
+  body?: string;
+  variant?: 'brass' | 'navy';
+}
+const {
+  heading = 'Need a locksmith right now?',
+  body = 'Call and talk to an actual locksmith — not a call center. We quote the price before we head out.',
+  variant = 'brass',
+} = Astro.props;
+---
+{variant === 'brass' ? (
+  <section class="bg-brass-400">
+    <div class="container-x py-10 md:py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="text-center md:text-left">
+        <h2 class="display text-navy-950 text-2xl md:text-[2rem]">{heading}</h2>
+        <p class="mt-2 text-navy-900/85 max-w-xl">{body}</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
+        <a href={`tel:${business.phoneHref}`} class="btn btn-navy btn-lg" data-call-cta="band">
+          <Icon name="phone" size={19} />
+          {business.phoneDisplay}
+        </a>
+        <a href="/contact" class="btn btn-outline btn-lg">Request a quote</a>
+      </div>
+    </div>
+  </section>
+) : (
+  <section class="tex-navy">
+    <div class="container-x py-10 md:py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="text-center md:text-left">
+        <h2 class="display text-white text-2xl md:text-[2rem]">{heading}</h2>
+        <p class="mt-2 text-navy-200 max-w-xl">{body}</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass btn-lg" data-call-cta="band">
+          <Icon name="phone" size={19} />
+          {business.phoneDisplay}
+        </a>
+        <a href="/contact" class="btn btn-ghost btn-lg">Request a quote</a>
+      </div>
+    </div>
+  </section>
+)}

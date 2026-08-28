@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import { services } from '@/data/services';
+import { business } from '@/data/business';
+---
+<BaseLayout
+  title="Page not found | Nico & Vito Locksmith"
+  description="That page doesn't exist. Find our locksmith services for Brooklyn and Staten Island, or call us directly."
+  canonical="/404"
+  noindex
+>
+  <section class="tex-navy py-20 md:py-28">
+    <div class="container-narrow text-center">
+      <p class="display text-brass-400 text-6xl md:text-7xl">404</p>
+      <h1 class="display text-white text-3xl md:text-5xl mt-4">
+        This one's locked and we don't have the key
+      </h1>
+      <p class="mt-4 text-navy-200 text-lg">
+        The page you're after doesn't exist. Everything else does — start here.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
+        </a>
+        <a href="/" class="btn btn-ghost">Back home</a>
+        <a href="/services" class="btn btn-ghost">All services</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 bg-cream">
+    <div class="container-x">
+      <h2 class="display text-navy-900 text-2xl text-center">Looking for one of these?</h2>
+      <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s) => (
+          <a href={`/services/${s.slug}`} class="card card-hover px-5 py-4 flex items-center gap-3.5">
+            <span class="w-9 h-9 rounded-lg bg-navy-50 text-navy-700 grid place-items-center shrink-0">
+              <Icon name={s.icon} size={19} />
+            </span>
+            <span class="font-display font-bold text-navy-900 text-[0.96rem] leading-tight">{s.name}</span>
+            <Icon name="arrow" size={16} class="text-brass-500 ml-auto shrink-0" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

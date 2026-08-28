@@ -1,0 +1,246 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import HeroBg from '@/components/HeroBg.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import { services } from '@/data/services';
+import { tier1Areas, nearbyAreas } from '@/data/locations';
+import { business } from '@/data/business';
+import { localCopy, traitNote, localLists } from '@/lib/localize';
+import { breadcrumbSchema, serviceSchema, faqSchema, pickTitle } from '@/lib/seo';
+
+export function getStaticPaths() {
+  return services.flatMap((service) =>
+    tier1Areas.map((area) => ({
+      params: { slug: service.slug, area: area.slug },
+      props: { service, area },
+    }))
+  );
+}
+
+const { service, area } = Astro.props;
+const copy = localCopy(service, area);
+const note = traitNote(service, area);
+const lists = localLists(service, area);
+const near = nearbyAreas(area);
+
+// Other services in this same neighborhood — strong internal linking that is
+// genuinely useful rather than a footer keyword dump.
+const otherServices = services.filter((s) => s.slug !== service.slug).slice(0, 6);
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Services', url: '/services' },
+  { name: service.name, url: `/services/${service.slug}` },
+  { name: area.name, url: `/services/${service.slug}/${area.slug}` },
+];
+
+const title = pickTitle([
+  `${service.name} in ${area.name}, ${area.region} | Nico & Vito`,
+  `${service.name} in ${area.name} | Nico & Vito Locksmith`,
+  `${service.name} in ${area.name} | Nico & Vito`,
+  `${service.short} in ${area.name} | Nico & Vito Locksmith`,
+  `${service.short} in ${area.name} | Nico & Vito`,
+  `${service.short} in ${area.name}, ${area.region}`,
+]);
+
+const schema = [
+  breadcrumbSchema(crumbs),
+  serviceSchema({
+    name: `${service.name} in ${area.name}`,
+    description: copy.metaDescription,
+    url: `/services/${service.slug}/${area.slug}`,
+    areaName: area.name,
+    areaRegion: area.region,
+  }),
+  faqSchema(copy.faqs),
+];
+---
+
+<BaseLayout
+  title={title}
+  description={copy.metaDescription}
+  canonical={`/services/${service.slug}/${area.slug}`}
+  schema={schema}
+>
+  <!-- Hero -->
+  <section class="tex-navy relative py-12 md:py-16 overflow-hidden">
+    <HeroBg variant="truck" />
+    <div class="container-x">
+      <Breadcrumbs items={crumbs} light />
+      <p class="eyebrow eyebrow--light mt-5 mb-3">
+        {area.name} · {area.region} {area.zip}
+      </p>
+      <h1 class="display text-white text-[2rem] sm:text-4xl lg:text-[3.1rem] max-w-4xl">
+        {service.name} in {area.name}
+      </h1>
+      <p class="mt-4 text-navy-200 text-lg max-w-2xl leading-relaxed">{copy.lead}</p>
+
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass" data-call-cta="local-hero">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
+        </a>
+        <a href="/contact" class="btn btn-ghost">Request a quote</a>
+      </div>
+
+      <ul class="mt-7 flex flex-wrap gap-x-6 gap-y-2.5 text-sm text-navy-100">
+        <li class="flex items-center gap-2">
+          <Icon name="bolt" size={16} class="text-brass-400 shrink-0" />
+          {area.eta} from Bay Ridge
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="clock" size={16} class="text-brass-400 shrink-0" />
+          Open daily 7 AM – 11 PM
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="badge" size={16} class="text-brass-400 shrink-0" />
+          Licensed &amp; insured
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 bg-cream">
+    <div class="container-x grid lg:grid-cols-12 gap-10 lg:gap-14">
+      <div class="lg:col-span-7">
+        <div class="prose-local text-[1.05rem]">
+          <p>{copy.localAngle}</p>
+          <p>{note}</p>
+        </div>
+
+        <!-- Why us here -->
+        <div class="mt-9">
+          <h2 class="display text-navy-900 text-2xl md:text-[1.8rem]">{copy.whyHeading}</h2>
+          <span class="rule-brass mt-3 block"></span>
+          <ul class="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-3">
+            {lists.features.map((f) => (
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-brass-400 text-navy-950 grid place-items-center shrink-0 mt-0.5">
+                  <Icon name="check" size={12} />
+                </span>
+                <span class="text-navy-800">{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Local scenarios -->
+        <div class="mt-10">
+          <h2 class="display text-navy-900 text-2xl md:text-[1.8rem]">{copy.scenarioHeading}</h2>
+          <span class="rule-brass mt-3 block"></span>
+          <ul class="mt-5 space-y-2.5">
+            {lists.scenarios.map((s) => (
+              <li class="flex items-start gap-3 bg-white border border-line rounded-lg px-4 py-3">
+                <Icon name="wrench" size={18} class="text-brass-500 shrink-0 mt-0.5" />
+                <span class="text-navy-800">{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Process -->
+        <div class="mt-10 prose-local text-[1.05rem]">
+          <h2 class="display text-navy-900 text-2xl md:text-[1.8rem] mb-3">
+            Booking {service.short.toLowerCase()} in {area.name}
+          </h2>
+          <span class="rule-brass mb-5 block"></span>
+          <p>{copy.process}</p>
+          <p>{copy.landmarkLine}{copy.coverage ? ` ${copy.coverage}` : ''}</p>
+          <p>{copy.close}</p>
+        </div>
+
+        <!-- Nearby -->
+        {near.length > 0 && (
+          <div class="mt-10">
+            <h2 class="display text-navy-900 text-xl md:text-2xl">
+              Also serving near {area.name}
+            </h2>
+            <div class="mt-4 grid sm:grid-cols-3 gap-3">
+              {near.map((n) => (
+                <a
+                  href={n.tier === 1
+                    ? `/services/${service.slug}/${n.slug}`
+                    : `/service-areas/${n.slug}`}
+                  class="card card-hover px-4 py-3.5 flex items-center gap-2.5"
+                >
+                  <Icon name="pin" size={16} class="text-brass-500 shrink-0" />
+                  <span class="text-navy-800 font-semibold text-[0.92rem]">{n.name}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-5 space-y-5">
+        <div class="card p-6 tex-navy">
+          <h2 class="text-white text-xl">{area.name} service details</h2>
+          <dl class="mt-4 space-y-3 text-[0.95rem]">
+            {[
+              { t: 'Typical arrival', d: area.eta, i: 'bolt' },
+              { t: 'Hours', d: 'Every day, 7 AM – 11 PM', i: 'clock' },
+              { t: 'Coverage', d: `${area.name}, ${area.region} ${area.zip}`, i: 'pin' },
+              { t: 'Trip surcharge', d: 'None — included in the quote', i: 'dollar' },
+            ].map((row) => (
+              <div class="flex items-start gap-3">
+                <Icon name={row.i} size={17} class="text-brass-400 shrink-0 mt-0.5" />
+                <div>
+                  <dt class="text-navy-300 text-xs uppercase tracking-wider font-semibold">{row.t}</dt>
+                  <dd class="text-white">{row.d}</dd>
+                </div>
+              </div>
+            ))}
+          </dl>
+          {service.priceFrom && (
+            <p class="mt-5 pt-4 border-t border-white/10 flex items-baseline gap-2">
+              <span class="text-navy-300 text-sm">Typically from</span>
+              <span class="display text-brass-400 text-2xl">{service.priceFrom}</span>
+            </p>
+          )}
+          <a href={`tel:${business.phoneHref}`} class="btn btn-brass w-full mt-5" data-call-cta="local-sidebar">
+            <Icon name="phone" size={18} />
+            {business.phoneDisplay}
+          </a>
+        </div>
+
+        <ContactForm service={service.name} area={area.name} compact />
+
+        <div class="card p-6">
+          <h2 class="text-navy-900 text-lg">Other services in {area.name}</h2>
+          <ul class="mt-4 space-y-2.5">
+            {otherServices.map((s) => (
+              <li>
+                <a href={`/services/${s.slug}/${area.slug}`} class="flex items-center gap-3 group">
+                  <span class="w-8 h-8 rounded-md bg-navy-50 text-navy-700 grid place-items-center shrink-0 group-hover:bg-brass-400 group-hover:text-navy-950 transition-colors">
+                    <Icon name={s.icon} size={16} />
+                  </span>
+                  <span class="text-navy-800 font-semibold text-[0.93rem] group-hover:text-brass-600 transition-colors">
+                    {s.short} in {area.name}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a href={`/service-areas/${area.slug}`} class="btn btn-outline btn-sm w-full mt-5">
+            All services in {area.name}
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <FaqAccordion
+    faqs={copy.faqs}
+    heading={`${service.short} in ${area.name} — common questions`}
+  />
+
+  <CtaBand
+    heading={`${service.name} in ${area.name}?`}
+    body={`We're ${area.eta} away, open every day 7 AM to 11 PM. Call for a price before we roll out.`}
+  />
+</BaseLayout>

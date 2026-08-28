@@ -1,0 +1,44 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import HeroBg from './HeroBg.astro';
+import Icon from './Icon.astro';
+import { business } from '@/data/business';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  crumbs?: { name: string; url: string }[];
+  /** Show the call/quote buttons */
+  cta?: boolean;
+  /** Dimmed photo behind the hero */
+  bg?: 'neighborhood' | 'truck' | 'avenue';
+}
+const { eyebrow, title, subtitle, crumbs, cta = true, bg = 'neighborhood' } = Astro.props;
+---
+<section class="tex-navy relative py-14 md:py-20 overflow-hidden">
+  <HeroBg variant={bg} />
+  <div class="container-x">
+    {crumbs && <div class="mb-5"><Breadcrumbs items={crumbs} light /></div>}
+    {eyebrow && <p class="eyebrow eyebrow--light mb-3">{eyebrow}</p>}
+    <h1 class="display text-white text-[2.1rem] sm:text-5xl lg:text-[3.4rem] max-w-4xl">
+      {title}
+    </h1>
+    {subtitle && (
+      <p class="mt-4 text-navy-200 text-lg md:text-xl max-w-2xl leading-relaxed">{subtitle}</p>
+    )}
+    {cta && (
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass" data-call-cta="hero">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
+        </a>
+        <a href="/contact" class="btn btn-ghost">Request a quote</a>
+        <span class="flex items-center gap-2 text-navy-200 text-sm ml-1">
+          <Icon name="clock" size={16} class="text-brass-400" />
+          Open every day 7 AM – 11 PM
+        </span>
+      </div>
+    )}
+  </div>
+</section>

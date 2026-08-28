@@ -1,0 +1,142 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Reviews from '@/components/Reviews.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { hasReviews, aggregateRatingSchema } from '@/data/reviews';
+import { business } from '@/data/business';
+import { breadcrumbSchema, localBusinessSchema } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Reviews', url: '/reviews' },
+];
+
+// Rating schema is emitted ONLY when there are genuine reviews behind it.
+const rating = aggregateRatingSchema();
+const businessNode: any = localBusinessSchema();
+if (rating) businessNode.aggregateRating = rating;
+---
+
+<BaseLayout
+  title="Reviews | Nico & Vito Locksmith, Brooklyn"
+  description={`Customer reviews for Nico & Vito Locksmith — a licensed Bay Ridge locksmith serving Brooklyn and Staten Island. Open every day 7AM–11PM. Call ${business.phone}.`}
+  canonical="/reviews"
+  schema={[breadcrumbSchema(crumbs), businessNode]}
+>
+  <PageHero
+    eyebrow="Reviews"
+    title="What our customers say"
+    subtitle="Real reviews from real jobs across Brooklyn and Staten Island."
+    crumbs={crumbs}
+  />
+
+  <Reviews limit={99} />
+
+  {!hasReviews && (
+    <section class="pb-16 bg-cream">
+      <div class="container-narrow">
+        <div class="card p-6 md:p-8">
+          <h2 class="display text-navy-900 text-xl md:text-2xl flex items-center gap-3">
+            <Icon name="badge" size={22} class="text-brass-500 shrink-0" />
+            Why this page isn't full of testimonials
+          </h2>
+          <div class="mt-4 space-y-3 text-muted leading-relaxed">
+            <p>
+              Plenty of locksmith sites launch with a wall of five-star quotes from people
+              who never existed. It's easy to do and it's worth nothing — to you or to us.
+            </p>
+            <p>
+              We'd rather this page fill up slowly with reviews from people we actually
+              worked for. If we've done a job for you anywhere in Brooklyn or Staten Island,
+              leaving one genuinely helps a neighborhood shop compete with the national
+              dispatch outfits.
+            </p>
+          </div>
+          <a href={`tel:${business.phoneHref}`} class="btn btn-navy mt-6">
+            <Icon name="phone" size={18} />
+            {business.phoneDisplay}
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Genuinely useful content instead of filler testimonials -->
+  <section class="py-14 md:py-18 tex-stone">
+    <div class="container-narrow">
+      <p class="eyebrow mb-3">Buyer's guide</p>
+      <h2 class="display text-navy-900 text-2xl md:text-[2.2rem]">
+        How to read locksmith reviews without getting burned
+      </h2>
+      <span class="rule-brass mt-3 block"></span>
+
+      <div class="mt-6 space-y-4 text-muted text-[1.04rem] leading-relaxed">
+        <p>
+          Locksmithing has one of the worst review-fraud problems of any trade, because
+          the people searching are almost always in a hurry and rarely comparing. Knowing
+          what a manufactured profile looks like is worth more to you than any five-star
+          quote we could put on this page.
+        </p>
+      </div>
+
+      <div class="mt-8 space-y-4">
+        {[
+          {
+            t: 'A hundred reviews and no photos of a van, a shop, or a person',
+            d: 'Real local businesses accumulate photos — the truck, the storefront, the work. A profile with a stock logo and nothing else is usually a lead-generation listing rather than a business.',
+          },
+          {
+            t: 'Reviews that never name a neighborhood or a job',
+            d: 'Genuine reviews say things like "locked out on 3rd Avenue" or "rekeyed three doors in Dyker Heights." Manufactured ones say "great service, fast and professional" over and over with nothing specific.',
+          },
+          {
+            t: 'Dozens of reviews posted in the same few days',
+            d: 'Real reviews arrive in a trickle over years. A cluster of twenty in one week, then silence, is a purchased batch.',
+          },
+          {
+            t: 'The business address is a mailbox or a residential lot',
+            d: "Paste the address into Google Street View. If it's a UPS Store counter or an empty house, the listing is a front for a dispatch service. (A service-area business like ours publishes a base neighborhood and no street address at all — that is the honest version, and Google supports it explicitly.)",
+          },
+          {
+            t: 'The phone number changes between listings',
+            d: 'Search the number itself. If the same number appears under six different "locksmith" names across the boroughs, you have found a call center.',
+          },
+        ].map((x, i) => (
+          <div class="card p-5 md:p-6 flex items-start gap-4 reveal" data-delay={i * 50}>
+            <span class="w-9 h-9 rounded-lg bg-brick-500/10 text-brick-500 grid place-items-center shrink-0">
+              <Icon name="bolt" size={18} />
+            </span>
+            <div>
+              <h3 class="text-navy-900 text-[1.06rem] leading-snug">{x.t}</h3>
+              <p class="mt-1.5 text-muted leading-relaxed text-[0.96rem]">{x.d}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-9 card p-6 md:p-7 bg-brass-50 border-brass-200">
+        <h3 class="text-navy-900 text-lg">Three questions before anyone comes out</h3>
+        <ol class="mt-4 space-y-3 text-navy-800 text-[0.98rem]">
+          {[
+            'What is the total price, including parts and labor? (Not the "service call" price.)',
+            'Are you licensed and insured, and will you show credentials at the door?',
+            'What business are you dispatched from, and where is it based?',
+          ].map((q, i) => (
+            <li class="flex items-start gap-3">
+              <span class="display text-brass-600 text-lg leading-none shrink-0 mt-0.5">{i + 1}</span>
+              <span>{q}</span>
+            </li>
+          ))}
+        </ol>
+        <p class="mt-4 text-[0.93rem] text-navy-800/80">
+          Any real locksmith answers all three without pausing. Ours are:
+          the quoted price with nothing added, yes and yes, and Bay Ridge, Brooklyn.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

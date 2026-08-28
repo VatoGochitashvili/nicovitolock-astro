@@ -1,0 +1,40 @@
+# Cloudflare Pages redirects.
+# Common URL shapes people (and old listings) guess at, sent to the real page
+# with a 301 so nothing sits as a dead end in Search Console.
+
+/home                     /                              301
+/index.html               /                              301
+/services.html            /services/                     301
+/contact.html             /contact/                      301
+/about-us                 /about/                        301
+/locations                /service-areas/                301
+/locations/*              /service-areas/:splat          301
+/areas                    /service-areas/                301
+/areas/*                  /service-areas/:splat          301
+/service-area/*           /service-areas/:splat          301
+/neighborhoods            /service-areas/                301
+/neighborhoods/*          /service-areas/:splat          301
+/service/*                /services/:splat               301
+/prices                   /pricing/                      301
+/price                    /pricing/                      301
+/rates                    /pricing/                      301
+/testimonials             /reviews/                      301
+/faqs                     /faq/                          301
+/questions                /faq/                          301
+
+# Common service-name guesses
+/lockout                  /services/emergency-lockout-service/   301
+/lockouts                 /services/emergency-lockout-service/   301
+/emergency                /services/emergency-lockout-service/   301
+/car-keys                 /services/car-key-replacement/         301
+/car-key                  /services/car-key-replacement/         301
+/keys                     /services/car-key-replacement/         301
+/rekey                    /services/lock-rekeying/               301
+/rekeying                 /services/lock-rekeying/               301
+/cameras                  /services/security-camera-installation/ 301
+/cctv                     /services/security-camera-installation/ 301
+/intercom                 /services/intercom-systems/            301
+/intercoms                /services/intercom-systems/            301
+/access-control           /services/access-control-systems/      301
+/smart-locks              /services/smart-lock-installation/     301
+/commercial               /services/commercial-locksmith/        301

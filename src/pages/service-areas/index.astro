@@ -1,0 +1,144 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { serviceAreas, regions } from '@/data/locations';
+import { services } from '@/data/services';
+import { business } from '@/data/business';
+import { breadcrumbSchema } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Service Areas', url: '/service-areas' },
+];
+
+const schema = [
+  breadcrumbSchema(crumbs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Neighborhoods served — Brooklyn & Staten Island',
+    numberOfItems: serviceAreas.length,
+    itemListElement: serviceAreas.map((a, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: `${a.name}, ${a.region}`,
+      url: new URL(`/service-areas/${a.slug}/`, Astro.site).toString(),
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title={`Service Areas | ${serviceAreas.length} Brooklyn & Staten Island Neighborhoods`}
+  description={`Nico & Vito Locksmith covers ${serviceAreas.length} neighborhoods across Brooklyn and Staten Island from our Bay Ridge base. Open every day 7AM–11PM. Call ${business.phone}.`}
+  canonical="/service-areas"
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Where we work"
+    title="Every neighborhood in Brooklyn & Staten Island"
+    subtitle={`${serviceAreas.length} neighborhoods, one Bay Ridge shop. Find yours below for arrival times and the work we do on your streets.`}
+    crumbs={crumbs}
+  />
+
+  <section class="py-14 md:py-18 bg-cream">
+    <div class="container-x">
+      {regions.map((region, ri) => {
+        const list = serviceAreas.filter((a) => a.region === region);
+        const primary = list.filter((a) => a.tier === 1);
+        const also = list.filter((a) => a.tier === 2);
+        return (
+          <div class:list={[ri > 0 && 'mt-16']} id={region.toLowerCase().replace(/\s+/g, '-')}>
+            <div class="flex items-center gap-4 mb-2">
+              <span class="w-11 h-11 rounded-lg bg-navy-800 text-brass-400 grid place-items-center shrink-0">
+                <Icon name="pin" size={22} />
+              </span>
+              <div>
+                <h2 class="display text-navy-900 text-2xl md:text-[2.1rem] leading-none">{region}</h2>
+                <p class="text-muted text-sm mt-1">{list.length} neighborhoods covered</p>
+              </div>
+            </div>
+
+            <p class="text-muted mt-4 max-w-3xl leading-relaxed">
+              {region === 'Brooklyn'
+                ? 'Our home borough. We are based in Bay Ridge, so southwest Brooklyn is minutes away — and we run the whole borough daily, from the Narrows up to the Queens line.'
+                : 'A straight run over the Verrazzano from Bay Ridge. We cover the North Shore, the Mid-Island, and the South Shore all the way down to Tottenville.'}
+            </p>
+
+            <div class="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {primary.map((a, i) => (
+                <a
+                  href={`/service-areas/${a.slug}`}
+                  class="card card-hover p-5 group reveal"
+                  data-delay={Math.min(i, 8) * 40}
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 class="text-lg text-navy-900 leading-tight group-hover:text-brass-600 transition-colors">
+                        {a.name}
+                      </h3>
+                      <p class="text-xs font-semibold uppercase tracking-wider text-muted mt-1">
+                        {a.region} · {a.zip}
+                      </p>
+                    </div>
+                    <span class="badge bg-brass-50 text-brass-700 shrink-0">{a.eta}</span>
+                  </div>
+                  <p class="mt-3 text-[0.9rem] text-muted leading-relaxed line-clamp-3">{a.blurb}</p>
+                  <span class="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-brass-600 group-hover:gap-2.5 transition-all">
+                    View {a.name}
+                    <Icon name="arrow" size={14} />
+                  </span>
+                </a>
+              ))}
+            </div>
+
+            {also.length > 0 && (
+              <div class="mt-7">
+                <h3 class="font-display font-bold text-navy-900 text-[1.05rem]">
+                  Also covered across {region}
+                </h3>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  {also.map((a) => (
+                    <a
+                      href={`/service-areas/${a.slug}`}
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-line text-[0.86rem] text-navy-800 hover:bg-navy-800 hover:border-navy-800 hover:text-white transition-colors"
+                    >
+                      <Icon name="pin" size={13} class="text-brass-500" />
+                      {a.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="py-14 tex-stone">
+    <div class="container-x">
+      <div class="max-w-2xl mb-7">
+        <p class="eyebrow mb-3">All services</p>
+        <h2 class="display text-navy-900 text-2xl md:text-[2.1rem]">
+          The same {services.length} services, everywhere we go
+        </h2>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s) => (
+          <a href={`/services/${s.slug}`} class="card card-hover px-5 py-4 flex items-center gap-3.5">
+            <span class="w-9 h-9 rounded-lg bg-navy-50 text-navy-700 grid place-items-center shrink-0">
+              <Icon name={s.icon} size={19} />
+            </span>
+            <span class="font-display font-bold text-navy-900 text-[0.96rem] leading-tight">{s.name}</span>
+            <Icon name="arrow" size={16} class="text-brass-500 ml-auto shrink-0" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

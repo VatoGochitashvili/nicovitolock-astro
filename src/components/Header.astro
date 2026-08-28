@@ -1,0 +1,144 @@
+---
+import { business } from '@/data/business';
+import { services } from '@/data/services';
+import Icon from './Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+
+const nav = [
+  { href: '/services', label: 'Services' },
+  { href: '/service-areas', label: 'Service Areas' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+
+<!-- Utility strip: quiet, one line, no decoration -->
+<div class="hidden md:block bg-navy-900 text-navy-200 text-[0.8rem]">
+  <div class="container-x flex items-center justify-between gap-6 py-2">
+    <p class="flex items-center gap-2">
+      <Icon name="clock" size={14} class="text-brass-400 shrink-0" />
+      Open every day <strong class="text-white font-semibold">7 AM – 11 PM</strong>
+    </p>
+    <p class="flex items-center gap-2">
+      <Icon name="pin" size={14} class="text-brass-400 shrink-0" />
+      Bay Ridge, Brooklyn · Serving Brooklyn &amp; Staten Island
+    </p>
+  </div>
+</div>
+
+<header class="sticky top-0 z-50 bg-white/92 backdrop-blur-md border-b border-line-cool">
+  <div class="container-x flex items-center justify-between gap-6 py-2.5 md:py-3">
+    <a href="/" class="flex items-center gap-3 md:gap-4 shrink-0 group" aria-label={`${business.name} — home`}>
+      <img
+        src="/brand/logo-512.png"
+        alt={`${business.name} logo`}
+        width="512"
+        height="512"
+        class="h-14 w-14 sm:h-16 sm:w-16 md:h-[4.75rem] md:w-[4.75rem] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+      />
+      <span class="leading-none">
+        <span class="block display text-navy-900 text-[1.15rem] sm:text-[1.35rem] md:text-[1.6rem] tracking-tight">
+          Nico &amp; Vito
+        </span>
+        <span class="block font-display text-[0.6rem] sm:text-[0.68rem] md:text-[0.75rem] font-bold uppercase tracking-[0.3em] text-brass-500 mt-1">
+          Locksmith
+        </span>
+      </span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'relative px-3.5 py-2 text-[0.95rem] font-semibold transition-colors',
+            isActive(item.href) ? 'text-navy-900' : 'text-muted hover:text-navy-900',
+          ]}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+          {isActive(item.href) && (
+            <span class="absolute left-3.5 right-3.5 -bottom-px h-[2px] bg-brass-400 rounded-full"></span>
+          )}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={`tel:${business.phoneHref}`}
+        class="btn btn-navy btn-sm md:btn"
+        data-call-cta="header"
+      >
+        <Icon name="phone" size={17} />
+        <span class="hidden sm:inline">{business.phoneDisplay}</span>
+        <span class="sm:hidden">Call</span>
+      </a>
+      <button
+        type="button"
+        id="nav-toggle"
+        class="lg:hidden p-2 -mr-1 rounded-lg text-navy-800 hover:bg-navy-50 transition-colors"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+      >
+        <Icon name="menu" size={26} />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div id="mobile-nav" class="lg:hidden hidden border-t border-line-cool bg-white">
+    <nav class="container-x py-2 flex flex-col" aria-label="Mobile">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'py-3.5 border-b border-line-cool/70 font-semibold',
+            isActive(item.href) ? 'text-brass-600' : 'text-navy-800',
+          ]}
+        >
+          {item.label}
+        </a>
+      ))}
+      <p class="pt-5 pb-2 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-muted">
+        Popular services
+      </p>
+      <div class="grid grid-cols-2 gap-x-4 pb-4">
+        {services.slice(0, 8).map((s) => (
+          <a href={`/services/${s.slug}`} class="py-2 text-[0.92rem] text-muted hover:text-navy-900">
+            {s.short}
+          </a>
+        ))}
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    function initNav() {
+      var btn = document.getElementById('nav-toggle');
+      var menu = document.getElementById('mobile-nav');
+      if (!btn || !menu || btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', function () {
+        // classList.toggle returns true when the class was ADDED,
+        // i.e. when the drawer just became hidden.
+        var isHidden = menu.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', String(!isHidden));
+        btn.setAttribute('aria-label', isHidden ? 'Open menu' : 'Close menu');
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initNav);
+    } else {
+      initNav();
+    }
+    document.addEventListener('astro:page-load', initNav);
+  })();
+</script>

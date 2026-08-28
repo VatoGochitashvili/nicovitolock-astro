@@ -1,0 +1,107 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { business } from '@/data/business';
+import { serviceAreas } from '@/data/locations';
+import { breadcrumbSchema, faqSchema } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'FAQ', url: '/faq' },
+];
+
+const groups = [
+  {
+    title: 'Hours, arrival & coverage',
+    faqs: [
+      { q: 'Are you open 24/7?', a: "No. We're open every day from 7 AM to 11 PM, including weekends and holidays. A lot of locksmith listings claim 24/7 and then don't answer overnight — we'd rather publish real hours so you know exactly when a person will pick up." },
+      { q: 'How fast can you get to me?', a: 'Most Brooklyn calls we reach in 20–30 minutes. Staten Island is typically 30–45 depending on where you are and the bridge. When you call we give you an actual window based on where our van is, not a scripted "twenty minutes."' },
+      { q: 'What areas do you cover?', a: `All of Brooklyn and all of Staten Island — ${serviceAreas.length} neighborhoods. We're based in Bay Ridge, so southwest Brooklyn is fastest, and Staten Island is a straight run over the Verrazzano.` },
+      { q: 'Do you charge extra to come to my neighborhood?', a: "No. There's no trip surcharge anywhere in our service area. The price we quote is for the work itself." },
+      { q: 'Do you work on holidays?', a: 'Yes — same hours, 7 AM to 11 PM, every day of the year.' },
+    ],
+  },
+  {
+    title: 'Pricing',
+    faqs: [
+      { q: 'How much does a locksmith cost?', a: 'It depends on the job, which is why we quote before coming out rather than after. As a guide: house lockouts start around $49, rekeys around $25 per cylinder, deadbolt installation around $120, and car keys around $120. You get an exact number on the phone.' },
+      { q: 'Why are some locksmiths so much cheaper on the phone?', a: "Because that price isn't real. The $19 and $29 quotes you see are lead-generation companies; the subcontractor arrives, declares the lock \"high security,\" drills it, and hands you a bill many times the quote. We quote the actual price and we hold to it." },
+      { q: 'Do you charge a call-out fee if I decide not to go ahead?', a: "If you're clear about the job on the phone, the price we give you is what it costs — and we tell you up front if there's a service charge for coming out. No hidden fees appearing at the end." },
+      { q: 'What payment do you take?', a: `${business.paymentAccepted}.` },
+      { q: 'Can you give me a price over the phone?', a: 'In most cases yes. Tell us the door, the lock or the vehicle, and what happened. If something on site genuinely turns out different, we stop and tell you before doing the work — never after.' },
+    ],
+  },
+  {
+    title: 'Lockouts',
+    faqs: [
+      { q: 'Will you damage my lock getting in?', a: "Almost never. We pick, bypass, or shim in the large majority of lockouts, which leaves your existing lock fully usable. Drilling is a genuine last resort — and if it's necessary we tell you and quote the replacement before touching the door." },
+      { q: 'Do I need to prove I live there?', a: "Yes. We ask for photo ID plus something tying you to the address — a lease, mail, or a bill. It's a legal and ethical requirement, and honestly it's the clearest test of whether you've called a real locksmith." },
+      { q: 'Can you get into a car?', a: 'Yes — we do car lockouts, and we can also cut and program a replacement key on the spot if the keys are genuinely lost rather than locked inside.' },
+      { q: 'My key snapped in the lock. Can it be saved?', a: 'Usually. We extract broken keys and, in most cases, the cylinder is undamaged and we can cut you a fresh key from the pieces or by decoding the lock.' },
+    ],
+  },
+  {
+    title: 'Locks, keys & security',
+    faqs: [
+      { q: "What's the difference between rekeying and replacing a lock?", a: 'Rekeying re-pins the cylinder you already have, so old keys stop working and a new key takes over — much cheaper. Replacing swaps the whole hardware. If your locks are in good condition, rekeying gets you the same security result for far less.' },
+      { q: 'Can you make all my doors open with one key?', a: "Yes — keying alike is one of the most common things we do. Front, back, vestibule, and basement doors on a single key, as long as the cylinders are compatible." },
+      { q: 'Are high-security locks worth it?', a: "For a front door, a storefront, or any door where you can't account for every key ever cut — yes. Mul-T-Lock and Medeco add pick and drill resistance plus patented keys that can't be copied at a kiosk. For an interior closet, no. We'll tell you which of your doors actually justify it." },
+      { q: 'Can you make a car key if I lost every one?', a: 'Yes — that\'s an "all keys lost" job and we do it regularly, at your car rather than at a dealership. Bring your license and registration or title so we can confirm the vehicle is yours.' },
+      { q: 'Will a smart lock fit my apartment door?', a: "Depends on the door. Many Brooklyn apartment doors are metal with mortise or jimmy-proof locks that most consumer smart locks won't fit. Send us a photo of the inside of the door and we'll tell you before you spend money." },
+    ],
+  },
+  {
+    title: 'Credentials',
+    faqs: [
+      { q: 'Are you licensed and insured?', a: "Yes — we're a licensed and insured New York locksmith. Ask to see credentials when we arrive. Any legitimate locksmith carries them, and you should be wary of one who can't produce them." },
+      { q: 'Are you a national company or a franchise?', a: "Neither. We're an independent, family-run shop based in Bay Ridge, Brooklyn. The number on this site rings the same people who show up at your door — no dispatcher, no subcontractor." },
+      { q: 'Do you work with landlords and property managers?', a: 'Regularly. We handle recurring work across multiple buildings, keep records of what is keyed how, master-key systems for staff and tenants, and bill per property so the accounting stays clean.' },
+    ],
+  },
+];
+
+const allFaqs = groups.flatMap((g) => g.faqs);
+---
+
+<BaseLayout
+  title="Locksmith FAQ | Nico & Vito, Brooklyn & Staten Island"
+  description="Straight answers on locksmith pricing, arrival times, lockouts, rekeying, car keys and high-security locks. Bay Ridge based, open every day 7AM–11PM."
+  canonical="/faq"
+  schema={[breadcrumbSchema(crumbs), faqSchema(allFaqs)]}
+>
+  <PageHero
+    eyebrow="FAQ"
+    title="Questions worth asking any locksmith"
+    subtitle="Including the ones the $29-quote outfits would rather you didn't ask."
+    crumbs={crumbs}
+  />
+
+  <section class="py-14 md:py-18 bg-cream">
+    <div class="container-narrow">
+      {groups.map((g, gi) => (
+        <div class:list={[gi > 0 && 'mt-12']}>
+          <h2 class="display text-navy-900 text-2xl md:text-[1.9rem]">{g.title}</h2>
+          <span class="rule-brass mt-3 block"></span>
+          <div class="mt-5 space-y-3">
+            {g.faqs.map((f, i) => (
+              <details class="card overflow-hidden reveal" data-delay={i * 40} open={gi === 0 && i === 0}>
+                <summary class="flex items-center justify-between gap-4 p-5 font-display font-bold text-navy-900 text-[1.03rem]">
+                  {f.q}
+                  <Icon name="chevron" size={20} class="acc-chevron text-brass-500 shrink-0" />
+                </summary>
+                <div class="px-5 pb-5 -mt-1 text-muted leading-relaxed">{f.a}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Still have a question?"
+    body="Call and ask. We'd rather spend two minutes on the phone than have you guess."
+  />
+</BaseLayout>

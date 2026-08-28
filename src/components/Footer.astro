@@ -1,0 +1,156 @@
+---
+import { business } from '@/data/business';
+import { services } from '@/data/services';
+import { serviceAreas } from '@/data/locations';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+const brooklyn = serviceAreas.filter((a) => a.region === 'Brooklyn');
+const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
+---
+
+<footer class="tex-navy pt-14 pb-8">
+  <div class="container-x">
+    <div class="grid gap-10 lg:grid-cols-12">
+      <!-- Brand + NAP -->
+      <div class="lg:col-span-4">
+        <div class="flex items-center gap-3">
+          <img
+            src="/brand/logo-192.png"
+            alt={`${business.name} logo`}
+            width="192" height="192"
+            class="h-16 w-16 object-contain bg-white rounded-full p-1.5 shrink-0"
+          />
+          <span class="leading-none">
+            <span class="block display text-white text-xl">NICO &amp; VITO</span>
+            <span class="block font-display text-xs font-bold uppercase tracking-[0.24em] text-brass-400">Locksmith</span>
+          </span>
+        </div>
+
+        <p class="mt-4 text-navy-200 text-[0.95rem] leading-relaxed max-w-sm">
+          {business.shortPitch}
+        </p>
+
+        <div class="mt-5 space-y-2.5 text-[0.95rem]">
+          <a href={`tel:${business.phoneHref}`} class="flex items-center gap-2.5 text-white font-semibold hover:text-brass-300 transition-colors">
+            <Icon name="phone" size={17} class="text-brass-400 shrink-0" />
+            {business.phoneDisplay}
+          </a>
+          <a href={`tel:${business.phoneAltHref}`} class="flex items-center gap-2.5 text-navy-200 hover:text-brass-300 transition-colors">
+            <Icon name="phone" size={17} class="text-brass-400/70 shrink-0" />
+            {business.phoneAltDisplay}
+          </a>
+          <a href={`mailto:${business.email}`} class="flex items-center gap-2.5 text-navy-200 hover:text-brass-300 transition-colors break-all">
+            <Icon name="mail" size={17} class="text-brass-400 shrink-0" />
+            {business.email}
+          </a>
+          <p class="flex items-start gap-2.5 text-navy-200">
+            <Icon name="pin" size={17} class="text-brass-400 shrink-0 mt-0.5" />
+            <span>
+              Based in {business.base.neighborhood}, {business.base.city}, {business.base.state} {business.base.zip}<br />
+              <span class="text-navy-300 text-sm">Mobile service — we come to you</span>
+            </span>
+          </p>
+          <p class="flex items-start gap-2.5 text-navy-200">
+            <Icon name="clock" size={17} class="text-brass-400 shrink-0 mt-0.5" />
+            <span>
+              <strong class="text-white">Open every day 7 AM – 11 PM</strong><br />
+              <span class="text-navy-300 text-sm">Not a 24-hour service — real hours, real answers</span>
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="lg:col-span-3">
+        <h2 class="font-display text-sm font-bold uppercase tracking-[0.18em] text-brass-400">Services</h2>
+        <ul class="mt-4 space-y-2 text-[0.93rem]">
+          {services.map((s) => (
+            <li>
+              <a href={`/services/${s.slug}`} class="text-navy-200 hover:text-white transition-colors">
+                {s.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Company + top areas -->
+      <div class="lg:col-span-2">
+        <h2 class="font-display text-sm font-bold uppercase tracking-[0.18em] text-brass-400">Company</h2>
+        <ul class="mt-4 space-y-2 text-[0.93rem]">
+          <li><a href="/about" class="text-navy-200 hover:text-white transition-colors">About Us</a></li>
+          <li><a href="/pricing" class="text-navy-200 hover:text-white transition-colors">Pricing</a></li>
+          <li><a href="/faq" class="text-navy-200 hover:text-white transition-colors">FAQ</a></li>
+          <li><a href="/reviews" class="text-navy-200 hover:text-white transition-colors">Reviews</a></li>
+          <li><a href="/contact" class="text-navy-200 hover:text-white transition-colors">Contact</a></li>
+          <li><a href="/service-areas" class="text-navy-200 hover:text-white transition-colors">All Service Areas</a></li>
+        </ul>
+      </div>
+
+      <!-- Trust -->
+      <div class="lg:col-span-3">
+        <h2 class="font-display text-sm font-bold uppercase tracking-[0.18em] text-brass-400">Why us</h2>
+        <ul class="mt-4 space-y-3 text-[0.93rem]">
+          {[
+            'Licensed & insured New York locksmith',
+            'Based in Bay Ridge — genuinely local',
+            'Price agreed before any work starts',
+            'Open 7 days including holidays',
+            'No call-center dispatch, no bait pricing',
+          ].map((t) => (
+            <li class="flex items-start gap-2.5 text-navy-200">
+              <Icon name="check" size={16} class="text-brass-400 shrink-0 mt-1" />
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Full neighborhood index — real internal linking, not a keyword dump -->
+    <div class="mt-12 pt-8 border-t border-white/10">
+      <h2 class="font-display text-sm font-bold uppercase tracking-[0.18em] text-brass-400">
+        Neighborhoods we serve
+      </h2>
+
+      <div class="mt-5">
+        <h3 class="text-white font-semibold text-[0.95rem] mb-2">Brooklyn</h3>
+        <ul class="flex flex-wrap gap-x-1 gap-y-1.5 text-[0.82rem] text-navy-300">
+          {brooklyn.map((a, i) => (
+            <li>
+              <a href={`/service-areas/${a.slug}`} class="hover:text-brass-300 transition-colors">{a.name}</a>
+              {i < brooklyn.length - 1 && <span class="text-navy-600 mx-0.5">·</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="mt-5">
+        <h3 class="text-white font-semibold text-[0.95rem] mb-2">Staten Island</h3>
+        <ul class="flex flex-wrap gap-x-1 gap-y-1.5 text-[0.82rem] text-navy-300">
+          {statenIsland.map((a, i) => (
+            <li>
+              <a href={`/service-areas/${a.slug}`} class="hover:text-brass-300 transition-colors">{a.name}</a>
+              {i < statenIsland.length - 1 && <span class="text-navy-600 mx-0.5">·</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-navy-300">
+      <p>© {year} {business.legalName}. All rights reserved.</p>
+      <p>{business.licenseNote} · Brooklyn &amp; Staten Island, NY</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky mobile call bar -->
+<div class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-navy-900/97 backdrop-blur border-t border-brass-400/40 px-3 py-2.5 flex gap-2">
+  <a href={`tel:${business.phoneHref}`} class="btn btn-brass flex-1 btn-sm" data-call-cta="sticky">
+    <Icon name="phone" size={17} />
+    Call {business.phoneDisplay}
+  </a>
+  <a href="/contact" class="btn btn-ghost btn-sm px-4">Quote</a>
+</div>

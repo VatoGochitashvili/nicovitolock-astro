@@ -1,0 +1,215 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import HeroBg from '@/components/HeroBg.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import { serviceAreas, nearbyAreas } from '@/data/locations';
+import { services } from '@/data/services';
+import { business } from '@/data/business';
+import { areaCopy, areaFaqs, areaTraitNote } from '@/lib/localize';
+import { breadcrumbSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
+
+export function getStaticPaths() {
+  return serviceAreas.map((area) => ({
+    params: { slug: area.slug },
+    props: { area },
+  }));
+}
+
+const { area } = Astro.props;
+const copy = areaCopy(area);
+const note = areaTraitNote(area);
+const near = nearbyAreas(area);
+const isTier1 = area.tier === 1;
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Service Areas', url: '/service-areas' },
+  { name: area.name, url: `/service-areas/${area.slug}` },
+];
+
+const faqs = areaFaqs(area);
+
+const title = pickTitle([
+  `Locksmith in ${area.name}, ${area.region} | Nico & Vito Locksmith`,
+  `Locksmith in ${area.name}, ${area.region} | Nico & Vito`,
+  `${area.name} Locksmith, ${area.region} | Nico & Vito`,
+  `Locksmith in ${area.name} | Nico & Vito Locksmith`,
+  `${area.name} Locksmith | Nico & Vito`,
+]);
+
+const description = clampDescription(
+  `Locksmith in ${area.name}, ${area.region} ${area.zip}. Lockouts, rekeys, car keys, intercoms & cameras. ${area.eta} from Bay Ridge, open daily 7AM–11PM. Call ${business.phone}.`
+);
+
+const schema = [
+  breadcrumbSchema(crumbs),
+  faqSchema(faqs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `Locksmith services in ${area.name}`,
+    description: copy.lead,
+    serviceType: 'Locksmith',
+    areaServed: {
+      '@type': 'Place',
+      name: `${area.name}, ${area.region}, NY ${area.zip}`,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: area.region,
+        addressRegion: 'NY',
+        postalCode: area.zip,
+        addressCountry: 'US',
+      },
+    },
+    provider: { '@id': 'https://nicovitolocksmith.com/#business' },
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`/service-areas/${area.slug}`}
+  schema={schema}
+>
+  <section class="tex-navy relative py-12 md:py-16 overflow-hidden">
+    <HeroBg variant={area.tier === 1 && /Downtown|DUMBO|St\. George|Tompkinsville/.test(area.name) ? 'avenue' : 'neighborhood'} />
+    <div class="container-x">
+      <Breadcrumbs items={crumbs} light />
+      <p class="eyebrow eyebrow--light mt-5 mb-3">{area.region} · {area.zip}</p>
+      <h1 class="display text-white text-[2rem] sm:text-4xl lg:text-[3.2rem] max-w-4xl">
+        Locksmith in {area.name}
+      </h1>
+      <p class="mt-4 text-navy-200 text-lg max-w-2xl leading-relaxed">{copy.lead}</p>
+
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass" data-call-cta="area-hero">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
+        </a>
+        <a href="/contact" class="btn btn-ghost">Request a quote</a>
+      </div>
+
+      <ul class="mt-7 flex flex-wrap gap-x-6 gap-y-2.5 text-sm text-navy-100">
+        <li class="flex items-center gap-2">
+          <Icon name="bolt" size={16} class="text-brass-400 shrink-0" />
+          {area.eta} from Bay Ridge
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="clock" size={16} class="text-brass-400 shrink-0" />
+          Open daily 7 AM – 11 PM
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="badge" size={16} class="text-brass-400 shrink-0" />
+          Licensed &amp; insured
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 bg-cream">
+    <div class="container-x grid lg:grid-cols-12 gap-10 lg:gap-14">
+      <div class="lg:col-span-7">
+        <div class="prose-local text-[1.05rem]">
+          <p>{area.blurb}</p>
+          <p>{copy.detail}</p>
+          <p>{note}</p>
+          <p>{copy.trust}{copy.coverage ? ` ${copy.coverage}` : ''}</p>
+        </div>
+
+        <div class="mt-9">
+          <h2 class="display text-navy-900 text-2xl md:text-[1.85rem]">{copy.heading}</h2>
+          <span class="rule-brass mt-3 block"></span>
+          <p class="mt-4 text-muted leading-relaxed">
+            Every service we offer is available in {area.name}
+            {isTier1 ? ' — tap one for local detail and pricing.' : '.'}
+          </p>
+          <div class="mt-5 grid sm:grid-cols-2 gap-3">
+            {services.map((s) => (
+              <a
+                href={isTier1 ? `/services/${s.slug}/${area.slug}` : `/services/${s.slug}`}
+                class="card card-hover px-4 py-3.5 flex items-center gap-3 group"
+              >
+                <span class="w-9 h-9 rounded-lg bg-navy-50 text-navy-700 grid place-items-center shrink-0 group-hover:bg-brass-400 group-hover:text-navy-950 transition-colors">
+                  <Icon name={s.icon} size={18} />
+                </span>
+                <span class="font-display font-bold text-navy-900 text-[0.92rem] leading-tight">
+                  {s.short} {isTier1 ? `in ${area.name}` : ''}
+                </span>
+                <Icon name="arrow" size={15} class="text-brass-500 ml-auto shrink-0" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="mt-10">
+          <h2 class="display text-navy-900 text-xl md:text-2xl">
+            Landmarks and streets we cover in {area.name}
+          </h2>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {area.landmarks.map((l) => (
+              <li class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-line text-[0.86rem] text-navy-800">
+                <Icon name="pin" size={13} class="text-brass-500" />
+                {l}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {near.length > 0 && (
+          <div class="mt-10">
+            <h2 class="display text-navy-900 text-xl md:text-2xl">Neighborhoods next door</h2>
+            <div class="mt-4 grid sm:grid-cols-3 gap-3">
+              {near.map((n) => (
+                <a href={`/service-areas/${n.slug}`} class="card card-hover px-4 py-3.5 flex items-center gap-2.5">
+                  <Icon name="pin" size={16} class="text-brass-500 shrink-0" />
+                  <span class="text-navy-800 font-semibold text-[0.92rem]">{n.name}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <aside class="lg:col-span-5 space-y-5">
+        <div class="card p-6 tex-navy">
+          <h2 class="text-white text-xl">{area.name} at a glance</h2>
+          <dl class="mt-4 space-y-3 text-[0.95rem]">
+            {[
+              { t: 'Borough', d: area.region, i: 'pin' },
+              { t: 'ZIP code', d: area.zip, i: 'pin' },
+              { t: 'Typical arrival', d: area.eta, i: 'bolt' },
+              { t: 'Hours', d: 'Every day, 7 AM – 11 PM', i: 'clock' },
+              { t: 'Trip surcharge', d: 'None', i: 'dollar' },
+            ].map((row) => (
+              <div class="flex items-start gap-3">
+                <Icon name={row.i} size={17} class="text-brass-400 shrink-0 mt-0.5" />
+                <div>
+                  <dt class="text-navy-300 text-xs uppercase tracking-wider font-semibold">{row.t}</dt>
+                  <dd class="text-white">{row.d}</dd>
+                </div>
+              </div>
+            ))}
+          </dl>
+          <a href={`tel:${business.phoneHref}`} class="btn btn-brass w-full mt-5" data-call-cta="area-sidebar">
+            <Icon name="phone" size={18} />
+            {business.phoneDisplay}
+          </a>
+        </div>
+
+        <ContactForm area={area.name} compact />
+      </aside>
+    </div>
+  </section>
+
+  <FaqAccordion faqs={faqs} heading={`Locksmith in ${area.name} — questions we get`} />
+
+  <CtaBand
+    heading={`Need a locksmith in ${area.name}?`}
+    body={`We're ${area.eta} away, open every day 7 AM to 11 PM. Call for a price before we head out.`}
+  />
+</BaseLayout>

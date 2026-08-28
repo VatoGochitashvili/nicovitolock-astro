@@ -1,0 +1,151 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { business } from '@/data/business';
+import { withTrailingSlash } from '@/lib/seo';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  schema?: object | object[];
+  ogImage?: string;
+  /** Set true on thin/utility pages that shouldn't be indexed. */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical = Astro.url.pathname,
+  schema,
+  ogImage = '/brand/van-2.jpg',
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(withTrailingSlash(canonical), Astro.site).toString();
+const ogURL = new URL(ogImage, Astro.site).toString();
+const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta
+      name="robots"
+      content={noindex
+        ? 'noindex, follow'
+        : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+    />
+
+    <link rel="icon" type="image/png" sizes="192x192" href="/brand/logo-192.png" />
+    <link rel="apple-touch-icon" href="/brand/logo-192.png" />
+    <meta name="theme-color" content="#22414f" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    <!-- Local / geo signals -->
+    <meta name="geo.region" content="US-NY" />
+    <meta name="geo.placename" content="Bay Ridge, Brooklyn" />
+    <meta name="geo.position" content={`${business.geo.lat};${business.geo.lng}`} />
+    <meta name="ICBM" content={`${business.geo.lat}, ${business.geo.lng}`} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogURL} />
+    <meta property="og:image:alt" content={`${business.name} — ${business.tagline}`} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogURL} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+
+    {schemaBlocks.map((block) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(block)} />
+    ))}
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script is:inline>
+      (function () {
+        // Scroll-reveal. Safety first: content must NEVER be permanently
+        // invisible. If IntersectionObserver is missing, throws, or simply
+        // never fires (hidden tab, prerender, odd bot renderer), a timer
+        // force-reveals everything.
+        function revealAll() {
+          var els = document.querySelectorAll('.reveal:not(.is-in)');
+          for (var i = 0; i < els.length; i++) els[i].classList.add('is-in');
+        }
+
+        function initReveal() {
+          var els = document.querySelectorAll('.reveal:not(.is-in)');
+          if (!els.length) return;
+
+          if (!('IntersectionObserver' in window)) {
+            revealAll();
+            return;
+          }
+
+          try {
+            var io = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                var el = entry.target;
+                var delay = el.getAttribute('data-delay');
+                if (delay) el.style.transitionDelay = delay + 'ms';
+                el.classList.add('is-in');
+                io.unobserve(el);
+              });
+            }, { rootMargin: '0px 0px -6% 0px', threshold: 0.1 });
+
+            for (var i = 0; i < els.length; i++) io.observe(els[i]);
+          } catch (e) {
+            revealAll();
+            return;
+          }
+
+          // Backstop: if the observer never reported anything, show it all.
+          setTimeout(revealAll, 2500);
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initReveal);
+        } else {
+          initReveal();
+        }
+        document.addEventListener('astro:page-load', initReveal);
+        // Last resort — a print or a save-to-PDF must show the whole page.
+        window.addEventListener('beforeprint', revealAll);
+      })();
+    </script>
+  </body>
+</html>

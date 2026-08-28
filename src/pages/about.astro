@@ -1,0 +1,160 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import { business } from '@/data/business';
+import { serviceAreas } from '@/data/locations';
+import { services } from '@/data/services';
+import { breadcrumbSchema, localBusinessSchema } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'About', url: '/about' },
+];
+
+const values = [
+  {
+    icon: 'dollar',
+    title: 'The quote is the price',
+    body: "We tell you the number before we leave. If we get there and the job is genuinely different from what you described, we stop and tell you before doing anything — never after. The bait-and-switch invoice is the single most common complaint about this trade, and it is entirely avoidable.",
+  },
+  {
+    icon: 'clock',
+    title: 'Real hours, not fake ones',
+    body: "Half the locksmith listings in New York claim 24/7 and then don't answer at 2 AM. We're open 7 AM to 11 PM, every single day including weekends and holidays. Inside those hours you get a person. Outside them, we're honest that you should call someone else.",
+  },
+  {
+    icon: 'wrench',
+    title: 'Repair before replace',
+    body: "A lot of 'broken' locks are misaligned doors, drifted strike plates, or swollen frames. We check that first. If the fix is a twenty-dollar adjustment rather than a two-hundred-dollar lockset, that's what we'll tell you — and it's why people call us back.",
+  },
+  {
+    icon: 'badge',
+    title: 'Licensed, insured, and local',
+    body: "We're a licensed New York locksmith carrying insurance, and we ask you for ID on lockouts. Both of those protect you. A locksmith who opens a door without asking who you are will do the same at your door for somebody else.",
+  },
+];
+---
+
+<BaseLayout
+  title="About Us | Nico & Vito Locksmith, Bay Ridge"
+  description="Nico & Vito Locksmith is a licensed, family-run locksmith based in Bay Ridge, Brooklyn, serving all of Brooklyn and Staten Island. Open every day 7AM–11PM."
+  canonical="/about"
+  schema={[breadcrumbSchema(crumbs), localBusinessSchema()]}
+>
+  <PageHero
+    eyebrow="About us"
+    title="Two guys, one van, and the whole of Brooklyn"
+    subtitle="Nico & Vito Locksmith is a licensed, family-run shop based in Bay Ridge — the number you call is the number that shows up."
+    crumbs={crumbs}
+  />
+
+  <TrustBar />
+
+  <section class="py-16 md:py-20 bg-cream">
+    <div class="container-x grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+      <div class="lg:col-span-7">
+        <p class="eyebrow mb-3">Our story</p>
+        <h2 class="display text-navy-900 text-3xl md:text-[2.5rem]">
+          Built on 3rd Avenue, not in a call center
+        </h2>
+
+        <div class="mt-6 space-y-4 text-muted text-[1.06rem] leading-relaxed">
+          <p>
+            If you have ever searched "locksmith near me" in New York, you have probably
+            been burned. Most of the top results are lead-generation companies — a national
+            number, a $29 quote, and a subcontractor who arrives, drills your lock in
+            ninety seconds, and hands you a bill for $350. They are not locksmiths. They
+            are a phone bank with a website.
+          </p>
+          <p>
+            <strong class="text-navy-900">Nico &amp; Vito is the opposite of that.</strong> We
+            are based in Bay Ridge. When you call {business.phoneDisplay}, you reach the
+            people who will actually be standing at your door. There is no dispatcher, no
+            bidding, and no handoff.
+          </p>
+          <p>
+            Working one part of the city for years teaches you things a national dispatch
+            never learns. We know the jimmy-proof rim locks on Brooklyn apartment doors and
+            which ones can be opened without damage. We know the prewar mortise locksets in
+            Park Slope and Windsor Terrace brownstones are usually worth repairing rather
+            than replacing. We know the salt air along the Belt and the Staten Island shore
+            eats cheap exterior cylinders in a season. We know Borough Park and Flatbush
+            buildings run intercom systems where one dead handset does not mean the whole
+            backbone has failed.
+          </p>
+          <p>
+            That is why most of our jobs finish in one visit, and why our vans carry the
+            key blanks, cylinders, programming equipment, and cutting machines you can see
+            in the photos rather than a generic toolbox.
+          </p>
+          <p>
+            We cover all {serviceAreas.length} neighborhoods across Brooklyn and Staten
+            Island, and we do all {services.length} services in-house — from a lockout at
+            9 PM to a full building's worth of intercoms and cameras.
+          </p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 space-y-5">
+        <div class="frame-brass">
+          <img
+            src="/brand/van-open.jpg"
+            alt="Inside the Nico & Vito Locksmith van: pegboard of key blanks, key cutting machines, and programming equipment"
+            width="1200" height="800"
+            class="w-full aspect-[4/3] object-cover"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="card p-6">
+          <h2 class="text-navy-900 text-lg">The details</h2>
+          <dl class="mt-4 space-y-3.5 text-[0.95rem]">
+            {[
+              { t: 'Business name', d: business.legalName, i: 'store' },
+              { t: 'Based in', d: `${business.base.neighborhood}, ${business.base.city}, ${business.base.state} ${business.base.zip}`, i: 'pin' },
+              { t: 'Service area', d: 'All of Brooklyn & Staten Island', i: 'pin' },
+              { t: 'Hours', d: 'Every day, 7:00 AM – 11:00 PM', i: 'clock' },
+              { t: 'Phone', d: business.phoneDisplay, i: 'phone' },
+              { t: 'Second line', d: business.phoneAltDisplay, i: 'phone' },
+              { t: 'Email', d: business.email, i: 'mail' },
+              { t: 'Payment', d: business.paymentAccepted, i: 'dollar' },
+            ].map((row) => (
+              <div class="flex items-start gap-3">
+                <Icon name={row.i} size={17} class="text-brass-500 shrink-0 mt-0.5" />
+                <div class="min-w-0">
+                  <dt class="text-muted text-xs uppercase tracking-wider font-bold">{row.t}</dt>
+                  <dd class="text-navy-900 font-medium break-words">{row.d}</dd>
+                </div>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-20 tex-stone">
+    <div class="container-x">
+      <div class="max-w-2xl mb-10">
+        <p class="eyebrow mb-3">How we work</p>
+        <h2 class="display text-navy-900 text-3xl md:text-[2.5rem]">Four things we don't compromise on</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-5">
+        {values.map((v, i) => (
+          <div class="card p-6 md:p-7 reveal" data-delay={i * 70}>
+            <span class="w-11 h-11 rounded-lg bg-navy-800 text-brass-400 grid place-items-center">
+              <Icon name={v.icon} size={22} />
+            </span>
+            <h3 class="mt-4 text-xl text-navy-900">{v.title}</h3>
+            <p class="mt-2.5 text-muted leading-relaxed">{v.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

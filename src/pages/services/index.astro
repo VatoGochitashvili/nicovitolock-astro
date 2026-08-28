@@ -1,0 +1,108 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import ServiceCard from '@/components/ServiceCard.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { services, serviceCategories } from '@/data/services';
+import { serviceAreas } from '@/data/locations';
+import { breadcrumbSchema, serviceSchema } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Services', url: '/services' },
+];
+
+const schema = [
+  breadcrumbSchema(crumbs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Locksmith services — Brooklyn & Staten Island',
+    itemListElement: services.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: s.name,
+      url: new URL(`/services/${s.slug}/`, Astro.site).toString(),
+    })),
+  },
+  ...services.slice(0, 4).map((s) =>
+    serviceSchema({ name: s.name, description: s.summary, url: `/services/${s.slug}` })
+  ),
+];
+
+const categoryBlurbs: Record<string, string> = {
+  Emergency: 'When you need someone at the door now.',
+  Residential: 'Houses, apartments, brownstones, and everything behind the front door.',
+  Automotive: 'Car keys and fobs, cut and programmed at your vehicle.',
+  Commercial: 'Storefronts, offices, and buildings — including the code-critical hardware.',
+  Security: 'Cameras and systems that produce footage you can actually use.',
+};
+---
+
+<BaseLayout
+  title="Locksmith Services | Brooklyn & Staten Island | Nico & Vito"
+  description="Locksmith services across Brooklyn & Staten Island: lockouts, rekeying, lock repair, car keys, smart locks, intercoms and cameras. Open daily 7AM–11PM."
+  canonical="/services"
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Our services"
+    title="Everything a locksmith should do — from one Bay Ridge shop"
+    subtitle={`${services.length} services covering residential, automotive, and commercial work across all of Brooklyn and Staten Island.`}
+    crumbs={crumbs}
+    bg="truck"
+  />
+
+  <section class="py-14 md:py-18 bg-cream">
+    <div class="container-x">
+      {serviceCategories.map((cat, ci) => {
+        const list = services.filter((s) => s.category === cat);
+        if (!list.length) return null;
+        return (
+          <div class:list={['scroll-mt-24', ci > 0 && 'mt-14']} id={cat.toLowerCase()}>
+            <div class="flex items-baseline gap-4 mb-6">
+              <h2 class="display text-navy-900 text-2xl md:text-[2rem]">{cat}</h2>
+              <span class="rule-brass"></span>
+              <p class="text-muted text-[0.95rem] hidden sm:block">{categoryBlurbs[cat]}</p>
+            </div>
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {list.map((s, i) => <ServiceCard service={s} delay={i * 60} />)}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="py-14 md:py-18 tex-stone">
+    <div class="container-x">
+      <div class="max-w-2xl mb-8">
+        <p class="eyebrow mb-3">Coverage</p>
+        <h2 class="display text-navy-900 text-3xl md:text-[2.4rem]">
+          Every service, in every neighborhood
+        </h2>
+        <p class="mt-4 text-muted text-lg leading-relaxed">
+          We cover {serviceAreas.length} neighborhoods across Brooklyn and Staten Island.
+          Pick your area to see hours, arrival times, and the work we do there.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        {serviceAreas.map((a) => (
+          <a
+            href={`/service-areas/${a.slug}`}
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-line text-[0.86rem] text-navy-800 hover:bg-navy-800 hover:border-navy-800 hover:text-white transition-colors"
+          >
+            <Icon name="pin" size={13} class="text-brass-500" />
+            {a.name}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Not sure which service you need?"
+    body="Describe the problem and we'll tell you what it actually takes — including when the answer is a cheaper fix than you expected."
+  />
+</BaseLayout>

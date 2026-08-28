@@ -1,0 +1,30 @@
+---
+import Icon from './Icon.astro';
+import type { Service } from '@/data/services';
+
+interface Props {
+  service: Service;
+  /** When set, link to the service-in-city page instead. */
+  areaSlug?: string;
+  areaName?: string;
+  delay?: number;
+}
+const { service, areaSlug, areaName, delay = 0 } = Astro.props;
+const href = areaSlug ? `/services/${service.slug}/${areaSlug}` : `/services/${service.slug}`;
+const title = areaName ? `${service.name} in ${areaName}` : service.name;
+---
+<a
+  href={href}
+  class="card card-hover group p-6 flex flex-col reveal"
+  data-delay={delay}
+>
+  <span class="w-11 h-11 rounded-lg bg-navy-800 text-brass-400 grid place-items-center shrink-0 group-hover:bg-brass-400 group-hover:text-navy-900 transition-colors">
+    <Icon name={service.icon} size={22} />
+  </span>
+  <h3 class="mt-4 text-lg text-navy-900 leading-snug">{title}</h3>
+  <p class="mt-2 text-[0.93rem] text-muted leading-relaxed grow">{service.summary}</p>
+  <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-brass-600 group-hover:gap-2.5 transition-all">
+    Learn more
+    <Icon name="arrow" size={15} />
+  </span>
+</a>

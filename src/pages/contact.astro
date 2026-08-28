@@ -1,0 +1,123 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import { business } from '@/data/business';
+import { serviceAreas } from '@/data/locations';
+import { breadcrumbSchema, localBusinessSchema } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Contact', url: '/contact' },
+];
+---
+
+<BaseLayout
+  title="Contact | Nico & Vito Locksmith, Bay Ridge"
+  description={`Call ${business.phone} or request a quote. Licensed Bay Ridge locksmith serving all of Brooklyn & Staten Island, open every day 7AM–11PM.`}
+  canonical="/contact"
+  schema={[
+    breadcrumbSchema(crumbs),
+    localBusinessSchema(),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      name: 'Contact Nico & Vito Locksmith',
+      url: new URL('/contact/', Astro.site).toString(),
+    },
+  ]}
+>
+  <PageHero
+    eyebrow="Get in touch"
+    title="Call us — it's faster than any form"
+    subtitle="Locked out or in a hurry? Pick up the phone. For everything else, send the form and we'll call you back."
+    crumbs={crumbs}
+    cta={false}
+  />
+
+  <section class="py-14 md:py-18 bg-cream">
+    <div class="container-x grid lg:grid-cols-12 gap-10">
+      <!-- Contact details -->
+      <div class="lg:col-span-5 space-y-5">
+        <div class="card p-6 md:p-7 tex-navy">
+          <p class="eyebrow eyebrow--light mb-3">Call now</p>
+          <a
+            href={`tel:${business.phoneHref}`}
+            class="display text-brass-400 text-[2rem] sm:text-[2.5rem] leading-none hover:text-brass-300 transition-colors block"
+            data-call-cta="contact-primary"
+          >
+            {business.phoneDisplay}
+          </a>
+          <p class="mt-3 text-navy-200">
+            Second line:
+            <a href={`tel:${business.phoneAltHref}`} class="text-white font-semibold hover:text-brass-300 transition-colors">
+              {business.phoneAltDisplay}
+            </a>
+          </p>
+          <a href={`tel:${business.phoneHref}`} class="btn btn-brass w-full mt-5">
+            <Icon name="phone" size={18} />
+            Call {business.phoneDisplay}
+          </a>
+        </div>
+
+        <div class="card p-6 md:p-7">
+          <h2 class="text-navy-900 text-lg">Hours</h2>
+          <span class="rule-brass mt-2.5 block"></span>
+          <div class="mt-4 flex items-baseline justify-between gap-4 pb-3 border-b border-line">
+            <span class="text-navy-800 font-semibold">Monday – Sunday</span>
+            <span class="text-navy-900 font-bold">7:00 AM – 11:00 PM</span>
+          </div>
+          <p class="mt-3 text-sm text-muted leading-relaxed">
+            Every day, weekends and holidays included. We are <strong class="text-navy-900">not</strong> a
+            24-hour service — outside those hours nobody is coming, and we'd rather say so
+            than take your call and leave you waiting.
+          </p>
+        </div>
+
+        <div class="card p-6 md:p-7">
+          <h2 class="text-navy-900 text-lg">Where we are</h2>
+          <span class="rule-brass mt-2.5 block"></span>
+          <ul class="mt-4 space-y-3.5 text-[0.95rem]">
+            <li class="flex items-start gap-3">
+              <Icon name="pin" size={18} class="text-brass-500 shrink-0 mt-0.5" />
+              <span class="text-navy-800">
+                <strong class="text-navy-900 block">Based in Bay Ridge, Brooklyn</strong>
+                Mobile service — we come to you. No walk-in storefront.
+              </span>
+            </li>
+            <li class="flex items-start gap-3">
+              <Icon name="bolt" size={18} class="text-brass-500 shrink-0 mt-0.5" />
+              <span class="text-navy-800">
+                <strong class="text-navy-900 block">All of Brooklyn &amp; Staten Island</strong>
+                {serviceAreas.length} neighborhoods. Brooklyn typically 20–30 min, Staten Island 30–45.
+              </span>
+            </li>
+            <li class="flex items-start gap-3">
+              <Icon name="mail" size={18} class="text-brass-500 shrink-0 mt-0.5" />
+              <a href={`mailto:${business.email}`} class="link-brass break-all">{business.email}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card p-6 md:p-7 bg-brass-50 border-brass-200">
+          <h2 class="text-navy-900 text-lg flex items-center gap-2">
+            <Icon name="badge" size={20} class="text-brass-600" />
+            Before we open your door
+          </h2>
+          <p class="mt-3 text-[0.95rem] text-navy-800 leading-relaxed">
+            On any lockout we'll ask for photo ID and something linking you to the address —
+            a lease, a piece of mail, a utility bill. It takes thirty seconds and it's the
+            clearest sign you've called a real locksmith. Anyone who skips it will do the
+            same for whoever knocks next.
+          </p>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="lg:col-span-7">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

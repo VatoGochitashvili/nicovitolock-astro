@@ -1,0 +1,7 @@
+# Nico & Vito Locksmith — nicovitolocksmith.com
+User-agent: *
+Allow: /
+
+# No crawl-delay: this is a small static site, crawl it freely.
+
+Sitemap: https://nicovitolocksmith.com/sitemap-index.xml

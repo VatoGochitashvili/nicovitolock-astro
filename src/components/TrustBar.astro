@@ -1,0 +1,25 @@
+---
+import Icon from './Icon.astro';
+
+const items = [
+  { icon: 'badge',  title: 'Licensed & insured',   body: 'A real New York locksmith. Ask for credentials — we carry them.' },
+  { icon: 'pin',    title: 'Bay Ridge based',      body: 'We live here. Most Brooklyn calls are 20–30 minutes.' },
+  { icon: 'dollar', title: 'Price before we work', body: 'Quoted on the phone, confirmed on site. No surprise invoice.' },
+  { icon: 'clock',  title: 'Open every day',       body: '7 AM to 11 PM, weekends and holidays included.' },
+];
+---
+<section class="bg-navy-800 border-y border-navy-700">
+  <div class="container-x grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+    {items.map((it) => (
+      <div class="flex items-start gap-3.5 py-6 sm:px-6 first:sm:pl-0 last:sm:pr-0">
+        <span class="w-10 h-10 rounded-lg bg-brass-400/15 text-brass-400 grid place-items-center shrink-0">
+          <Icon name={it.icon} size={20} />
+        </span>
+        <div>
+          <h3 class="text-white text-[1.02rem] font-display font-bold leading-tight">{it.title}</h3>
+          <p class="mt-1 text-navy-200 text-[0.88rem] leading-snug">{it.body}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
