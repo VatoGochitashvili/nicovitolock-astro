@@ -10,6 +10,7 @@ const isActive = (href: string) =>
 const nav = [
   { href: '/services', label: 'Services' },
   { href: '/service-areas', label: 'Service Areas' },
+  { href: '/car-keys', label: 'Car Keys' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
@@ -36,13 +37,17 @@ const nav = [
          separate wordmark would just repeat it. The alt text carries the
          business name for screen readers and for search. -->
     <a href="/" class="shrink-0 group" aria-label={`${business.name} — home`}>
-      <img
-        src="/brand/logo-512.png"
-        alt={`${business.name} — Bay Ridge, Brooklyn`}
-        width="512"
-        height="512"
-        class="h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 md:h-[5.5rem] md:w-[5.5rem] object-contain transition-transform duration-300 group-hover:scale-[1.05]"
-      />
+      <picture>
+        <source srcset="/brand/logo-176.webp 176w, /brand/logo-256.webp 256w" sizes="88px" type="image/webp" />
+        <img
+          src="/brand/logo-176.png"
+          alt={`${business.name} — Bay Ridge, Brooklyn`}
+          width="176"
+          height="176"
+          fetchpriority="high"
+          class="h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 md:h-[5.5rem] md:w-[5.5rem] object-contain transition-transform duration-300 group-hover:scale-[1.05]"
+        />
+      </picture>
     </a>
 
     <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main">

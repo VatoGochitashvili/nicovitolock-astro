@@ -487,3 +487,115 @@ export function localLists(service: Service, area: ServiceArea) {
     scenarios: pickMany(service.scenarios, seed, 37, 5),
   };
 }
+
+// ---------------------------------------------------------------------
+// Car-make page copy. Same problem as the neighborhood pages: 22 pages about
+// "car keys" will collapse into near-duplicates unless the shared framing
+// varies. Seeded from the make slug, so each page is stable but distinct.
+// ---------------------------------------------------------------------
+
+import type { Vehicle } from '@/data/vehicles';
+
+export interface VehicleCopy {
+  sub: string;
+  coverage: string;
+  quote: string;
+  process: string;
+  closing: string;
+  modelsNote: string;
+  ctaBody: string;
+  costAnswer: string;
+  onSiteAnswer: string;
+  aftermarketAnswer: string;
+}
+
+export function vehicleCopy(v: Vehicle): VehicleCopy {
+  const seed = seededHash(`vehicle::${v.slug}`);
+  const make = v.make;
+  const m0 = v.models[0];
+  const m1 = v.models[1] ?? v.models[0];
+
+  const subs = [
+    `Cut and programmed at your ${make}, wherever it is parked in Brooklyn or Staten Island — for a lot less than the dealer, and with no tow.`,
+    `We come to the ${make}. Keys and fobs cut and programmed at the kerb across Brooklyn and Staten Island, at a fraction of dealer pricing.`,
+    `A ${make} key made at your car, not at a dealership — no tow truck, no waiting list, and a price agreed before we set off.`,
+    `${make} keys and fobs originated on site anywhere in Brooklyn or Staten Island. Dealer-level equipment, without the dealer bill.`,
+    `Lost the key to your ${m0}? We cut and program a replacement at the vehicle, usually the same day you call.`,
+  ];
+
+  const coverages = [
+    `We reach the car wherever it sits. These neighborhoods are the quickest from Bay Ridge, though every one of them is covered.`,
+    `Your ${make} does not have to move — we do. Fastest neighborhoods from our Bay Ridge base are listed below.`,
+    `Because the car cannot be driven without a key, we bring the equipment to it. A sample of the areas we reach quickest:`,
+    `Every neighborhood in both boroughs is on our route. These are simply the closest to Bay Ridge:`,
+  ];
+
+  const quotes = [
+    `Tell us the year and model and we will quote the key before leaving Bay Ridge. Bring your licence and registration — we check that the ${make} is yours.`,
+    `Give us the year, model and what happened, and you get a real price on the phone. We will ask for ID and proof of ownership at the car, as any legitimate locksmith should.`,
+    `A ${make} quote takes one phone call. We confirm the key type from your year and model, price it, and come out. Photo ID and registration needed on arrival.`,
+    `Call with the VIN year and model of your ${make} and we will tell you the exact key it takes and what it costs — before anybody drives anywhere.`,
+  ];
+
+  const processes = [
+    `We identify the correct key from your VIN, cut the blade to the vehicle, and pair the chip to the immobiliser at the roadside. Old lost keys can be erased from the car's memory at the same time — worth doing if the key was lost rather than broken.`,
+    `The job is two halves: cutting a blade that fits the ${make}'s lock, and marrying the transponder to the immobiliser so the engine will actually start. We carry the equipment for both on the van.`,
+    `Cutting alone gets you into the ${m1}; it will not start it. We do the electronic half as well, programming the chip to the car and, where you want it, deleting the missing key so it can never start the vehicle again.`,
+    `We decode the key from the vehicle, cut it, and program it on the spot. If the old key is genuinely lost rather than damaged, we will also erase it from the immobiliser so nobody else can use it.`,
+  ];
+
+  const closings = [
+    `${make} owners across both boroughs call us because the price we quote on the phone is the price on the invoice.`,
+    `Whether it is a spare for the ${m0} or an all-keys-lost on a car sitting on the street, you get a licensed tech and an honest quote.`,
+    `We would rather tell you on the phone that a job needs a dealer than take your money and fail at the kerb. That applies to every ${make} we quote.`,
+    `From a second key to a full origination, ${make} work is priced up front and done at your vehicle.`,
+  ];
+
+  const modelsNotes = [
+    `Not listed? We cover the rest of the ${make} range too — call with the year and model.`,
+    `The list is not exhaustive; if your ${make} is not on it, ring us with the year and model.`,
+    `Other ${make} models are covered as well — the ones above are simply what we see most.`,
+    `Anything else in the ${make} lineup, just ask. These are the common ones, not the limit.`,
+  ];
+
+  const ctaBodies = [
+    `We come to the ${make} anywhere in Brooklyn or Staten Island. Open every day, 7 AM to 11 PM.`,
+    `The car stays where it is and we drive to it — every neighborhood in both boroughs, 7 AM to 11 PM daily.`,
+    `No tow and no dealership queue. We reach your ${make} across Brooklyn and Staten Island, seven days a week.`,
+    `A licensed tech to your ${m0}, anywhere in the two boroughs, any day between 7 AM and 11 PM.`,
+  ];
+
+  const costAnswers = [
+    `It depends on the key type — a plain transponder blade costs far less than a proximity fob. ${make} keys typically start around $120 and we quote your exact vehicle on the phone. Still well below dealer pricing, and it saves the tow.`,
+    `Key type decides it. A basic ${make} chip key is the cheap end; a smart proximity fob is the expensive end. We start around $120 and give you the real number once you tell us the year and model — no dealer markup, no tow bill.`,
+    `Somewhere from about $120, depending on whether your ${make} takes a cut blade or a proximity fob. You get the exact figure before we set off, and it will be a good deal less than the dealership quoted.`,
+    `A ${make} key starts around $120 and rises with the complexity of the fob. We price it on the phone from your year and model, so nothing changes when we arrive.`,
+  ];
+
+  const onSiteAnswers = [
+    `We come to you, anywhere in Brooklyn or Staten Island. That is rather the point — with the key lost, the ${make} cannot be driven to a dealership without a tow truck.`,
+    `To you. A car with no key is not going anywhere on its own, so we bring the cutting and programming equipment to wherever it is parked.`,
+    `Always to the vehicle. Everything needed to originate a ${make} key rides on the van, which is what saves you the tow.`,
+    `We travel to the car. Kerbside, driveway, garage, parking lot — if we can reach the ${make}, we can key it.`,
+  ];
+
+  const aftermarketAnswers = [
+    `Often yes, if it is the correct part number and frequency for your ${make}. Aftermarket quality is a real gamble though — send us the part number before you buy and we will sanity-check it, which is cheaper than finding out it will not pair.`,
+    `Usually, provided it matches your ${make}'s frequency and part number. Cheap listings do fail to program, and that is the fob rather than the car. Check the number with us first.`,
+    `We can try, and it usually works when the part is right for the vehicle. If a bargain fob refuses to pair, the fob is the problem — so it is worth confirming the part number with us before ordering.`,
+    `Yes in most cases. The failure mode is always the same: wrong frequency or a poor clone. Send the listing over and we will tell you if it will pair with your ${make}.`,
+  ];
+
+  return {
+    sub: pick(subs, seed, 1),
+    coverage: pick(coverages, seed, 2),
+    quote: pick(quotes, seed, 3),
+    process: pick(processes, seed, 4),
+    closing: pick(closings, seed, 5),
+    modelsNote: pick(modelsNotes, seed, 6),
+    ctaBody: pick(ctaBodies, seed, 7),
+    costAnswer: pick(costAnswers, seed, 8),
+    onSiteAnswer: pick(onSiteAnswers, seed, 9),
+    aftermarketAnswer: pick(aftermarketAnswers, seed, 10),
+  };
+}

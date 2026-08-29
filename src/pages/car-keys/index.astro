@@ -1,0 +1,139 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import Backdrop from '@/components/Backdrop.astro';
+import { vehicles } from '@/data/vehicles';
+import { business } from '@/data/business';
+import { breadcrumbSchema, serviceSchema, faqSchema } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Car Keys by Make', url: '/car-keys' },
+];
+
+const faqs = [
+  {
+    q: 'Do you make car keys for every make?',
+    a: `We cover most makes on the road. A handful of platforms are genuinely dealer-only for all-keys-lost — newer Mercedes on FBS4, MQB-platform Volkswagens, some newer Volvos and BMWs. We say so on the phone rather than take a call-out fee for a job that cannot succeed.`,
+  },
+  {
+    q: 'Is a locksmith really cheaper than the dealer?',
+    a: 'Almost always — and it also saves the tow, because the dealer needs the car there and you have no key. We come to the vehicle wherever it is parked in Brooklyn or Staten Island.',
+  },
+  {
+    q: 'What do you need from me to make a car key?',
+    a: 'Your driver’s licence and the registration or title, so we can confirm the car is yours. Any locksmith who skips that check is one you should not be calling.',
+  },
+  {
+    q: 'Can you make a key with no working key at all?',
+    a: 'For most makes, yes — that is an all-keys-lost job and we do them regularly. We originate a key from the vehicle and program it to the immobiliser at the roadside.',
+  },
+];
+
+const schema = [
+  breadcrumbSchema(crumbs),
+  serviceSchema({
+    name: 'Car key replacement by make',
+    description: 'Car keys and fobs cut and programmed at your vehicle across Brooklyn and Staten Island.',
+    url: '/car-keys',
+  }),
+  faqSchema(faqs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Car makes we cut and program keys for',
+    numberOfItems: vehicles.length,
+    itemListElement: vehicles.map((v, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: `${v.make} car key replacement`,
+      url: new URL(`/car-keys/${v.slug}/`, Astro.site).toString(),
+    })),
+  },
+];
+---
+<BaseLayout
+  title="Car Key Replacement by Make | Brooklyn & Staten Island"
+  description={`Car keys and fobs cut and programmed at your vehicle for ${vehicles.length} makes across Brooklyn & Staten Island. Far below dealer pricing, no tow. Call ${business.phone}.`}
+  canonical="/car-keys"
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Automotive"
+    title="Car key replacement, by make"
+    subtitle="We come to the vehicle and cut and program the key there — for a lot less than a dealership, and without the tow."
+    crumbs={crumbs}
+    scene="automotive"
+  />
+
+  <section class="relative overflow-hidden py-14 md:py-18 bg-cream">
+    <Backdrop variant="grid" tone="light" intensity={0.7} />
+    <div class="container-x relative z-[1]">
+      <div class="max-w-3xl prose-local text-[1.06rem]">
+        <p class="text-navy-800 text-[1.15rem] leading-relaxed">
+          Almost every car built since the late 1990s has a transponder chip that has to be
+          electronically married to the immobiliser — cutting the metal alone opens the door
+          but will not start the engine. We do both halves at the roadside, for most makes
+          on the road in Brooklyn and Staten Island.
+        </p>
+        <p>
+          Every make below has its own key system, its own quirks, and its own honest answer
+          about what a locksmith can and cannot do. Pick yours.
+        </p>
+      </div>
+
+      <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
+        Choose your make
+      </h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1">
+        {vehicles.map((v) => (
+          <li class="border-b border-line">
+            <a href={`/car-keys/${v.slug}`} class="group flex items-center gap-3 py-3.5">
+              <Icon name="car" size={17} class="text-brass-600 shrink-0" />
+              <span class="font-display font-bold text-navy-900 text-[1rem] group-hover:text-brass-600 transition-colors">
+                {v.make}
+              </span>
+              {!v.allKeysLost && (
+                <span class="badge bg-cream-deep text-muted text-[0.68rem]">some models dealer-only</span>
+              )}
+              <Icon name="arrow" size={15} class="text-brass-500 ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p class="mt-8 text-muted">
+        Make not listed? Call <a href={`tel:${business.phoneHref}`} class="link-brass">{business.phoneDisplay}</a> with
+        the year, make and model — we will give you a straight yes or no rather than showing up and shrugging.
+      </p>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden py-14 md:py-18 bg-navy-900" id="quote">
+    <Backdrop variant="rings" tone="dark" />
+    <div class="container-x relative z-[1] grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+      <div class="lg:col-span-5">
+        <h2 class="display text-white text-2xl md:text-[2.1rem]">Locked out of your car?</h2>
+        <p class="mt-4 text-navy-200 leading-relaxed">
+          Tell us the year, make and model and we will quote the key before we leave Bay Ridge.
+          Open every day, 7 AM to 11 PM.
+        </p>
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass mt-6" data-call-cta="carkeys-band">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
+        </a>
+      </div>
+      <div class="lg:col-span-7">
+        <ContactForm variant="short" tone="dark" service="Car Key Replacement" />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Need a car key today?"
+    body="We come to the vehicle anywhere in Brooklyn or Staten Island. No tow, no dealership queue."
+  />
+</BaseLayout>

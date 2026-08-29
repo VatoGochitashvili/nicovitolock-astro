@@ -2,6 +2,7 @@
 import { business } from '@/data/business';
 import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
+import { vehicles } from '@/data/vehicles';
 import Icon from './Icon.astro';
 
 const year = new Date().getFullYear();
@@ -15,12 +16,15 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
       <!-- Brand + NAP -->
       <div class="lg:col-span-4">
         <div class="flex items-center gap-3">
-          <img
-            src="/brand/logo-192.png"
-            alt={`${business.name} logo`}
-            width="192" height="192"
-            class="h-16 w-16 object-contain bg-white rounded-full p-1.5 shrink-0"
-          />
+          <picture>
+            <source srcset="/brand/logo-176.webp" type="image/webp" />
+            <img
+              src="/brand/logo-176.png"
+              alt={`${business.name} logo`}
+              width="176" height="176" loading="lazy"
+              class="h-16 w-16 object-contain bg-white rounded-full p-1.5 shrink-0"
+            />
+          </picture>
           <span class="leading-none">
             <span class="block display text-white text-xl">NICO &amp; VITO</span>
             <span class="block font-display text-xs font-bold uppercase tracking-[0.24em] text-brass-400">Locksmith</span>
@@ -85,6 +89,7 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
           <li><a href="/reviews" class="text-navy-200 hover:text-white transition-colors">Reviews</a></li>
           <li><a href="/contact" class="text-navy-200 hover:text-white transition-colors">Contact</a></li>
           <li><a href="/service-areas" class="text-navy-200 hover:text-white transition-colors">All Service Areas</a></li>
+          <li><a href="/car-keys" class="text-navy-200 hover:text-white transition-colors">Car Keys by Make</a></li>
         </ul>
       </div>
 
@@ -121,6 +126,18 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
             <li>
               <a href={`/service-areas/${a.slug}`} class="hover:text-brass-300 transition-colors">{a.name}</a>
               {i < brooklyn.length - 1 && <span class="text-navy-600 mx-0.5">·</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="mt-5">
+        <h3 class="text-white font-semibold text-[0.95rem] mb-2">Car keys by make</h3>
+        <ul class="flex flex-wrap gap-x-1 gap-y-1.5 text-[0.82rem] text-navy-300">
+          {vehicles.map((v, i) => (
+            <li>
+              <a href={`/car-keys/${v.slug}`} class="hover:text-brass-300 transition-colors">{v.make}</a>
+              {i < vehicles.length - 1 && <span class="text-navy-600 mx-0.5">·</span>}
             </li>
           ))}
         </ul>

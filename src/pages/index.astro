@@ -9,6 +9,7 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
 import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
+import { vehicles } from '@/data/vehicles';
 import { localBusinessSchema, webSiteSchema, organizationSchema, faqSchema } from '@/lib/seo';
 
 const brooklynAreas = serviceAreas.filter((a) => a.region === 'Brooklyn');
@@ -162,6 +163,28 @@ const description =
           </li>
         ))}
       </ol>
+
+      <div class="mt-10 pt-8 border-t border-line">
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 mb-4">
+          <h3 class="display text-navy-900 text-xl">Car keys, by make</h3>
+          <a href="/car-keys" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 hover:text-brass-600 transition-colors">
+            All {vehicles.length} makes →
+          </a>
+        </div>
+        <ul class="flex flex-wrap gap-2">
+          {vehicles.map((v) => (
+            <li>
+              <a
+                href={`/car-keys/${v.slug}`}
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 transition-colors"
+              >
+                <Icon name="car" size={13} class="text-brass-500" />
+                {v.make}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -246,13 +269,16 @@ const description =
       </div>
 
       <div class="order-1 lg:order-2 relative min-h-[18rem] lg:min-h-[34rem]">
-        <img
-          src="/brand/van-2.jpg"
-          alt="The Nico & Vito Locksmith van open on a Brooklyn street, showing the key board, cutting machines, and programming equipment"
-          width="1200" height="800"
-          class="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
+        <picture>
+          <source srcset="/brand/van-2.webp" type="image/webp" />
+          <img
+            src="/brand/van-2.jpg"
+            alt="The Nico & Vito Locksmith van open on a Brooklyn street, showing the key board, cutting machines, and programming equipment"
+            width="1200" height="800"
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy" decoding="async"
+          />
+        </picture>
       </div>
     </div>
   </section>

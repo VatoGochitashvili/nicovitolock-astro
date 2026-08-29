@@ -77,13 +77,9 @@ const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogURL} />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Self-hosted variable fonts; preloaded. See public/fonts/fonts.css -->
+    <link rel="preload" href="/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
 
     <script is:inline>document.documentElement.classList.add('js');</script>
 

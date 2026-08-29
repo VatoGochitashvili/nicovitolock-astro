@@ -7,6 +7,10 @@
 /brand/*
   Cache-Control: public, max-age=31536000, immutable
 
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 

@@ -9,7 +9,7 @@ Re-run the checks after any content change.
 
 | Check | Result |
 |---|---|
-| Pages built | 786 |
+| Pages built | 809 |
 | Duplicate `<title>` | **0** |
 | Duplicate meta description | **0** |
 | Duplicate canonical | **0** |
@@ -40,8 +40,17 @@ deliberately **absent** until real reviews exist — see §5.
 /services/[slug]/[area]    660 service × neighborhood pages (55 tier-1 areas)
 /service-areas             hub  → 105 neighborhoods
 /service-areas/[slug]      105 neighborhood pages
+/car-keys                  hub  → 22 car makes
+/car-keys/[make]           22 make pages (Honda, Toyota, BMW, …)
 /pricing /about /faq /reviews /contact
 ```
+
+**The car-make cluster** exists because "honda key replacement brooklyn" is a
+different search from "car key replacement brooklyn", and the generic service
+page never ranks for it. Each make page carries real platform detail (Toyota's
+G-to-H chip change, BMW CAS vs FEM/BDC, the Hyundai/Kia immobiliser gap) and an
+honest caveat where a platform is genuinely dealer-only. Those caveats cost a
+few jobs and save far more in wasted call-outs and bad reviews.
 
 **Neighborhoods are tiered on purpose.** 55 tier-1 areas get the full 12-service
 matrix; the other 50 get a neighborhood page only. A full 105 × 12 would be 1,260
@@ -82,6 +91,12 @@ The link graph is built from:
 | Same service across 55 neighborhoods | **~10%** |
 | The 105 neighborhood pages vs each other | **~13%** |
 | Same neighborhood, different services | **~14%** |
+| The 22 car-make pages vs each other | **~13%** |
+
+The make pages first shipped at **53% similarity and 544 words** — genuinely
+doorway-shaped. They were rebuilt with real model lists, per-make year notes,
+and seeded variation until they matched the rest of the site. Worth re-running
+that measurement on any new cluster before it goes live.
 
 Driven by: 12 features / 10 scenarios per service rendered as a seeded subset of
 6 / 5 per neighborhood; housing-trait paragraphs keyed to each area's `traits`;
@@ -94,6 +109,23 @@ Driving similarity toward zero requires text-spinning, which is itself a spam
 signal.
 
 ---
+
+## 4b. Performance — Core Web Vitals
+
+| Fix | Before | After |
+|---|---|---|
+| Header logo (loads on every page, displays at 88px) | 292KB PNG | **14KB WebP** |
+| Fonts | render-blocking request to Google Fonts | **self-hosted, 81KB, 2 variable files** |
+| Font weight coverage | 8 static faces, 324KB | 2 variable files, 81KB |
+| Photographs | 261–267KB JPG | **112–118KB WebP** (JPG fallback kept) |
+| Images missing width/height (CLS) | 0 | 0 |
+| Third-party requests | 1 (fonts.googleapis.com) | **0** |
+
+The Google Fonts request was the worst of these: a third-party DNS lookup plus
+TLS handshake sitting on the critical path before first paint. The faces are now
+bundled into the main stylesheet and the two woff2 files are preloaded.
+
+Per page over the wire: ~16KB HTML + 7KB CSS + 81KB fonts (cached forever).
 
 ## 5. What only the owner can do
 

@@ -1,0 +1,256 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import Backdrop from '@/components/Backdrop.astro';
+import Scene from '@/components/Scene.astro';
+import { vehicles } from '@/data/vehicles';
+import { tier1Areas } from '@/data/locations';
+import { business } from '@/data/business';
+import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
+import { vehicleCopy } from '@/lib/localize';
+
+export function getStaticPaths() {
+  return vehicles.map((vehicle) => ({ params: { make: vehicle.slug }, props: { vehicle } }));
+}
+
+const { vehicle } = Astro.props;
+const copy = vehicleCopy(vehicle);
+const others = vehicles.filter((v) => v.slug !== vehicle.slug).slice(0, 8);
+// A sample of nearby neighborhoods for internal linking, not all 55.
+const nearbyAreas = tier1Areas.slice(0, 12);
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Car Keys by Make', url: '/car-keys' },
+  { name: vehicle.make, url: `/car-keys/${vehicle.slug}` },
+];
+
+const title = pickTitle([
+  `${vehicle.make} Car Key Replacement Brooklyn | Nico & Vito`,
+  `${vehicle.make} Key Replacement Brooklyn | Nico & Vito`,
+  `${vehicle.make} Car Keys Brooklyn | Nico & Vito`,
+  `${vehicle.make} Car Key Replacement | Brooklyn`,
+]);
+
+const description = clampDescription(
+  `${vehicle.make} car keys and fobs cut and programmed at your vehicle across Brooklyn & Staten Island. ${vehicle.system}. Open daily 7AM–11PM. Call ${business.phone}.`
+);
+
+const faqs = [
+  {
+    q: `Can you make a ${vehicle.make} key if I lost all of them?`,
+    a: vehicle.allKeysLost
+      ? `Yes. All-keys-lost is routine on ${vehicle.make} for most model years — we originate a key from the vehicle and program it to the immobiliser at the roadside. Bring your licence and the registration or title so we can confirm the car is yours.`
+      : `It depends on the year. ${vehicle.caveat} Call ${business.phone} with your year and model and we will tell you honestly which side of the line your car falls on.`,
+  },
+  {
+    q: `How much does a ${vehicle.make} key cost?`,
+    a: copy.costAnswer,
+  },
+  {
+    q: `Do you come to the car, or do I need to bring it in?`,
+    a: copy.onSiteAnswer,
+  },
+  {
+    q: `What key system does my ${vehicle.make} use?`,
+    a: `${vehicle.system}. ${vehicle.notes}`,
+  },
+  {
+    q: `Can you program a ${vehicle.make} fob I bought online?`,
+    a: copy.aftermarketAnswer,
+  },
+];
+
+const schema = [
+  breadcrumbSchema(crumbs),
+  serviceSchema({
+    name: `${vehicle.make} car key replacement`,
+    description,
+    url: `/car-keys/${vehicle.slug}`,
+  }),
+  faqSchema(faqs),
+];
+---
+<BaseLayout title={title} description={description} canonical={`/car-keys/${vehicle.slug}`} schema={schema}>
+  <section class="relative bg-navy-900 overflow-hidden">
+    <Backdrop variant="bitting" tone="dark" intensity={0.7} />
+    <Scene variant="automotive" class="h-[74%]" opacity={0.17} />
+    <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
+    <span
+      class="pointer-events-none select-none absolute -right-2 top-1/2 -translate-y-1/2 display text-white/[0.04] text-[6rem] lg:text-[10rem] leading-none whitespace-nowrap z-[1]"
+      aria-hidden="true">{vehicle.make.toUpperCase()}</span>
+
+    <div class="container-x relative z-[1] py-11 md:py-14">
+      <Breadcrumbs items={crumbs} light />
+      <p class="mt-6 mb-4 font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400">
+        Automotive · {vehicle.system}
+      </p>
+      <h1 class="display text-white text-[2rem] sm:text-[2.7rem] lg:text-[3.2rem] max-w-4xl leading-[1.04]">
+        {vehicle.make} car key replacement in Brooklyn
+      </h1>
+      <p class="mt-4 text-navy-200 text-lg max-w-2xl leading-relaxed">{copy.sub}</p>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass" data-call-cta="make-hero">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
+        </a>
+        <a href="#quote" class="btn btn-ghost">Get a price</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-navy-800 border-b border-white/10">
+    <div class="container-x grid grid-cols-2 lg:grid-cols-4 divide-x divide-white/10">
+      {[
+        { k: 'Key system', v: vehicle.system.split('(')[0].trim(), i: 'fob' },
+        { k: 'All keys lost', v: vehicle.allKeysLost ? 'Handled on site' : 'Year dependent', i: 'key' },
+        { k: 'Typically from', v: '$120', i: 'dollar' },
+        { k: 'Hours', v: 'Every day, 7am–11pm', i: 'clock' },
+      ].map((f) => (
+        <div class="py-4 px-4 first:pl-0 last:pr-0">
+          <p class="flex items-center gap-1.5 text-[0.65rem] uppercase tracking-[0.14em] text-navy-300">
+            <Icon name={f.i} size={13} class="text-brass-400 shrink-0" />
+            {f.k}
+          </p>
+          <p class="mt-1 text-white font-semibold text-[0.95rem]">{f.v}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden py-14 md:py-18 bg-cream">
+    <Backdrop variant="grid" tone="light" intensity={0.6} />
+    <div class="container-x relative z-[1]">
+      <div class="max-w-3xl prose-local text-[1.06rem]">
+        <p class="text-navy-800 text-[1.15rem] leading-relaxed">{vehicle.notes}</p>
+        <p>{vehicle.yearNotes}</p>
+        <p>{copy.process}</p>
+        {vehicle.caveat && (
+          <p class="!text-navy-900 bg-brass-50 border-l-4 border-brass-400 px-5 py-4 rounded-r-lg">
+            <strong>Straight answer first:</strong> {vehicle.caveat}
+          </p>
+        )}
+      </div>
+
+      <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-5 border-b-2 border-navy-900">
+        {vehicle.make} models we cut keys for
+      </h2>
+      <ul class="flex flex-wrap gap-2">
+        {vehicle.models.map((m) => (
+          <li class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800">
+            <Icon name="car" size={13} class="text-brass-500" />
+            {vehicle.make} {m}
+          </li>
+        ))}
+      </ul>
+      <p class="mt-3 text-muted text-[0.92rem]">{copy.modelsNote}</p>
+
+      <div class="mt-12 grid md:grid-cols-2 gap-10 md:gap-14 max-w-5xl">
+        <div>
+          <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 border-b-2 border-navy-900">
+            {vehicle.make} keys we cut and program
+          </h2>
+          <ul class="mt-5 space-y-2.5">
+            {vehicle.keyTypes.map((k) => (
+              <li class="flex items-start gap-2.5">
+                <Icon name="check" size={16} class="text-brass-600 shrink-0 mt-1" />
+                <span class="text-navy-800">{k}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 border-b-2 border-navy-900">
+            What {vehicle.make} owners call us about
+          </h2>
+          <ul class="mt-5 space-y-2.5">
+            {vehicle.common.map((c) => (
+              <li class="flex items-start gap-2.5">
+                <Icon name="wrench" size={16} class="text-brass-600 shrink-0 mt-1" />
+                <span class="text-navy-800">{c}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-5 border-b-2 border-navy-900">
+        {vehicle.make} key replacement across Brooklyn &amp; Staten Island
+      </h2>
+      <p class="text-muted max-w-3xl leading-relaxed">
+        {copy.coverage} The <a href="/services/car-key-replacement" class="link-brass">full car key service</a> page
+        carries the complete list.
+      </p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {nearbyAreas.map((a) => (
+          <li>
+            <a
+              href={`/services/car-key-replacement/${a.slug}`}
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 transition-colors"
+            >
+              <Icon name="pin" size={13} class="text-brass-500" />
+              {a.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden py-14 md:py-18 bg-navy-900" id="quote">
+    <Backdrop variant="rings" tone="dark" />
+    <div class="container-x relative z-[1] grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+      <div class="lg:col-span-5">
+        <h2 class="display text-white text-2xl md:text-[2.1rem]">
+          Get a price for your {vehicle.make}
+        </h2>
+        <p class="mt-4 text-navy-200 leading-relaxed">{copy.quote}</p>
+        <a href={`tel:${business.phoneHref}`} class="btn btn-brass mt-6" data-call-cta="make-band">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
+        </a>
+      </div>
+      <div class="lg:col-span-7">
+        <ContactForm variant="short" tone="dark" service="Car Key Replacement" />
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 bg-cream-deep">
+    <div class="container-x">
+      <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mb-6 border-b-2 border-navy-900">
+        Other makes we cover
+      </h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1">
+        {others.map((v) => (
+          <li class="border-b border-line">
+            <a href={`/car-keys/${v.slug}`} class="group flex items-center gap-3 py-3">
+              <Icon name="car" size={16} class="text-brass-600 shrink-0" />
+              <span class="text-navy-800 font-semibold text-[0.93rem] group-hover:text-brass-600 transition-colors">
+                {v.make}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/car-keys" class="btn btn-outline btn-sm mt-6">All makes</a>
+    </div>
+  </section>
+
+  <section class="py-10 bg-cream">
+    <div class="container-narrow">
+      <p class="text-muted text-[1.02rem] leading-relaxed">{copy.closing}</p>
+    </div>
+  </section>
+
+  <FaqAccordion faqs={faqs} heading={`${vehicle.make} car keys — common questions`} />
+
+  <CtaBand
+    heading={`Need a ${vehicle.make} key today?`}
+    body={copy.ctaBody}
+  />
+</BaseLayout>
