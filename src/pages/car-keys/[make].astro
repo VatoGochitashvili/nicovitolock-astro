@@ -7,6 +7,7 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
+import PhotoBg from '@/components/PhotoBg.astro';
 import { vehicles } from '@/data/vehicles';
 import { tier1Areas } from '@/data/locations';
 import { business } from '@/data/business';
@@ -77,8 +78,8 @@ const schema = [
 ---
 <BaseLayout title={title} description={description} canonical={`/car-keys/${vehicle.slug}`} schema={schema}>
   <section class="relative bg-navy-900 overflow-hidden">
-    <Backdrop variant="bitting" tone="dark" intensity={0.7} />
-    <Scene variant="automotive" class="h-[74%]" opacity={0.17} />
+    <PhotoBg variant="van" strength={46} eager />
+    <Scene variant="automotive" class="h-[58%]" opacity={0.11} />
     <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
       class="pointer-events-none select-none absolute -right-2 top-1/2 -translate-y-1/2 display text-white/[0.04] text-[6rem] lg:text-[10rem] leading-none whitespace-nowrap z-[1]"

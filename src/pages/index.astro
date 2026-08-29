@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
+import PhotoBg from '@/components/PhotoBg.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
@@ -56,8 +57,8 @@ const description =
        Flat navy plate, no photograph behind the type. The form is the only
        light object in the band, which makes it the focal point. -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <Backdrop variant="bitting" tone="dark" intensity={0.8} />
-    <Scene variant="bayridge" class="h-[66%] lg:h-[78%]" opacity={0.2} />
+    <PhotoBg variant="rowhouses" strength={52} position="center 62%" eager />
+    <Scene variant="bayridge" class="h-[52%] lg:h-[62%]" opacity={0.13} />
     <div class="absolute inset-x-0 top-0 h-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
       class="pointer-events-none select-none absolute -left-6 bottom-[-3rem] display text-white/[0.035] text-[13rem] lg:text-[20rem] leading-none"

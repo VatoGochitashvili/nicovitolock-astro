@@ -20,6 +20,13 @@ export function getStaticPaths() {
 
 const { service } = Astro.props;
 
+const photoFor: Record<string, 'key' | 'keys' | 'van' | 'rowhouses' | 'street'> = {
+  Emergency: 'key',
+  Residential: 'keys',
+  Automotive: 'van',
+  Commercial: 'street',
+  Security: 'rowhouses',
+};
 const sceneFor: Record<string, 'residential' | 'automotive' | 'commercial' | 'security' | 'emergency'> = {
   Emergency: 'emergency',
   Residential: 'residential',
@@ -74,6 +81,7 @@ const schema = [
     subtitle={service.summary}
     crumbs={crumbs}
     scene={sceneFor[service.category]}
+    photo={photoFor[service.category]}
   />
 
   <section class="py-14 md:py-18 bg-cream">

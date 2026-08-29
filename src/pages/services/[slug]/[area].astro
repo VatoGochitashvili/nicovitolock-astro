@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
+import PhotoBg from '@/components/PhotoBg.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
@@ -32,6 +33,13 @@ const sceneFor: Record<string, 'residential' | 'automotive' | 'commercial' | 'se
   Security: 'security',
 };
 
+const photoFor: Record<string, 'key' | 'keys' | 'van' | 'rowhouses' | 'street'> = {
+  Emergency: 'key',
+  Residential: 'keys',
+  Automotive: 'van',
+  Commercial: 'street',
+  Security: 'rowhouses',
+};
 const copy = localCopy(service, area);
 const note = traitNote(service, area);
 const lists = localLists(service, area);
@@ -82,8 +90,8 @@ const facts = [
 >
   <!-- Header plate -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <Backdrop variant="bitting" tone="dark" intensity={0.7} />
-    <Scene variant={sceneFor[service.category]} class="h-[74%]" opacity={0.17} />
+    <PhotoBg variant={photoFor[service.category]} strength={46} eager />
+    <Scene variant={sceneFor[service.category]} class="h-[58%]" opacity={0.11} />
     <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
       class="pointer-events-none select-none absolute -right-2 top-1/2 -translate-y-1/2 display text-white/[0.04] text-[7rem] lg:text-[11rem] leading-none whitespace-nowrap"

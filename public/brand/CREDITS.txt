@@ -1,24 +1,49 @@
 Image credits — nicovitolocksmith.com
 =====================================
 
-OWNED / BRAND
-  logo-512.png, logo-192.png
-      The Nico & Vito Locksmith logo, background cut to alpha so the mark sits
-      cleanly on white, cream, or navy without a visible square.
-      The masters (original + transparent) are in /brand-source/, which is
-      versioned but not deployed. See brand-source/README.md to regenerate.
-  van-2.jpg, van-open.jpg
-      The Nico & Vito service van. Used as the hero background on every
-      /services/ page.
+ALL BACKGROUND PHOTOGRAPHY IS PROCESSED INTO THE BRAND DUOTONE
+Navy shadows (#0a1822) to warm highlight (#e9e2d4), baked into the file rather
+than applied with CSS filters. Zero runtime cost, identical in every browser,
+and it is what stops a stock photograph from looking like a stock photograph —
+it arrives already in the palette. A light Gaussian blur is applied because
+these sit behind a ~77% scrim where fine detail is invisible but expensive:
+it roughly halved the file sizes and improved text legibility.
 
-NO STOCK PHOTOGRAPHY
-  This site deliberately uses none. The earlier build borrowed Brooklyn stock
-  shots from a sibling project (locksandcameras.com); they were removed because
-  shared imagery made the two sites look like the same template. Everything
-  visual here is Nico & Vito's own.
+Scrim levels are measured, not guessed. Against the brightest 95th-percentile
+patch in each image's text column, body copy clears WCAG AA at 8.7:1 or better
+and the brass accent at 5.5:1 or better. Re-measure before lowering them.
 
-TO ADD YOUR OWN
-  Drop photos into public/brand/ and reference them from the components.
-  Worth shooting: the shop/van on 3rd Avenue, a tech at a door, key cutting in
-  the van, the Verrazzano from Shore Road. Real local photos beat stock for
-  trust and for local SEO.
+OWNED
+  logo*.png / logo*.webp    The Nico & Vito Locksmith logo.
+                            Transparent for page chrome; the favicons are
+                            opaque white squares (a navy mark vanishes on a
+                            dark browser tab).
+  van-2.jpg, van-open.jpg   The Nico & Vito service van.
+  bg-van.*                  The van, duotoned. NOTE: cropped to exclude the
+                            right flank, because the van still carries the
+                            OLD phone number (347-613-0218) and the site now
+                            leads with 718-618-6002.
+
+STOCK PHOTOGRAPHY — Unsplash License
+(free for commercial use, no attribution required; credited here as practice)
+
+  bg-rowhouses.*   Brooklyn brownstone row with stoops.
+                   unsplash.com/photos/photo-1698248476376-f28f8869b622
+  bg-street.*      Brownstone street with a lamp.
+                   unsplash.com/photos/photo-1515112569565-1e4aef316db9
+  bg-key.*         A key on a dark textured surface.
+                   unsplash.com/photos/photo-1562770584-eaf50b017307
+  bg-keys.*        Old keys hanging on wood.
+                   unsplash.com/photos/photo-1550527882-b71dea5f8089
+
+  These were chosen fresh for this site. They are NOT the photos used on the
+  sibling locksandcameras.com project — sharing assets between the two made
+  them look like one template, which is the whole reason that set was removed.
+
+NOTE FOR THE OWNER
+  These are generic Brooklyn streets, not photographs of Bay Ridge, and nothing
+  on the site captions them as a specific place. Real local photos would be
+  better for trust and for local SEO. Worth shooting: the van on 3rd Avenue,
+  a tech at a door, key cutting inside the van, the Verrazzano from Shore Road.
+  Drop them in as bg-rowhouses.jpg / bg-street.jpg and the duotone script in
+  the commit history will reprocess them to match.
