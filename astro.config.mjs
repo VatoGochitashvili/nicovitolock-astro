@@ -21,20 +21,25 @@ export default defineConfig({
         const p = new URL(item.url).pathname.replace(/\/$/, '') || '/';
         let priority = 0.6;
         let changefreq = 'monthly';
+        // Priority is a hint Google largely ignores now, but the tiering keeps
+        // the file honest about what matters and costs nothing.
         if (p === '/') {
           priority = 1.0;
           changefreq = 'weekly';
-        } else if (p === '/services') {
+        } else if (p === '/services' || p === '/car-keys') {
           priority = 0.9;
           changefreq = 'weekly';
         } else if (/^\/services\/[^/]+$/.test(p)) {
           priority = 0.9;
+        } else if (/^\/car-keys\/[^/]+$/.test(p)) {
+          // Per-make pages: high commercial intent, above the area matrix.
+          priority = 0.8;
         } else if (/^\/services\/[^/]+\/[^/]+$/.test(p)) {
-          priority = 0.55;
+          priority = 0.6;
         } else if (p === '/service-areas') {
           priority = 0.85;
         } else if (/^\/service-areas\/[^/]+$/.test(p)) {
-          priority = 0.65;
+          priority = 0.7;
         } else if (p === '/contact' || p === '/about') {
           priority = 0.8;
         } else if (p === '/reviews' || p === '/faq' || p === '/pricing') {
