@@ -67,7 +67,7 @@ For a local locksmith, the Business Profile drives more calls than the website.
   Google suspends locksmith listings for this specifically, and the category is
   already heavily policed because of lead-gen fraud.
 - Hours: **7:00 AM – 11:00 PM, every day**. Match the site exactly.
-- Primary phone: **(347) 613-0218** — the number on the van and the cards.
+- Primary phone: **(718) 618-6002** (confirmed by the owner).
 - Website: `https://nicovitolocksmith.com`
 - Add real photos of the van, the key board, and completed work.
 - Locksmiths often face extra verification (video call). Have the van, tools,
@@ -81,8 +81,13 @@ Google Business Profile, Yelp, Facebook, Apple Maps, Bing Places. Use:
 ```
 Nico & Vito Locksmith
 Bay Ridge, Brooklyn, NY 11209
-(347) 613-0218
+(718) 618-6002
 ```
+
+⚠️ The van and the printed business cards still show **347-613-0218**. Both
+numbers reach the shop, but every citation must carry the same primary or the
+listings fight each other. Either re-letter the van, or switch the site's
+primary back — it is one line in `src/data/business.ts`.
 
 Inconsistency here is the most common reason a local business under-ranks.
 

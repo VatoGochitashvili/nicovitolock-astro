@@ -1,6 +1,7 @@
 ---
 import Breadcrumbs from './Breadcrumbs.astro';
 import Backdrop from './Backdrop.astro';
+import Scene from './Scene.astro';
 import Icon from './Icon.astro';
 import { business } from '@/data/business';
 
@@ -17,11 +18,14 @@ interface Props {
   cta?: boolean;
   /** Big faint numeral or word set behind the title */
   ghost?: string;
+  /** Original line-art scene anchored to the bottom of the band */
+  scene?: 'bayridge' | 'residential' | 'automotive' | 'commercial' | 'security' | 'emergency';
 }
-const { eyebrow, title, subtitle, crumbs, cta = true, ghost } = Astro.props;
+const { eyebrow, title, subtitle, crumbs, cta = true, ghost, scene } = Astro.props;
 ---
 <section class="relative bg-navy-900 overflow-hidden">
-  <Backdrop variant="pins" tone="dark" />
+  <Backdrop variant="pins" tone="dark" intensity={0.7} />
+  {scene && <Scene variant={scene} class="h-[76%]" opacity={0.17} />}
   <!-- Brass index rule down the left edge -->
   <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
 

@@ -1,0 +1,166 @@
+---
+/**
+ * Original SVG scenes, drawn for this site. Bottom-anchored silhouettes that
+ * sit at the base of a dark band — a different treatment from both the
+ * Backdrop patterns and from photography.
+ *
+ * 'bayridge' is the Verrazzano-Narrows Bridge with a limestone row-house
+ * skyline: the one view every Bay Ridge resident recognises instantly, and
+ * something no stock library or competing site will have.
+ */
+interface Props {
+  variant?: 'bayridge' | 'residential' | 'automotive' | 'commercial' | 'security' | 'emergency';
+  class?: string;
+  /** 0–1 opacity of the silhouette */
+  opacity?: number;
+}
+const { variant = 'bayridge', class: className = '', opacity = 0.13 } = Astro.props;
+const ink = '#ffffff';
+const accent = '#f2ae39';
+---
+<div
+  class:list={['pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden', className]}
+  aria-hidden="true"
+>
+  {variant === 'bayridge' && (
+    <svg viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice" class="w-full h-full">
+      <g opacity={opacity} fill="none" stroke={ink} stroke-width="2.5">
+        {/* Verrazzano-Narrows: towers, main cable, suspenders, deck */}
+        <path d="M0 214 C 210 214, 330 120, 470 120 C 610 120, 730 214, 940 214" stroke-width="3" />
+        <path d="M940 214 C 1150 214, 1270 120, 1410 120 C 1500 120, 1560 160, 1600 186" stroke-width="3" />
+        <line x1="470" y1="52" x2="470" y2="238" stroke-width="5" />
+        <line x1="1410" y1="52" x2="1410" y2="238" stroke-width="5" />
+        <path d="M440 84 H500 M440 116 H500" />
+        <path d="M1380 84 H1440 M1380 116 H1440" />
+        <line x1="0" y1="238" x2="1600" y2="238" stroke-width="3.5" />
+        {[120, 200, 280, 360, 560, 640, 720, 800, 880, 1040, 1120, 1200, 1280, 1340, 1500, 1560].map((x) => {
+          const t = Math.abs(x - 470) < Math.abs(x - 1410) ? 470 : 1410;
+          const d = Math.min(1, Math.abs(x - t) / 470);
+          const y = 120 + d * d * 94;
+          return <line x1={x} y1={y} x2={x} y2="238" stroke-width="1.5" />;
+        })}
+        {/* limestone row houses along the shore */}
+        <g stroke-width="2.2">
+          <path d="M0 300 V262 H62 V300 M0 262 L31 244 L62 262" />
+          <path d="M62 300 V254 H124 V300 M62 254 L93 236 L124 254" />
+          <path d="M124 300 V266 H186 V300 M124 266 L155 248 L186 266" />
+          <path d="M186 300 V250 H248 V300 M186 250 L217 232 L248 250" />
+          <path d="M1352 300 V258 H1414 V300 M1352 258 L1383 240 L1414 258" />
+          <path d="M1414 300 V266 H1476 V300 M1414 266 L1445 248 L1476 266" />
+          <path d="M1476 300 V252 H1538 V300 M1476 252 L1507 234 L1538 252" />
+          <path d="M1538 300 V264 H1600 V300 M1538 264 L1569 246 L1600 264" />
+        </g>
+      </g>
+      <circle cx="470" cy="40" r="5" fill={accent} opacity={opacity * 2.4} />
+      <circle cx="1410" cy="40" r="5" fill={accent} opacity={opacity * 2.4} />
+    </svg>
+  )}
+
+  {variant === 'residential' && (
+    <svg viewBox="0 0 1600 220" preserveAspectRatio="xMidYMax slice" class="w-full h-full">
+      <g opacity={opacity} fill="none" stroke={ink} stroke-width="2.4">
+        {/* a run of attached brownstones with stoops */}
+        {[0, 200, 400, 600, 800, 1000, 1200, 1400].map((x, i) => {
+          const h = [150, 132, 162, 140, 156, 128, 148, 138][i];
+          return (
+            <g transform={`translate(${x} 0)`}>
+              <path d={`M8 220 V${220 - h} H192 V220`} />
+              <path d={`M8 ${220 - h} H192`} stroke-width="3" />
+              <rect x="34" y={220 - h + 26} width="34" height="40" />
+              <rect x="94" y={220 - h + 26} width="34" height="40" />
+              <rect x="34" y={220 - h + 86} width="34" height="40" />
+              <rect x="94" y={220 - h + 86} width="34" height="40" />
+              <path d="M146 220 V176 H176 V220" />
+              <path d="M138 220 L146 190 M184 220 L176 190" />
+            </g>
+          );
+        })}
+      </g>
+    </svg>
+  )}
+
+  {variant === 'automotive' && (
+    <svg viewBox="0 0 1600 200" preserveAspectRatio="xMidYMax slice" class="w-full h-full">
+      <g opacity={opacity} fill="none" stroke={ink} stroke-width="2.4">
+        <line x1="0" y1="182" x2="1600" y2="182" stroke-width="3" />
+        {[60, 700, 1180].map((x) => (
+          <g transform={`translate(${x} 0)`}>
+            <path d="M0 156 L18 108 H150 L196 108 L232 156 Z" />
+            <path d="M40 108 L52 74 H140 L156 108" />
+            <circle cx="58" cy="160" r="20" />
+            <circle cx="192" cy="160" r="20" />
+            <line x1="0" y1="140" x2="232" y2="140" stroke-width="1.6" />
+          </g>
+        ))}
+        {/* an oversized key fob, floating */}
+        <g transform="translate(420 40)">
+          <rect x="0" y="0" width="64" height="104" rx="18" />
+          <circle cx="32" cy="26" r="7" />
+          <line x1="16" y1="54" x2="48" y2="54" />
+          <line x1="16" y1="74" x2="48" y2="74" />
+        </g>
+      </g>
+      <circle cx="452" cy="66" r="6" fill={accent} opacity={opacity * 2.4} />
+    </svg>
+  )}
+
+  {variant === 'commercial' && (
+    <svg viewBox="0 0 1600 200" preserveAspectRatio="xMidYMax slice" class="w-full h-full">
+      <g opacity={opacity} fill="none" stroke={ink} stroke-width="2.4">
+        {[0, 320, 640, 960, 1280].map((x) => (
+          <g transform={`translate(${x} 0)`}>
+            <path d="M10 200 V70 H310 V200" />
+            <path d="M0 70 H320" stroke-width="3" />
+            {/* awning */}
+            <path d="M18 70 L46 104 H274 L302 70" />
+            {/* roll-down gate slats */}
+            <line x1="60" y1="122" x2="260" y2="122" stroke-width="1.5" />
+            <line x1="60" y1="140" x2="260" y2="140" stroke-width="1.5" />
+            <line x1="60" y1="158" x2="260" y2="158" stroke-width="1.5" />
+            <line x1="60" y1="176" x2="260" y2="176" stroke-width="1.5" />
+            <rect x="60" y="112" width="200" height="88" />
+          </g>
+        ))}
+      </g>
+    </svg>
+  )}
+
+  {variant === 'security' && (
+    <svg viewBox="0 0 1600 220" preserveAspectRatio="xMidYMax slice" class="w-full h-full">
+      <g opacity={opacity} fill="none" stroke={ink} stroke-width="2.4">
+        <path d="M0 220 V150 H240 V220 M240 220 V116 H520 V220 M520 220 V166 H760 V220 M760 220 V132 H1040 V220 M1040 220 V178 H1300 V220 M1300 220 V140 H1600 V220" />
+        {[180, 660, 1180].map((x) => (
+          <g transform={`translate(${x} 0)`}>
+            <line x1="0" y1="220" x2="0" y2="46" stroke-width="3" />
+            <path d="M0 52 H74 L96 68 L74 84 H0 Z" />
+            <path d="M96 68 L150 40 M96 68 L150 96" stroke-width="1.4" stroke-dasharray="7 9" />
+          </g>
+        ))}
+      </g>
+      <circle cx="264" cy="68" r="5" fill={accent} opacity={opacity * 2.6} />
+      <circle cx="744" cy="68" r="5" fill={accent} opacity={opacity * 2.6} />
+      <circle cx="1264" cy="68" r="5" fill={accent} opacity={opacity * 2.6} />
+    </svg>
+  )}
+
+  {variant === 'emergency' && (
+    <svg viewBox="0 0 1600 220" preserveAspectRatio="xMidYMax slice" class="w-full h-full">
+      <g opacity={opacity} fill="none" stroke={ink} stroke-width="2.4">
+        <line x1="0" y1="212" x2="1600" y2="212" stroke-width="3" />
+        {[120, 560, 1000, 1400].map((x, i) => (
+          <g transform={`translate(${x} 0)`}>
+            <rect x="0" y={44 + (i % 2) * 14} width="150" height={168 - (i % 2) * 14} rx="3" />
+            <circle cx="122" cy={140 + (i % 2) * 7} r="6" />
+            <line x1="0" y1={44 + (i % 2) * 14} x2="150" y2={44 + (i % 2) * 14} stroke-width="3" />
+          </g>
+        ))}
+        {/* keyhole, oversized */}
+        <g transform="translate(760 58)">
+          <circle cx="40" cy="40" r="30" />
+          <path d="M26 62 L18 118 H62 L54 62" />
+        </g>
+      </g>
+      <circle cx="800" cy="98" r="7" fill={accent} opacity={opacity * 2.4} />
+    </svg>
+  )}
+</div>

@@ -11,14 +11,18 @@ export const business = {
   shortPitch:
     'A neighborhood locksmith run out of Bay Ridge, Brooklyn. Lockouts, lock changes, car keys, intercoms, and cameras — done by licensed techs who actually live around here.',
 
-  // Primary number: the one printed on the van and the business cards.
-  phone: '347-613-0218',
-  phoneHref: '+13476130218',
-  phoneDisplay: '(347) 613-0218',
-  // Secondary office line.
-  phoneAlt: '718-618-6002',
-  phoneAltHref: '+17186186002',
-  phoneAltDisplay: '(718) 618-6002',
+  // PRIMARY line — confirmed by the owner 2026-08-29. This is the number that
+  // must appear in Google Business Profile and every citation.
+  // NOTE: the van and the printed business cards still show 347-613-0218.
+  // Both numbers reach the shop, but NAP consistency wants ONE primary
+  // everywhere — see DEPLOY.md before updating listings.
+  phone: '718-618-6002',
+  phoneHref: '+17186186002',
+  phoneDisplay: '(718) 618-6002',
+  // Secondary line (the number currently on the van and the cards).
+  phoneAlt: '347-613-0218',
+  phoneAltHref: '+13476130218',
+  phoneAltDisplay: '(347) 613-0218',
   email: 'nicoandvitolock@gmail.com',
 
   // Service-area business: van-based, no walk-in storefront. We publish the

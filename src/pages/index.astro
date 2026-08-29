@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import Backdrop from '@/components/Backdrop.astro';
+import Scene from '@/components/Scene.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
@@ -45,7 +46,7 @@ const schema = [localBusinessSchema(), webSiteSchema(), organizationSchema(), fa
 
 const title = 'Locksmith Brooklyn & Staten Island | Nico & Vito';
 const description =
-  'Licensed Bay Ridge locksmith covering all of Brooklyn & Staten Island. Lockouts, rekeys, car keys, intercoms, cameras. Open daily 7AM–11PM. (347) 613-0218.';
+  `Licensed Bay Ridge locksmith covering all of Brooklyn & Staten Island. Lockouts, rekeys, car keys, intercoms, cameras. Open daily 7AM–11PM. ${business.phoneDisplay}.`;
 ---
 
 <BaseLayout title={title} description={description} schema={schema} canonical="/">
@@ -54,7 +55,8 @@ const description =
        Flat navy plate, no photograph behind the type. The form is the only
        light object in the band, which makes it the focal point. -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <Backdrop variant="bitting" tone="dark" intensity={1.2} />
+    <Backdrop variant="bitting" tone="dark" intensity={0.8} />
+    <Scene variant="bayridge" class="h-[66%] lg:h-[78%]" opacity={0.2} />
     <div class="absolute inset-x-0 top-0 h-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
       class="pointer-events-none select-none absolute -left-6 bottom-[-3rem] display text-white/[0.035] text-[13rem] lg:text-[20rem] leading-none"
