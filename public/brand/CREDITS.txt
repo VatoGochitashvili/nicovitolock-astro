@@ -11,21 +11,14 @@ OWNED / BRAND
       The Nico & Vito service van. Used as the hero background on every
       /services/ page.
 
-STOCK PHOTOGRAPHY — Unsplash License
-(free for commercial use, no attribution required; credited here as good practice)
+NO STOCK PHOTOGRAPHY
+  This site deliberately uses none. The earlier build borrowed Brooklyn stock
+  shots from a sibling project (locksandcameras.com); they were removed because
+  shared imagery made the two sites look like the same template. Everything
+  visual here is Nico & Vito's own.
 
-  bg-rowhouses.jpg   Brooklyn row houses.
-                     unsplash.com/photos/photo-1749292177172-66edfd44e7cc
-                     Used dimmed behind the homepage and /service-areas/ heroes.
-
-  bg-avenue.jpg      A Brooklyn commercial avenue.
-                     Used dimmed behind downtown / North Shore area heroes.
-
-NOTE FOR THE OWNER
-  bg-rowhouses.jpg is a generic Brooklyn row-house street, NOT a photograph of
-  Bay Ridge specifically. It is used purely as dimmed background texture and
-  never captioned as a particular location, so nothing on the site claims
-  otherwise. If you want the real thing, shoot a few photos along 3rd Avenue,
-  Shore Road, or 86th Street and drop them in as bg-rowhouses.jpg — the site
-  will pick them up with no code changes. A genuine local photo is also a
-  small trust signal for visitors who know the neighborhood.
+TO ADD YOUR OWN
+  Drop photos into public/brand/ and reference them from the components.
+  Worth shooting: the shop/van on 3rd Avenue, a tech at a door, key cutting in
+  the van, the Verrazzano from Shore Road. Real local photos beat stock for
+  trust and for local SEO.

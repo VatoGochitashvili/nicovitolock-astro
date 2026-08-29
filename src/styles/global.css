@@ -314,23 +314,6 @@
 .prose-local p:last-child { margin-bottom: 0; }
 .prose-local strong { color: var(--color-navy-900); font-weight: 650; }
 
-/* ------------------------------------------------------------------ *
- * Marquee (brand strip)
- * ------------------------------------------------------------------ */
-.marquee-mask {
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-}
-.marquee {
-  display: flex;
-  gap: 3rem;
-  width: max-content;
-  animation: marquee 40s linear infinite;
-}
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
 
 /* ------------------------------------------------------------------ *
  * Scroll reveal (progressive enhancement — needs html.js)
@@ -361,7 +344,6 @@ details[open] .acc-chevron { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1 !important; transform: none !important; transition: none; }
-  .marquee { animation: none; }
   html { scroll-behavior: auto; }
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }

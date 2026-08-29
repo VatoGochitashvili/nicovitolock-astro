@@ -25,7 +25,25 @@ Node 22.12+ (see `.nvmrc`).
 | `src/lib/localize.ts` | Per-neighborhood copy variation — sentence pools, housing-trait paragraphs, and seeded subsets of each service's feature/scenario lists. Deterministic, so pages are stable across builds but differ sharply from each other. |
 | `src/components/HeroBg.astro` | Dimmed photo hero backgrounds. `neighborhood` = Brooklyn row houses (home, area pages), `truck` = the van (service pages). Scrim floors are set from measured contrast — see the comment before changing them. |
 | `src/lib/seo.ts` | JSON-LD builders, canonical/trailing-slash normalization, title-length clamping. |
-| `src/styles/global.css` | The design system — white chrome, navy ink, one brass accent, dimmed photography. Palette pulled from the logo. |
+| `src/styles/global.css` | The design system — white chrome, navy ink, one brass accent. Palette pulled from the logo. |
+
+### Deliberately NOT like the sibling project
+
+This site shares no layout DNA with `locksandcameras.com`, which was built from
+the same data architecture. If you edit the design, keep these apart:
+
+| locksandcameras.com | here |
+|---|---|
+| Full-bleed photo hero + dark scrim + gradient | Flat navy plate, no photo behind type |
+| Stock Brooklyn photography throughout | Only Nico & Vito's own van photos |
+| Services as a card grid | Services as a numbered editorial index |
+| Inner pages: content + sticky sidebar | Inner pages: single column + facts strip + full-width quote band |
+| Brand-name marquee | (none) |
+| Stats row under the hero | Definition list, different treatment |
+
+Photography here appears as hard-edged blocks (the van split on the homepage),
+never as a scrimmed underlay behind text. That single rule keeps the two sites
+from reading as the same template.
 | `functions/api/contact.js` | Cloudflare Pages Function that emails the quote form. See `DEPLOY.md`. |
 
 ## Page inventory

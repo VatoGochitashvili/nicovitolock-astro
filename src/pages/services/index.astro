@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
-import ServiceCard from '@/components/ServiceCard.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
 import { services, serviceCategories } from '@/data/services';
@@ -51,7 +50,6 @@ const categoryBlurbs: Record<string, string> = {
     title="Everything a locksmith should do — from one Bay Ridge shop"
     subtitle={`${services.length} services covering residential, automotive, and commercial work across all of Brooklyn and Staten Island.`}
     crumbs={crumbs}
-    bg="truck"
   />
 
   <section class="py-14 md:py-18 bg-cream">
@@ -61,14 +59,30 @@ const categoryBlurbs: Record<string, string> = {
         if (!list.length) return null;
         return (
           <div class:list={['scroll-mt-24', ci > 0 && 'mt-14']} id={cat.toLowerCase()}>
-            <div class="flex items-baseline gap-4 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-4 mb-2 border-b-2 border-navy-900">
               <h2 class="display text-navy-900 text-2xl md:text-[2rem]">{cat}</h2>
-              <span class="rule-brass"></span>
-              <p class="text-muted text-[0.95rem] hidden sm:block">{categoryBlurbs[cat]}</p>
+              <p class="text-muted text-[0.95rem]">{categoryBlurbs[cat]}</p>
             </div>
-            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {list.map((s, i) => <ServiceCard service={s} delay={i * 60} />)}
-            </div>
+            <ol class="divide-y divide-line">
+              {list.map((s) => (
+                <li>
+                  <a
+                    href={`/services/${s.slug}`}
+                    class="group grid grid-cols-[1fr_auto] md:grid-cols-[17rem_1fr_auto] items-baseline gap-x-4 md:gap-x-8 py-5 hover:bg-white transition-colors"
+                  >
+                    <span class="font-display font-bold text-navy-900 text-[1.1rem] md:text-[1.25rem] leading-tight group-hover:text-brass-600 transition-colors">
+                      {s.name}
+                    </span>
+                    <span class="col-span-2 md:col-span-1 text-muted text-[0.95rem] leading-relaxed mt-1.5 md:mt-0">
+                      {s.summary}
+                    </span>
+                    <span class="hidden md:block text-brass-500 self-center">
+                      <Icon name="arrow" size={18} />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
           </div>
         );
       })}

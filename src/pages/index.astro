@@ -1,20 +1,17 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
-import HeroBg from '@/components/HeroBg.astro';
 import ContactForm from '@/components/ContactForm.astro';
-import TrustBar from '@/components/TrustBar.astro';
-import ServiceCard from '@/components/ServiceCard.astro';
-import Reviews from '@/components/Reviews.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
-import { services, featuredServices } from '@/data/services';
+import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
 import { localBusinessSchema, webSiteSchema, organizationSchema, faqSchema } from '@/lib/seo';
 
 const brooklynAreas = serviceAreas.filter((a) => a.region === 'Brooklyn');
 const siAreas = serviceAreas.filter((a) => a.region === 'Staten Island');
+const priced = services.filter((s) => s.priceFrom?.startsWith('$'));
 
 const homeFaqs = [
   {
@@ -43,293 +40,249 @@ const homeFaqs = [
   },
 ];
 
-const schema = [
-  localBusinessSchema(),
-  webSiteSchema(),
-  organizationSchema(),
-  faqSchema(homeFaqs),
-];
+const schema = [localBusinessSchema(), webSiteSchema(), organizationSchema(), faqSchema(homeFaqs)];
 
 const title = 'Locksmith Brooklyn & Staten Island | Nico & Vito';
 const description =
   'Licensed Bay Ridge locksmith covering all of Brooklyn & Staten Island. Lockouts, rekeys, car keys, intercoms, cameras. Open daily 7AM–11PM. (347) 613-0218.';
-
-const steps = [
-  { n: '01', t: 'Call and describe it', d: 'Tell us the door, the lock, or the car. We ask the questions that let us quote it accurately over the phone.' },
-  { n: '02', t: 'Get a real price', d: 'You hear the number before we leave Bay Ridge. No trip fee surprises, no "we’ll see when we get there."' },
-  { n: '03', t: 'We show up prepared', d: 'A licensed tech arrives in the window we gave you with the parts and tools already on the van.' },
-  { n: '04', t: 'Job done, door works', d: 'We finish, test the door, clean up, and charge the price we quoted. That’s the whole thing.' },
-];
 ---
 
 <BaseLayout title={title} description={description} schema={schema} canonical="/">
-  <!-- ================= HERO ================= -->
-  <!-- Dimmed Bay Ridge row houses behind; the quote form is the brightest
-       object on the page by a wide margin, which is the point. -->
-  <section class="relative tex-navy overflow-hidden">
-    <HeroBg variant="neighborhood" strength={42} />
 
-    <div class="container-x relative py-12 md:py-20 lg:py-24">
-      <!-- Explicit grid placement so the form sits beside the copy on desktop
-           but directly under the headline on mobile — ahead of the supporting
-           detail, not buried below it. -->
-      <div class="grid gap-8 lg:grid-cols-12 lg:gap-x-14 lg:gap-y-7 lg:items-center">
+  <!-- ══════════════ 01 · HERO ══════════════
+       Flat navy plate, no photograph behind the type. The form is the only
+       light object in the band, which makes it the focal point. -->
+  <section class="relative bg-navy-900 overflow-hidden">
+    <div class="absolute inset-x-0 top-0 h-1 bg-brass-400" aria-hidden="true"></div>
+    <span
+      class="pointer-events-none select-none absolute -left-6 bottom-[-3rem] display text-white/[0.035] text-[13rem] lg:text-[20rem] leading-none"
+      aria-hidden="true">11209</span>
 
-        <!-- 1. The hook -->
+    <div class="container-x relative py-12 md:py-16 lg:py-20">
+      <div class="grid gap-10 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-8 lg:items-center">
+
         <div class="lg:col-span-7 lg:col-start-1 lg:row-start-1">
-          <p class="eyebrow eyebrow--light mb-4">Bay Ridge, Brooklyn</p>
+          <p class="flex items-center gap-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-5">
+            <span class="w-8 h-px bg-brass-400"></span>
+            Bay Ridge · Brooklyn · Staten Island
+          </p>
 
-          <h1 class="display text-white text-[2.3rem] sm:text-[3rem] lg:text-[3.8rem] leading-[1.03]">
-            Locked out in Brooklyn?<br />
-            <span class="text-brass-400">We're a few blocks away.</span>
+          <h1 class="display text-white text-[2.3rem] sm:text-[3rem] lg:text-[3.7rem] leading-[1.02]">
+            The locksmith your<br class="hidden sm:block" />
+            block already calls.
           </h1>
 
-          <p class="mt-5 text-navy-100 text-lg md:text-xl leading-relaxed max-w-xl">
-            A licensed, family-run locksmith based in Bay Ridge — covering every
-            neighborhood in <strong class="text-white font-semibold">Brooklyn</strong> and
-            <strong class="text-white font-semibold">Staten Island</strong>.
-            Priced before we start.
+          <p class="mt-6 text-navy-200 text-lg md:text-xl leading-relaxed max-w-xl">
+            Licensed, family-run, and working out of Bay Ridge — lockouts, lock changes,
+            car keys, intercoms and cameras across every Brooklyn and Staten Island
+            neighborhood. Price agreed before we start.
           </p>
         </div>
 
-        <!-- 2. The conversion point. Brightest object on the page, and on
-                mobile it lands immediately after the headline. -->
-        <div class="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 lg:self-center">
+        <div class="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2">
           <ContactForm variant="short" tone="dark" />
         </div>
 
-        <!-- 3. Supporting detail -->
         <div class="lg:col-span-7 lg:col-start-1 lg:row-start-2">
           <a href={`tel:${business.phoneHref}`} class="btn btn-brass btn-lg w-full sm:w-auto" data-call-cta="hero-primary">
             <Icon name="phone" size={20} />
             {business.phoneDisplay}
           </a>
-
-          <ul class="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[0.92rem]">
+          <dl class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 border-t border-white/10 pt-6">
             {[
-              { i: 'clock', t: 'Open daily 7 AM – 11 PM' },
-              { i: 'badge', t: 'Licensed & insured' },
-              { i: 'bolt',  t: '20–30 min typical arrival' },
+              { k: 'Open daily', v: '7am–11pm' },
+              { k: 'Brooklyn arrival', v: '20–30 min' },
+              { k: 'Neighborhoods', v: String(serviceAreas.length) },
+              { k: 'Licensed & insured', v: 'Yes' },
             ].map((x) => (
-              <li class="flex items-center gap-2 text-navy-100">
-                <Icon name={x.i} size={16} class="text-brass-400 shrink-0" />
-                {x.t}
-              </li>
+              <div>
+                <dt class="text-[0.68rem] uppercase tracking-[0.14em] text-navy-300">{x.k}</dt>
+                <dd class="display text-brass-400 text-[1.35rem] mt-1">{x.v}</dd>
+              </div>
             ))}
-          </ul>
+          </dl>
         </div>
       </div>
     </div>
   </section>
 
-  <TrustBar />
-
-  <!-- ================= NOT 24/7 — honesty as a differentiator ================= -->
+  <!-- ══════════════ 02 · HOURS HONESTY ══════════════ -->
   <section class="bg-white border-b border-line-cool">
-    <div class="container-x py-7 flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
-      <span class="w-10 h-10 rounded-full bg-brass-50 text-brass-600 grid place-items-center shrink-0">
-        <Icon name="clock" size={20} />
-      </span>
-      <p class="text-navy-800 text-[1.02rem] max-w-3xl">
-        We're not a 24/7 operation — we're open <strong class="text-navy-900">every day, 7 AM to 11 PM</strong>.
-        <span class="text-muted">When you call in those hours, a locksmith actually answers.</span>
+    <div class="container-x py-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+      <Icon name="clock" size={19} class="text-brass-600 shrink-0" />
+      <p class="text-navy-800 text-[0.98rem]">
+        Not a 24/7 operation — open <strong class="text-navy-900">every day, 7 AM to 11 PM</strong>.
+        <span class="text-muted">Inside those hours a locksmith actually answers the phone.</span>
       </p>
     </div>
   </section>
 
-  <!-- ================= SERVICES ================= -->
+  <!-- ══════════════ 03 · SERVICES — numbered index, not a card grid ══════════════ -->
   <section class="py-16 md:py-22 bg-cream" id="services">
     <div class="container-x">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
-        <div class="max-w-2xl">
-          <p class="eyebrow mb-3">What we do</p>
-          <h2 class="display text-navy-900 text-3xl md:text-[2.8rem]">
-            Locks, keys, and security — one local shop
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10 pb-6 border-b-2 border-navy-900">
+        <div>
+          <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-600 mb-3">
+            What we do
+          </p>
+          <h2 class="display text-navy-900 text-3xl md:text-[2.7rem] max-w-2xl">
+            Twelve services, one local shop
           </h2>
-          <p class="mt-4 text-muted text-lg leading-relaxed">
-            Residential, automotive, and commercial work across Brooklyn and Staten Island.
-            If it locks, opens, buzzes, or records, it's on this list.
-          </p>
         </div>
-        <a href="/services" class="btn btn-outline shrink-0">
-          All {services.length} services
-          <Icon name="arrow" size={17} />
+        <a href="/pricing" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 shrink-0 hover:text-brass-600 transition-colors">
+          See starting prices →
         </a>
       </div>
 
-      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {featuredServices.map((s, i) => <ServiceCard service={s} delay={i * 60} />)}
-      </div>
-
-      <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {services.filter((s) => !s.featured).map((s, i) => (
-          <a
-            href={`/services/${s.slug}`}
-            class="card card-hover px-5 py-4 flex items-center gap-3.5 reveal"
-            data-delay={i * 40}
-          >
-            <span class="w-9 h-9 rounded-lg bg-navy-50 text-navy-700 grid place-items-center shrink-0">
-              <Icon name={s.icon} size={19} />
-            </span>
-            <span class="font-display font-bold text-navy-900 text-[0.98rem] leading-tight">{s.name}</span>
-            <Icon name="arrow" size={16} class="text-brass-500 ml-auto shrink-0" />
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= LOCAL STORY ================= -->
-  <section class="py-16 md:py-22 tex-stone">
-    <div class="container-x grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-      <div class="lg:col-span-5 reveal" data-reveal="left">
-        <div class="frame">
-          <img
-            src="/brand/van-open.jpg"
-            alt="Nico & Vito Locksmith service van with the side door open, key board and key cutting machines visible inside"
-            width="1200" height="800"
-            class="w-full aspect-[4/3] object-cover"
-            loading="lazy"
-          />
-        </div>
-      </div>
-
-      <div class="lg:col-span-7">
-        <p class="eyebrow mb-3">Who you're calling</p>
-        <h2 class="display text-navy-900 text-3xl md:text-[2.6rem]">
-          A Bay Ridge shop, not a call center
-        </h2>
-
-        <div class="mt-5 space-y-4 text-muted text-[1.05rem] leading-relaxed">
-          <p>
-            When you call a lot of "locksmiths" in New York, you reach a national dispatch
-            office that sells your job to whoever bids on it. You get quoted $29 on the
-            phone and handed a $350 invoice at the door, by someone who has never worked
-            on your kind of lock.
-          </p>
-          <p>
-            <strong class="text-navy-900">That's not us.</strong> Nico &amp; Vito is based in
-            Bay Ridge. The number on this page rings the same people who show up at your
-            door. We quote the price before we leave, and it's the price you pay.
-          </p>
-          <p>
-            Working out of one neighborhood for years means we know the housing stock —
-            the jimmy-proof locks on Brooklyn apartment doors, the prewar mortise sets in
-            Park Slope brownstones, the salt-corroded hardware along the Belt, the
-            multi-family intercoms in Borough Park. That's why most of our jobs finish
-            on the first visit.
-          </p>
-        </div>
-
-        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {business.highlights.map((h) => (
-            <div class="bg-white rounded-lg border border-line px-4 py-3.5">
-              <p class="display text-navy-900 text-[1.35rem] leading-none">{h.value}</p>
-              <p class="mt-1.5 text-xs font-semibold uppercase tracking-wider text-muted leading-tight">
-                {h.label}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <a href="/about" class="btn btn-navy mt-8">
-          More about us
-          <Icon name="arrow" size={17} />
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= HOW IT WORKS ================= -->
-  <section class="py-16 md:py-20 tex-navy">
-    <div class="container-x">
-      <div class="max-w-2xl mb-10">
-        <p class="eyebrow eyebrow--light mb-3">How it works</p>
-        <h2 class="display text-white text-3xl md:text-[2.6rem]">
-          Four steps, no surprises
-        </h2>
-      </div>
-      <ol class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {steps.map((s, i) => (
-          <li class="bg-white/5 border border-white/10 rounded-xl p-6 reveal" data-delay={i * 70}>
-            <span class="display text-brass-400 text-2xl">{s.n}</span>
-            <h3 class="mt-2 text-white text-lg">{s.t}</h3>
-            <p class="mt-2 text-navy-200 text-[0.93rem] leading-relaxed">{s.d}</p>
+      <ol class="divide-y divide-line">
+        {services.map((s, i) => (
+          <li>
+            <a
+              href={`/services/${s.slug}`}
+              class="group grid grid-cols-[2.75rem_1fr_auto] md:grid-cols-[4rem_18rem_1fr_auto] items-baseline gap-x-4 md:gap-x-8 py-5 md:py-6 hover:bg-white transition-colors"
+            >
+              <span class="font-display font-bold text-[0.85rem] text-brass-500 tabular-nums">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="font-display font-bold text-navy-900 text-[1.15rem] md:text-[1.3rem] leading-tight group-hover:text-brass-600 transition-colors">
+                {s.name}
+              </span>
+              <span class="col-span-2 md:col-span-1 text-muted text-[0.95rem] leading-relaxed mt-1.5 md:mt-0">
+                {s.summary}
+              </span>
+              <span class="hidden md:block text-brass-500 self-center">
+                <Icon name="arrow" size={18} />
+              </span>
+            </a>
           </li>
         ))}
       </ol>
     </div>
   </section>
 
-  <!-- ================= SERVICE AREAS ================= -->
-  <section class="py-16 md:py-22 bg-cream" id="areas">
-    <div class="container-x">
-      <div class="max-w-2xl mb-9">
-        <p class="eyebrow mb-3">Where we work</p>
-        <h2 class="display text-navy-900 text-3xl md:text-[2.8rem]">
-          Every neighborhood in Brooklyn &amp; Staten Island
-        </h2>
-        <p class="mt-4 text-muted text-lg leading-relaxed">
-          {serviceAreas.length} neighborhoods, one local shop. Bay Ridge is home, so
-          southwest Brooklyn is minutes away — and Staten Island is a straight run
-          over the Verrazzano.
+  <!-- ══════════════ 04 · PRICE PREVIEW ══════════════ -->
+  <section class="py-16 md:py-20 bg-navy-900">
+    <div class="container-x grid lg:grid-cols-12 gap-10 lg:gap-16">
+      <div class="lg:col-span-5">
+        <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-3">
+          Straight pricing
         </p>
-      </div>
-
-      <div class="grid lg:grid-cols-2 gap-6">
-        {[
-          { region: 'Brooklyn', areas: brooklynAreas, note: 'Our home borough — from the Narrows to the Queens line.' },
-          { region: 'Staten Island', areas: siAreas, note: 'Straight over the Verrazzano — North Shore to Tottenville.' },
-        ].map((group, gi) => (
-          <div class="card p-6 md:p-7 reveal" data-delay={gi * 100}>
-            <div class="flex items-center gap-3">
-              <span class="w-10 h-10 rounded-lg bg-navy-800 text-brass-400 grid place-items-center shrink-0">
-                <Icon name="pin" size={21} />
-              </span>
-              <div>
-                <h3 class="text-xl text-navy-900 leading-tight">{group.region}</h3>
-                <p class="text-sm text-muted">{group.areas.length} neighborhoods covered</p>
-              </div>
-            </div>
-            <p class="mt-3 text-muted text-[0.95rem]">{group.note}</p>
-            <ul class="mt-4 flex flex-wrap gap-2">
-              {group.areas.map((a) => (
-                <li>
-                  <a
-                    href={`/service-areas/${a.slug}`}
-                    class="inline-block px-2.5 py-1 rounded-md bg-cream-deep border border-line text-[0.83rem] text-navy-800 hover:bg-brass-400 hover:border-brass-400 hover:text-navy-950 transition-colors"
-                  >{a.name}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <div class="mt-7 text-center">
-        <a href="/service-areas" class="btn btn-outline">
-          Browse all service areas
+        <h2 class="display text-white text-3xl md:text-[2.5rem]">
+          Published, so you can hold us to it
+        </h2>
+        <p class="mt-5 text-navy-200 leading-relaxed">
+          The $19 and $29 lockout quotes you see elsewhere are a hook — the tech
+          arrives, calls your lock "high security," drills it, and hands you a bill
+          for several hundred. These are the real starting numbers. Your exact price
+          is quoted on the phone before we leave.
+        </p>
+        <a href="/pricing" class="btn btn-brass mt-7">
+          Full price list
           <Icon name="arrow" size={17} />
         </a>
+      </div>
+
+      <div class="lg:col-span-7">
+        <dl class="divide-y divide-white/10 border-y border-white/10">
+          {priced.map((s) => (
+            <div class="flex items-baseline justify-between gap-6 py-4">
+              <dt>
+                <a href={`/services/${s.slug}`} class="text-white font-semibold hover:text-brass-300 transition-colors">
+                  {s.name}
+                </a>
+              </dt>
+              <dd class="display text-brass-400 text-xl whitespace-nowrap">{s.priceFrom}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="mt-4 text-navy-300 text-sm">
+          Starting points for standard hardware. Nothing here is a binding quote —
+          yours comes on the phone, before we roll out.
+        </p>
       </div>
     </div>
   </section>
 
-  <Reviews />
+  <!-- ══════════════ 05 · THE VAN — hard-edged split, no overlay ══════════════ -->
+  <section class="bg-cream-deep">
+    <div class="grid lg:grid-cols-2">
+      <div class="order-2 lg:order-1 flex items-center">
+        <div class="px-5 sm:px-10 lg:pl-[max(1.25rem,calc((100vw-1200px)/2))] lg:pr-16 py-14 md:py-20 max-w-2xl">
+          <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-600 mb-3">
+            Who you're calling
+          </p>
+          <h2 class="display text-navy-900 text-3xl md:text-[2.5rem]">
+            A Bay Ridge shop, not a call center
+          </h2>
+          <div class="mt-5 space-y-4 text-muted leading-relaxed">
+            <p>
+              Search "locksmith near me" in New York and most of what you get is a
+              national dispatch office that auctions your job to whoever bids. The
+              $29 phone quote becomes a $350 invoice at your door.
+            </p>
+            <p>
+              <strong class="text-navy-900">The number on this page rings us.</strong>
+              The same people who answer it are the ones who show up. No dispatcher,
+              no subcontractor, no handoff.
+            </p>
+            <p>
+              Working one neighborhood for years teaches you the housing stock — the
+              jimmy-proof locks on Brooklyn apartment doors, the prewar mortise sets in
+              brownstones, the salt-corroded hardware along the Belt and the Staten
+              Island shore. It's why most of our jobs finish on the first visit.
+            </p>
+          </div>
+          <a href="/about" class="btn btn-navy mt-8">
+            More about us
+            <Icon name="arrow" size={17} />
+          </a>
+        </div>
+      </div>
 
-  <!-- ================= BRANDS ================= -->
-  <section class="py-12 bg-white border-y border-line-cool overflow-hidden">
-    <div class="container-x mb-6">
-      <p class="text-center text-muted text-[0.72rem] font-bold uppercase tracking-[0.2em]">
-        Hardware we install &amp; service
-      </p>
+      <div class="order-1 lg:order-2 relative min-h-[18rem] lg:min-h-[34rem]">
+        <img
+          src="/brand/van-2.jpg"
+          alt="The Nico & Vito Locksmith van open on a Brooklyn street, showing the key board, cutting machines, and programming equipment"
+          width="1200" height="800"
+          class="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
     </div>
-    <div class="marquee-mask">
-      <div class="marquee">
-        {[...business.brands, ...business.brands].map((b) => (
-          <span class="font-display font-bold text-lg md:text-xl text-navy-300 whitespace-nowrap select-none">
-            {b}
-          </span>
+  </section>
+
+  <!-- ══════════════ 06 · COVERAGE — text index, not cards ══════════════ -->
+  <section class="py-16 md:py-22 bg-cream" id="areas">
+    <div class="container-x">
+      <div class="mb-10 pb-6 border-b-2 border-navy-900">
+        <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-600 mb-3">
+          Where we work
+        </p>
+        <h2 class="display text-navy-900 text-3xl md:text-[2.7rem] max-w-3xl">
+          Every neighborhood in Brooklyn and Staten Island
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-10 md:gap-14">
+        {[
+          { region: 'Brooklyn', areas: brooklynAreas },
+          { region: 'Staten Island', areas: siAreas },
+        ].map((group) => (
+          <div>
+            <h3 class="flex items-baseline justify-between gap-4 pb-3 mb-4 border-b border-line">
+              <span class="display text-navy-900 text-xl">{group.region}</span>
+              <span class="text-muted text-sm tabular-nums">{group.areas.length} covered</span>
+            </h3>
+            <ul class="columns-2 gap-6 text-[0.92rem]">
+              {group.areas.map((a) => (
+                <li class="mb-1.5 break-inside-avoid">
+                  <a href={`/service-areas/${a.slug}`} class="text-navy-800 hover:text-brass-600 hover:underline underline-offset-2 transition-colors">
+                    {a.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
       </div>
     </div>

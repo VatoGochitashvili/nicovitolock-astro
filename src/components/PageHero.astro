@@ -1,40 +1,59 @@
 ---
 import Breadcrumbs from './Breadcrumbs.astro';
-import HeroBg from './HeroBg.astro';
 import Icon from './Icon.astro';
 import { business } from '@/data/business';
 
+/**
+ * Inner-page header. Deliberately NOT a scrimmed photo band — a flat navy
+ * plate with a brass index rule and an oversized label. Photography on this
+ * site appears as hard-edged blocks, never as text underlay.
+ */
 interface Props {
   eyebrow?: string;
   title: string;
   subtitle?: string;
   crumbs?: { name: string; url: string }[];
-  /** Show the call/quote buttons */
   cta?: boolean;
-  /** Dimmed photo behind the hero */
-  bg?: 'neighborhood' | 'truck' | 'avenue';
+  /** Big faint numeral or word set behind the title */
+  ghost?: string;
 }
-const { eyebrow, title, subtitle, crumbs, cta = true, bg = 'neighborhood' } = Astro.props;
+const { eyebrow, title, subtitle, crumbs, cta = true, ghost } = Astro.props;
 ---
-<section class="tex-navy relative py-14 md:py-20 overflow-hidden">
-  <HeroBg variant={bg} />
-  <div class="container-x">
-    {crumbs && <div class="mb-5"><Breadcrumbs items={crumbs} light /></div>}
-    {eyebrow && <p class="eyebrow eyebrow--light mb-3">{eyebrow}</p>}
-    <h1 class="display text-white text-[2.1rem] sm:text-5xl lg:text-[3.4rem] max-w-4xl">
+<section class="relative bg-navy-900 overflow-hidden">
+  <!-- Brass index rule down the left edge -->
+  <div class="absolute left-0 inset-y-0 w-1 bg-brass-400" aria-hidden="true"></div>
+
+  {ghost && (
+    <span
+      class="pointer-events-none select-none absolute -right-4 top-1/2 -translate-y-1/2 display text-white/[0.04] text-[8rem] lg:text-[13rem] leading-none whitespace-nowrap"
+      aria-hidden="true"
+    >{ghost}</span>
+  )}
+
+  <div class="container-x relative py-11 md:py-14">
+    {crumbs && <div class="mb-6"><Breadcrumbs items={crumbs} light /></div>}
+
+    {eyebrow && (
+      <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-4">
+        {eyebrow}
+      </p>
+    )}
+
+    <h1 class="display text-white text-[2.1rem] sm:text-[2.9rem] lg:text-[3.5rem] max-w-4xl leading-[1.04]">
       {title}
     </h1>
+
     {subtitle && (
-      <p class="mt-4 text-navy-200 text-lg md:text-xl max-w-2xl leading-relaxed">{subtitle}</p>
+      <p class="mt-4 text-navy-200 text-lg max-w-2xl leading-relaxed">{subtitle}</p>
     )}
+
     {cta && (
-      <div class="mt-7 flex flex-wrap items-center gap-3">
+      <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
         <a href={`tel:${business.phoneHref}`} class="btn btn-brass" data-call-cta="hero">
           <Icon name="phone" size={18} />
           {business.phoneDisplay}
         </a>
-        <a href="/contact" class="btn btn-ghost">Request a quote</a>
-        <span class="flex items-center gap-2 text-navy-200 text-sm ml-1">
+        <span class="flex items-center gap-2 text-navy-200 text-sm">
           <Icon name="clock" size={16} class="text-brass-400" />
           Open every day 7 AM – 11 PM
         </span>
