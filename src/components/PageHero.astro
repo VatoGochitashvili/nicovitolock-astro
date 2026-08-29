@@ -1,5 +1,6 @@
 ---
 import Breadcrumbs from './Breadcrumbs.astro';
+import Backdrop from './Backdrop.astro';
 import Icon from './Icon.astro';
 import { business } from '@/data/business';
 
@@ -20,8 +21,9 @@ interface Props {
 const { eyebrow, title, subtitle, crumbs, cta = true, ghost } = Astro.props;
 ---
 <section class="relative bg-navy-900 overflow-hidden">
+  <Backdrop variant="pins" tone="dark" />
   <!-- Brass index rule down the left edge -->
-  <div class="absolute left-0 inset-y-0 w-1 bg-brass-400" aria-hidden="true"></div>
+  <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
 
   {ghost && (
     <span
@@ -30,7 +32,7 @@ const { eyebrow, title, subtitle, crumbs, cta = true, ghost } = Astro.props;
     >{ghost}</span>
   )}
 
-  <div class="container-x relative py-11 md:py-14">
+  <div class="container-x relative z-[1] py-11 md:py-14">
     {crumbs && <div class="mb-6"><Breadcrumbs items={crumbs} light /></div>}
 
     {eyebrow && (

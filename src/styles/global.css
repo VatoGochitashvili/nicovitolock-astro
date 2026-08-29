@@ -347,3 +347,15 @@ details[open] .acc-chevron { transform: rotate(180deg); }
   html { scroll-behavior: auto; }
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* Visually hidden but available to screen readers — the form uses chips and
+   placeholders visually, but every control still needs a real label. */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

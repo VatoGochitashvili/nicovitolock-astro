@@ -5,19 +5,11 @@ import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
 
 interface Props {
-  /** Preselect a service (used on service pages) */
   service?: string;
-  /** Preselect an area */
   area?: string;
-  /** Hide the heading/intro (sidebar use) */
   compact?: boolean;
-  /**
-   * 'full'  — every field (contact page)
-   * 'short' — name, phone, service only. Fewer fields converts better in a
-   *           hero, where the visitor has not committed to anything yet.
-   */
+  /** 'full' = every field (contact page). 'short' = quick capture. */
   variant?: 'full' | 'short';
-  /** Dark card for placing on a light surface */
   tone?: 'light' | 'dark';
   class?: string;
 }
@@ -32,158 +24,186 @@ const {
 
 const short = variant === 'short';
 
-// Unique per instance so two forms can coexist on one page. Derived from the
-// props rather than randomised, so the markup stays byte-stable across builds.
+// Unique per instance so two forms can coexist on one page; derived from props
+// rather than randomised so the markup stays byte-stable across builds.
 const uid =
-  [variant, service, area]
-    .filter(Boolean)
-    .join('-')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '') || 'main';
+  [variant, service, area].filter(Boolean).join('-').toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'main';
 
 const brooklyn = serviceAreas.filter((a) => a.region === 'Brooklyn');
 const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
 
+// The six people actually pick in a hurry; the rest stay in the full list.
+const quickPicks = [
+  'emergency-lockout-service',
+  'car-key-replacement',
+  'lock-rekeying',
+  'lock-replacement-and-repair',
+  'key-fob-and-remote-programming',
+  'security-camera-installation',
+].map((slug) => services.find((s) => s.slug === slug)!).filter(Boolean);
+
 const field =
-  'w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-2 focus:ring-brass-400/30 outline-none transition';
-const label = 'block text-sm font-bold text-navy-900 mb-1.5';
+  'w-full rounded-lg border border-line bg-white px-3.5 py-3 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-4 focus:ring-brass-400/20 outline-none transition';
+const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-muted mb-2';
 ---
 <form
   data-quote-form
   id={`quote-form-${uid}`}
   class:list={[
-    tone === 'dark' ? 'bg-white rounded-xl p-6 md:p-7 shadow-2xl' : 'card p-6 md:p-8',
+    'relative overflow-hidden',
+    tone === 'dark'
+      ? 'bg-white rounded-2xl shadow-[0_30px_60px_-25px_rgba(16,35,48,0.55)]'
+      : 'bg-white rounded-2xl border border-line',
     className,
   ]}
   method="POST"
   action="/api/contact"
   novalidate
 >
-  {!compact && !short && (
-    <>
-      <h2 class="display text-navy-900 text-2xl">Request a quote or callback</h2>
-      <p class="mt-2 text-muted text-[0.95rem]">
-        Locked out right now? <a href={`tel:${business.phoneHref}`} class="link-brass">Call {business.phoneDisplay}</a> —
-        a phone call is always faster than a form.
-      </p>
-    </>
-  )}
+  <!-- brass cap -->
+  <div class="h-1.5 bg-gradient-to-r from-brass-400 via-brass-300 to-brass-500"></div>
 
-  {short && (
-    <>
-      <h2 class="display text-navy-900 text-[1.45rem] leading-tight">Get a price in 2 minutes</h2>
-      <p class="mt-1.5 text-muted text-[0.9rem]">
-        Tell us what you need and we'll call you straight back — usually within minutes.
-      </p>
-    </>
-  )}
+  <div class="p-6 md:p-7">
+    {!compact && !short && (
+      <>
+        <h2 class="display text-navy-900 text-2xl">Request a quote or callback</h2>
+        <p class="mt-2 text-muted text-[0.95rem]">
+          Locked out right now? <a href={`tel:${business.phoneHref}`} class="link-brass">Call {business.phoneDisplay}</a> —
+          a phone call is always faster than a form.
+        </p>
+      </>
+    )}
 
-  <div class:list={['grid gap-4', short ? 'mt-5' : 'mt-6 sm:grid-cols-2']}>
-    <div>
-      <label for={`qf-name-${uid}`} class={label}>
-        Name <span class="text-brick-500">*</span>
-      </label>
-      <input
-        id={`qf-name-${uid}`} name="name" type="text" required autocomplete="name"
-        class={field} placeholder="Your name"
-      />
-    </div>
-
-    <div>
-      <label for={`qf-phone-${uid}`} class={label}>
-        Phone <span class="text-brick-500">*</span>
-      </label>
-      <input
-        id={`qf-phone-${uid}`} name="phone" type="tel" required autocomplete="tel"
-        class={field} placeholder="(347) 000-0000"
-      />
-    </div>
-
-    {!short && (
-      <div class="sm:col-span-2">
-        <label for={`qf-email-${uid}`} class={label}>Email</label>
-        <input
-          id={`qf-email-${uid}`} name="email" type="email" autocomplete="email"
-          class={field} placeholder="you@example.com (optional)"
-        />
+    {short && (
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="display text-navy-900 text-[1.4rem] leading-tight">Get a price in 2 minutes</h2>
+          <p class="mt-1 text-muted text-[0.88rem]">No obligation. We call you straight back.</p>
+        </div>
+        <span class="hidden sm:flex items-center gap-1.5 shrink-0 rounded-full bg-green-50 border border-green-200 px-2.5 py-1 text-[0.72rem] font-bold text-green-800">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+          Open now
+        </span>
       </div>
     )}
 
-    <div>
-      <label for={`qf-service-${uid}`} class={label}>What do you need?</label>
-      <select id={`qf-service-${uid}`} name="service" class={field}>
-        <option value="">Select a service…</option>
+    <!-- Step 1 — what -->
+    <fieldset class="mt-6">
+      <legend class={label}>
+        <span class="text-brass-600">01</span> &nbsp;What do you need?
+      </legend>
+      <div class="flex flex-wrap gap-2" data-qf-chips>
+        {quickPicks.map((s) => (
+          <button
+            type="button"
+            data-qf-chip={s.name}
+            class="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-3 py-1.5 text-[0.85rem] font-semibold text-navy-800 hover:border-navy-300 transition-colors"
+            aria-pressed="false"
+          >
+            <Icon name={s.icon} size={14} class="text-brass-600" />
+            {s.short}
+          </button>
+        ))}
+      </div>
+      <label for={`qf-service-${uid}`} class="sr-only">Service</label>
+      <select id={`qf-service-${uid}`} name="service" class:list={[field, 'mt-2.5']} data-qf-service>
+        <option value="">Something else / full list…</option>
         {services.map((s) => (
           <option value={s.name} selected={s.slug === service || s.name === service}>{s.name}</option>
         ))}
-        <option value="Something else">Something else</option>
       </select>
-    </div>
+    </fieldset>
 
-    <div>
-      <label for={`qf-area-${uid}`} class={label}>Where are you?</label>
-      <select id={`qf-area-${uid}`} name="area" class={field}>
+    <!-- Step 2 — where, with a live arrival estimate -->
+    <fieldset class="mt-5">
+      <legend class={label}>
+        <span class="text-brass-600">02</span> &nbsp;Where are you?
+      </legend>
+      <label for={`qf-area-${uid}`} class="sr-only">Neighborhood</label>
+      <select id={`qf-area-${uid}`} name="area" class={field} data-qf-area>
         <option value="">Select your neighborhood…</option>
         <optgroup label="Brooklyn">
           {brooklyn.map((a) => (
-            <option value={`${a.name}, Brooklyn`} selected={a.slug === area || a.name === area}>{a.name}</option>
+            <option value={`${a.name}, Brooklyn`} data-eta={a.eta} selected={a.slug === area || a.name === area}>{a.name}</option>
           ))}
         </optgroup>
         <optgroup label="Staten Island">
           {statenIsland.map((a) => (
-            <option value={`${a.name}, Staten Island`} selected={a.slug === area || a.name === area}>{a.name}</option>
+            <option value={`${a.name}, Staten Island`} data-eta={a.eta} selected={a.slug === area || a.name === area}>{a.name}</option>
           ))}
         </optgroup>
       </select>
+
+      <!-- Populated from the selected option's data-eta. Real numbers from
+           src/data/locations.ts, not a marketing promise. -->
+      <p
+        data-qf-eta
+        class="hidden mt-2.5 items-center gap-2 rounded-lg bg-brass-50 border border-brass-200 px-3 py-2 text-[0.85rem] text-navy-800"
+      >
+        <Icon name="bolt" size={15} class="text-brass-600 shrink-0" />
+        <span data-qf-eta-text></span>
+      </p>
+    </fieldset>
+
+    <!-- Step 3 — who -->
+    <fieldset class="mt-5">
+      <legend class={label}>
+        <span class="text-brass-600">03</span> &nbsp;Where do we call you?
+      </legend>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label for={`qf-name-${uid}`} class="sr-only">Name</label>
+          <input id={`qf-name-${uid}`} name="name" type="text" required autocomplete="name" class={field} placeholder="Your name" />
+        </div>
+        <div>
+          <label for={`qf-phone-${uid}`} class="sr-only">Phone</label>
+          <input id={`qf-phone-${uid}`} name="phone" type="tel" required autocomplete="tel" class={field} placeholder="Phone number" />
+        </div>
+      </div>
+
+      {!short && (
+        <>
+          <label for={`qf-email-${uid}`} class="sr-only">Email</label>
+          <input id={`qf-email-${uid}`} name="email" type="email" autocomplete="email" class:list={[field, 'mt-3']} placeholder="Email (optional)" />
+          <label for={`qf-message-${uid}`} class="sr-only">Details</label>
+          <textarea
+            id={`qf-message-${uid}`} name="message" rows="4" class:list={[field, 'mt-3 resize-y']}
+            placeholder="Tell us about the door, the lock, or the car — the more detail, the more accurate the price."
+          ></textarea>
+        </>
+      )}
+    </fieldset>
+
+    <!-- honeypot -->
+    <div class="hidden" aria-hidden="true">
+      <label for={`qf-company-${uid}`}>Company</label>
+      <input id={`qf-company-${uid}`} name="company" type="text" tabindex="-1" autocomplete="off" />
     </div>
 
-    {!short && (
-      <div class="sm:col-span-2">
-        <label for={`qf-message-${uid}`} class={label}>Details</label>
-        <textarea
-          id={`qf-message-${uid}`} name="message" rows="4"
-          class:list={[field, 'resize-y']}
-          placeholder="Tell us about the door, the lock, or the car — the more detail, the more accurate the price."
-        ></textarea>
-      </div>
-    )}
-  </div>
+    <button type="submit" class="btn btn-brass w-full mt-6 !py-3.5 text-[1.05rem]" data-qf-submit>
+      {short ? 'Get my price' : 'Send request'}
+      <Icon name="arrow" size={18} />
+    </button>
 
-  <!-- honeypot: bots fill this, humans never see it -->
-  <div class="hidden" aria-hidden="true">
-    <label for={`qf-company-${uid}`}>Company</label>
-    <input id={`qf-company-${uid}`} name="company" type="text" tabindex="-1" autocomplete="off" />
-  </div>
-
-  <button type="submit" class="btn btn-brass w-full mt-5" data-qf-submit>
-    <Icon name="arrow" size={18} />
-    {short ? 'Get my price' : 'Send request'}
-  </button>
-
-  {short ? (
-    <p class="mt-3 text-center text-[0.82rem] text-muted">
-      Or call now —
-      <a href={`tel:${business.phoneHref}`} class="link-brass" data-call-cta="hero-form">
-        {business.phoneDisplay}
-      </a>
+    <p class="mt-3 flex items-center justify-center gap-4 text-[0.78rem] text-muted">
+      <span class="flex items-center gap-1"><Icon name="badge" size={13} class="text-brass-600" /> Licensed &amp; insured</span>
+      <span class="flex items-center gap-1"><Icon name="clock" size={13} class="text-brass-600" /> 7am–11pm daily</span>
     </p>
-  ) : (
-    <p class="mt-3 text-xs text-muted text-center">
-      We reply during business hours — every day, 7 AM to 11 PM. For anything urgent, call.
-    </p>
-  )}
 
-  <div data-qf-status class="mt-4 hidden rounded-lg px-4 py-3 text-sm" role="status" aria-live="polite"></div>
+    <p class="mt-3 text-center text-[0.85rem] text-muted">
+      Rather talk?
+      <a href={`tel:${business.phoneHref}`} class="link-brass" data-call-cta="form-inline">{business.phoneDisplay}</a>
+    </p>
+
+    <div data-qf-status class="mt-4 hidden rounded-lg px-4 py-3 text-sm" role="status" aria-live="polite"></div>
+  </div>
 </form>
 
 <script is:inline define:vars={{ phone: business.phoneDisplay, phoneHref: business.phoneHref, email: business.email }}>
   (function () {
-    // Bind EVERY form on the page, not a single hardcoded id — the homepage
-    // hero and a sidebar form can both be present.
     function initForms() {
-      var forms = document.querySelectorAll('form[data-quote-form]');
-      for (var i = 0; i < forms.length; i++) bindForm(forms[i]);
+      document.querySelectorAll('form[data-quote-form]').forEach(bindForm);
     }
 
     function bindForm(form) {
@@ -193,6 +213,42 @@ const label = 'block text-sm font-bold text-navy-900 mb-1.5';
       var status = form.querySelector('[data-qf-status]');
       var submit = form.querySelector('[data-qf-submit]');
       var submitLabel = submit ? submit.innerHTML : '';
+      var serviceSel = form.querySelector('[data-qf-service]');
+      var areaSel = form.querySelector('[data-qf-area]');
+      var etaBox = form.querySelector('[data-qf-eta]');
+      var etaText = form.querySelector('[data-qf-eta-text]');
+      var chips = form.querySelectorAll('[data-qf-chip]');
+
+      // --- service chips drive the (still submitted) select ---
+      function syncChips() {
+        chips.forEach(function (c) {
+          var on = c.getAttribute('data-qf-chip') === serviceSel.value;
+          c.setAttribute('aria-pressed', String(on));
+          c.className = on
+            ? 'inline-flex items-center gap-1.5 rounded-full border border-navy-900 bg-navy-900 px-3 py-1.5 text-[0.85rem] font-semibold text-white transition-colors'
+            : 'inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-3 py-1.5 text-[0.85rem] font-semibold text-navy-800 hover:border-navy-300 transition-colors';
+        });
+      }
+      chips.forEach(function (c) {
+        c.addEventListener('click', function () {
+          var v = c.getAttribute('data-qf-chip');
+          serviceSel.value = serviceSel.value === v ? '' : v;
+          syncChips();
+        });
+      });
+      if (serviceSel) { serviceSel.addEventListener('change', syncChips); syncChips(); }
+
+      // --- live arrival estimate from the selected neighborhood ---
+      function syncEta() {
+        if (!areaSel || !etaBox) return;
+        var opt = areaSel.options[areaSel.selectedIndex];
+        var eta = opt && opt.getAttribute('data-eta');
+        if (!eta) { etaBox.classList.add('hidden'); etaBox.classList.remove('flex'); return; }
+        etaText.textContent = 'Typically ' + eta + ' from us in Bay Ridge.';
+        etaBox.classList.remove('hidden');
+        etaBox.classList.add('flex');
+      }
+      if (areaSel) { areaSel.addEventListener('change', syncEta); syncEta(); }
 
       function show(kind, html) {
         status.className =
@@ -206,7 +262,7 @@ const label = 'block text-sm font-bold text-navy-900 mb-1.5';
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        if (form.company && form.company.value) return; // honeypot tripped
+        if (form.company && form.company.value) return; // honeypot
 
         var name = form.name.value.trim();
         var tel = form.phone.value.trim();
@@ -219,15 +275,13 @@ const label = 'block text-sm font-bold text-navy-900 mb-1.5';
         submit.textContent = 'Sending…';
 
         fetch(form.action, { method: 'POST', body: new FormData(form) })
-          .then(function (r) {
-            return r.ok ? r.json().catch(function () { return { ok: true }; }) : Promise.reject(r);
-          })
+          .then(function (r) { return r.ok ? r.json().catch(function () { return { ok: true }; }) : Promise.reject(r); })
           .then(function () {
             form.reset();
+            syncChips(); syncEta();
             show('ok', "<strong>Got it.</strong> We'll call you back shortly. If it's urgent, ring <a class='underline font-semibold' href='tel:" + phoneHref + "'>" + phone + '</a>.');
           })
           .catch(function () {
-            // No mail backend wired yet (or a network failure) — never lose the lead.
             var body = encodeURIComponent(
               'Name: ' + name +
               '\nPhone: ' + tel +
