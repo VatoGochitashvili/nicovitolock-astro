@@ -195,12 +195,6 @@ const schema = [
             Call and describe the job. We quote {service.short.toLowerCase()} over the phone
             before we head out — and that's the price you pay.
           </p>
-          {service.priceFrom && (
-            <p class="mt-4 flex items-baseline gap-2">
-              <span class="text-navy-300 text-sm">Typically from</span>
-              <span class="display text-brass-400 text-2xl">{service.priceFrom}</span>
-            </p>
-          )}
           <a href={`tel:${business.phoneHref}`} class="btn btn-brass w-full mt-5" data-call-cta="service-sidebar">
             <Icon name="phone" size={18} />
             {business.phoneDisplay}

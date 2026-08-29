@@ -53,7 +53,7 @@ from reading as the same template.
 12   /services/[slug]
 660  /services/[slug]/[area]      12 services × 55 tier-1 neighborhoods
 105  /service-areas/[slug]
-8    /services, /service-areas, /about, /contact, /pricing, /faq, /reviews, /404
+7    /services, /car-keys, /service-areas, /about, /contact, /faq, /reviews, /404
 ---
 786  total
 ```

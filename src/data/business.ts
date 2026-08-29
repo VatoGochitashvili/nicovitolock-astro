@@ -75,7 +75,6 @@ export const business = {
 
   // Payment / practical facts reused in schema + FAQ
   paymentAccepted: 'Cash, Credit Card, Debit Card, Zelle',
-  priceRange: '$$',
 } as const;
 
 export type Business = typeof business;

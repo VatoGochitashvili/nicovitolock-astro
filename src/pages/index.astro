@@ -15,7 +15,6 @@ import { localBusinessSchema, webSiteSchema, organizationSchema, faqSchema } fro
 
 const brooklynAreas = serviceAreas.filter((a) => a.region === 'Brooklyn');
 const siAreas = serviceAreas.filter((a) => a.region === 'Staten Island');
-const priced = services.filter((s) => s.priceFrom?.startsWith('$'));
 
 const homeFaqs = [
   {
@@ -28,7 +27,7 @@ const homeFaqs = [
   },
   {
     q: 'How much does a locksmith cost?',
-    a: "It depends on the job, which is why we quote before we come out rather than after. A house lockout starts around $49, a rekey around $25 per cylinder, and a car key around $120. You get the number on the phone and we honor it — no bait price that triples at the door.",
+    a: "It depends on the job — the door, the hardware, and what has actually gone wrong. That is why we quote before we come out rather than after. Describe it on the phone and you get a real number, and that number is the one you pay. No bait price that triples at the door.",
   },
   {
     q: 'How fast can you get here?',
@@ -136,8 +135,8 @@ const description =
             Twelve services, one local shop
           </h2>
         </div>
-        <a href="/pricing" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 shrink-0 hover:text-brass-600 transition-colors">
-          See starting prices →
+        <a href="/contact" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 shrink-0 hover:text-brass-600 transition-colors">
+          Get a quote →
         </a>
       </div>
 
@@ -189,46 +188,46 @@ const description =
     </div>
   </section>
 
-  <!-- ══════════════ 04 · PRICE PREVIEW ══════════════ -->
+  <!-- ══════════════ 04 · HOW WE QUOTE ══════════════ -->
   <section class="relative overflow-hidden py-16 md:py-20 bg-navy-900">
     <Backdrop variant="rings" tone="dark" />
     <div class="container-x relative z-[1] grid lg:grid-cols-12 gap-10 lg:gap-16">
       <div class="lg:col-span-5">
         <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-3">
-          Straight pricing
+          How we quote
         </p>
         <h2 class="display text-white text-3xl md:text-[2.5rem]">
-          Published, so you can hold us to it
+          The number on the phone is the number you pay
         </h2>
         <p class="mt-5 text-navy-200 leading-relaxed">
-          The $19 and $29 lockout quotes you see elsewhere are a hook — the tech
+          Rock-bottom lockout quotes advertised elsewhere are a hook — the tech
           arrives, calls your lock "high security," drills it, and hands you a bill
-          for several hundred. These are the real starting numbers. Your exact price
-          is quoted on the phone before we leave.
+          many times what you were told. We price the actual job, before we leave
+          Bay Ridge, and we hold to it.
         </p>
-        <a href="/pricing" class="btn btn-brass mt-7">
-          Full price list
+        <a href="/contact" class="btn btn-brass mt-7">
+          Get a quote
           <Icon name="arrow" size={17} />
         </a>
       </div>
 
       <div class="lg:col-span-7">
-        <dl class="divide-y divide-white/10 border-y border-white/10">
-          {priced.map((s) => (
-            <div class="flex items-baseline justify-between gap-6 py-4">
-              <dt>
-                <a href={`/services/${s.slug}`} class="text-white font-semibold hover:text-brass-300 transition-colors">
-                  {s.name}
-                </a>
-              </dt>
-              <dd class="display text-brass-400 text-xl whitespace-nowrap">{s.priceFrom}</dd>
-            </div>
+        <ol class="divide-y divide-white/10 border-y border-white/10">
+          {[
+            { n: '01', t: 'You describe the job', d: 'The door, the lock, or the vehicle — and what actually happened.' },
+            { n: '02', t: 'We quote it', d: 'A real figure for the real work, before anybody drives anywhere.' },
+            { n: '03', t: 'Anything changes, you hear it first', d: 'If the job on site is genuinely different, we stop and tell you — never after.' },
+            { n: '04', t: 'You pay what we said', d: 'No neighborhood surcharge, no evening rate, no invented labor line.' },
+          ].map((x) => (
+            <li class="flex items-baseline gap-5 py-5">
+              <span class="font-display font-bold text-[0.85rem] text-brass-400 tabular-nums shrink-0">{x.n}</span>
+              <div>
+                <h3 class="text-white font-display font-bold text-[1.05rem]">{x.t}</h3>
+                <p class="mt-1 text-navy-200 text-[0.95rem] leading-relaxed">{x.d}</p>
+              </div>
+            </li>
           ))}
-        </dl>
-        <p class="mt-4 text-navy-300 text-sm">
-          Starting points for standard hardware. Nothing here is a binding quote —
-          yours comes on the phone, before we roll out.
-        </p>
+        </ol>
       </div>
     </div>
   </section>
@@ -248,7 +247,7 @@ const description =
             <p>
               Search "locksmith near me" in New York and most of what you get is a
               national dispatch office that auctions your job to whoever bids. The
-              $29 phone quote becomes a $350 invoice at your door.
+            throwaway phone quote becomes a far larger invoice at your door.
             </p>
             <p>
               <strong class="text-navy-900">The number on this page rings us.</strong>

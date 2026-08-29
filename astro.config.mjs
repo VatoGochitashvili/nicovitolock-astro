@@ -42,7 +42,7 @@ export default defineConfig({
           priority = 0.7;
         } else if (p === '/contact' || p === '/about') {
           priority = 0.8;
-        } else if (p === '/reviews' || p === '/faq' || p === '/pricing') {
+        } else if (p === '/reviews' || p === '/faq') {
           priority = 0.7;
         }
         item.priority = priority;

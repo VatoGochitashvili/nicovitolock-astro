@@ -29,8 +29,6 @@ export interface Service {
   scenarios: string[];
   /** Inline SVG icon id (see components/Icon.astro) */
   icon: string;
-  /** Ballpark price band shown on the pricing page */
-  priceFrom?: string;
   /** True for the services we want featured on the homepage grid */
   featured?: boolean;
   faqs: ServiceFaq[];
@@ -45,7 +43,6 @@ export const services: Service[] = [
     category: 'Emergency',
     icon: 'lockout',
     featured: true,
-    priceFrom: '$49',
     summary:
       'Locked out of your house, apartment, store, or car? We come to you and get you back in without wrecking the door.',
     intro:
@@ -101,7 +98,6 @@ export const services: Service[] = [
     category: 'Residential',
     icon: 'key',
     featured: true,
-    priceFrom: '$25 / cylinder',
     summary:
       'Keep your existing locks, retire the old keys. The cheapest way to lock out an ex-tenant, a contractor, or a lost keyring.',
     intro:
@@ -157,7 +153,6 @@ export const services: Service[] = [
     category: 'Residential',
     icon: 'lock',
     featured: true,
-    priceFrom: '$75',
     summary:
       'Sticking, loose, or broken locks repaired — or replaced with hardware that will outlive the door it goes on.',
     intro:
@@ -212,7 +207,6 @@ export const services: Service[] = [
     workTerm: 'deadbolt installation',
     category: 'Residential',
     icon: 'deadbolt',
-    priceFrom: '$120',
     summary:
       'The best security-per-dollar upgrade there is: a properly installed deadbolt with a reinforced strike.',
     intro:
@@ -267,7 +261,6 @@ export const services: Service[] = [
     workTerm: 'high-security lock',
     category: 'Residential',
     icon: 'shield',
-    priceFrom: '$180',
     summary:
       'Mul-T-Lock and Medeco cylinders: pick resistant, drill resistant, and keys that literally cannot be copied at a kiosk.',
     intro:
@@ -323,7 +316,6 @@ export const services: Service[] = [
     category: 'Automotive',
     icon: 'car',
     featured: true,
-    priceFrom: '$120',
     summary:
       'Lost every car key? We cut and program a new one at your car — for a lot less than the dealer, without the tow.',
     intro:
@@ -378,7 +370,6 @@ export const services: Service[] = [
     workTerm: 'key fob',
     category: 'Automotive',
     icon: 'fob',
-    priceFrom: '$60',
     summary:
       'Remotes, smart fobs, and push-to-start keys programmed to your car — new, spare, or replacement.',
     intro:
@@ -433,7 +424,6 @@ export const services: Service[] = [
     workTerm: 'smart lock',
     category: 'Residential',
     icon: 'smart',
-    priceFrom: '$140',
     summary:
       'Keypad and app-controlled locks installed and set up properly — including on doors that fight back.',
     intro:
@@ -489,7 +479,6 @@ export const services: Service[] = [
     category: 'Commercial',
     icon: 'intercom',
     featured: true,
-    priceFrom: 'Quoted on site',
     summary:
       'Audio and video intercoms for multi-family buildings, from a single dead handset to a full building replacement.',
     intro:
@@ -544,7 +533,6 @@ export const services: Service[] = [
     workTerm: 'access control',
     category: 'Commercial',
     icon: 'access',
-    priceFrom: 'Quoted on site',
     summary:
       'Key fobs, cards, and keypads that let you add or revoke someone in seconds instead of rekeying a building.',
     intro:
@@ -600,7 +588,6 @@ export const services: Service[] = [
     category: 'Security',
     icon: 'camera',
     featured: true,
-    priceFrom: 'Quoted on site',
     summary:
       'CCTV that actually produces usable footage — placed, aimed, and set up so you can find the clip when it matters.',
     intro:
@@ -655,7 +642,6 @@ export const services: Service[] = [
     workTerm: 'commercial locksmith',
     category: 'Commercial',
     icon: 'store',
-    priceFrom: 'Quoted on site',
     summary:
       'Storefronts, offices, and buildings: panic bars, door closers, roll-down gates, master keying, and code compliance.',
     intro:

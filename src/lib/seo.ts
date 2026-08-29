@@ -53,7 +53,6 @@ export function localBusinessSchema() {
     email: business.email,
     image: abs('/brand/van-2.jpg'),
     logo: abs('/brand/logo-512.png'),
-    priceRange: business.priceRange,
     currenciesAccepted: 'USD',
     paymentAccepted: business.paymentAccepted,
     // Service-area business: no street address published, but the base city

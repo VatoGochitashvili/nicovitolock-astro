@@ -26,8 +26,8 @@ const groups = [
   {
     title: 'Pricing',
     faqs: [
-      { q: 'How much does a locksmith cost?', a: 'It depends on the job, which is why we quote before coming out rather than after. As a guide: house lockouts start around $49, rekeys around $25 per cylinder, deadbolt installation around $120, and car keys around $120. You get an exact number on the phone.' },
-      { q: 'Why are some locksmiths so much cheaper on the phone?', a: "Because that price isn't real. The $19 and $29 quotes you see are lead-generation companies; the subcontractor arrives, declares the lock \"high security,\" drills it, and hands you a bill many times the quote. We quote the actual price and we hold to it." },
+      { q: 'How much does a locksmith cost?', a: 'It depends entirely on the job — the door, the hardware, and what has actually failed. That is why we quote before coming out rather than after. Describe it on the phone and you get a real number, and that number is what you pay.' },
+      { q: 'Why are some locksmiths so much cheaper on the phone?', a: "Because that price isn't real. The rock-bottom quotes you see advertised come from lead-generation companies; the subcontractor arrives, declares the lock \"high security,\" drills it, and hands you a bill many times the quote. We quote the actual price for the actual job and we hold to it." },
       { q: 'Do you charge a call-out fee if I decide not to go ahead?', a: "If you're clear about the job on the phone, the price we give you is what it costs — and we tell you up front if there's a service charge for coming out. No hidden fees appearing at the end." },
       { q: 'What payment do you take?', a: `${business.paymentAccepted}.` },
       { q: 'Can you give me a price over the phone?', a: 'In most cases yes. Tell us the door, the lock or the vehicle, and what happened. If something on site genuinely turns out different, we stop and tell you before doing the work — never after.' },
@@ -74,7 +74,7 @@ const allFaqs = groups.flatMap((g) => g.faqs);
   <PageHero
     eyebrow="FAQ"
     title="Questions worth asking any locksmith"
-    subtitle="Including the ones the $29-quote outfits would rather you didn't ask."
+    subtitle="Including the ones the bait-quote outfits would rather you didn't ask."
     crumbs={crumbs}
     photo="keys"
   />

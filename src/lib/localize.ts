@@ -382,7 +382,7 @@ export function areaFaqs(area: ServiceArea): { q: string; a: string }[] {
     { q: `Are you open on weekends in ${city}?`,
       a: `Every day of the week, 7 AM to 11 PM, holidays included. We're not a 24-hour operation — outside those hours nobody is coming, and we'd rather say so than take your call and leave you waiting.` },
     { q: `What does a locksmith cost in ${city}?`,
-      a: `The same as anywhere else we work — there's no ${city} surcharge. Lockouts start around $49, rekeys around $25 per cylinder, car keys around $120. You get an exact quote on the phone before we come out.` },
+      a: `The same as anywhere else we work — there's no ${city} surcharge. What it costs depends on the door, the hardware and the job, so we quote it on the phone before we come out and hold to that number.` },
     { q: `Do you handle both homes and businesses in ${city}?`,
       a: `Both. ${city} is ${area.character}, and we cover residential, automotive, and commercial work across all of it.` },
     { q: `Are you licensed to work in ${city}?`,
@@ -566,10 +566,10 @@ export function vehicleCopy(v: Vehicle): VehicleCopy {
   ];
 
   const costAnswers = [
-    `It depends on the key type — a plain transponder blade costs far less than a proximity fob. ${make} keys typically start around $120 and we quote your exact vehicle on the phone. Still well below dealer pricing, and it saves the tow.`,
-    `Key type decides it. A basic ${make} chip key is the cheap end; a smart proximity fob is the expensive end. We start around $120 and give you the real number once you tell us the year and model — no dealer markup, no tow bill.`,
-    `Somewhere from about $120, depending on whether your ${make} takes a cut blade or a proximity fob. You get the exact figure before we set off, and it will be a good deal less than the dealership quoted.`,
-    `A ${make} key starts around $120 and rises with the complexity of the fob. We price it on the phone from your year and model, so nothing changes when we arrive.`,
+    `It depends on the key type — a plain transponder blade costs far less than a proximity fob. Tell us the year and model of your ${make} and we quote it on the phone. It will be well under what the dealer charges, and it saves the tow.`,
+    `Key type decides it. A basic ${make} chip key is the cheap end; a smart proximity fob is the expensive end. Give us the year and model and you get the real number up front — no dealer markup, no tow bill.`,
+    `It depends whether your ${make} takes a cut blade or a proximity fob. You get the exact figure before we set off, and it will be a good deal less than the dealership quoted.`,
+    `A ${make} key is priced by the complexity of the fob. We work it out on the phone from your year and model, so nothing changes when we arrive.`,
   ];
 
   const onSiteAnswers = [

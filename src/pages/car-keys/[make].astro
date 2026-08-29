@@ -109,7 +109,7 @@ const schema = [
       {[
         { k: 'Key system', v: vehicle.system.split('(')[0].trim(), i: 'fob' },
         { k: 'All keys lost', v: vehicle.allKeysLost ? 'Handled on site' : 'Year dependent', i: 'key' },
-        { k: 'Typically from', v: '$120', i: 'dollar' },
+        { k: 'Where', v: 'At your vehicle', i: 'pin' },
         { k: 'Hours', v: 'Every day, 7am–11pm', i: 'clock' },
       ].map((f) => (
         <div class="py-4 px-4 first:pl-0 last:pr-0">

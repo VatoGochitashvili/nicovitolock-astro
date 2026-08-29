@@ -9,7 +9,7 @@ Re-run the checks after any content change.
 
 | Check | Result |
 |---|---|
-| Pages built | 809 |
+| Pages built | 808 |
 | Duplicate `<title>` | **0** |
 | Duplicate meta description | **0** |
 | Duplicate canonical | **0** |
@@ -42,7 +42,7 @@ deliberately **absent** until real reviews exist — see §5.
 /service-areas/[slug]      105 neighborhood pages
 /car-keys                  hub  → 22 car makes
 /car-keys/[make]           22 make pages (Honda, Toyota, BMW, …)
-/pricing /about /faq /reviews /contact
+/about /faq /reviews /contact
 ```
 
 **The car-make cluster** exists because "honda key replacement brooklyn" is a
@@ -126,6 +126,23 @@ TLS handshake sitting on the critical path before first paint. The faces are now
 bundled into the main stylesheet and the two woff2 files are preloaded.
 
 Per page over the wire: ~16KB HTML + 7KB CSS + 81KB fonts (cached forever).
+
+## 4c. No published prices — deliberate
+
+Every dollar figure was removed from the site on 2026-08-29 at the owner's
+request, and `/pricing` was retired with a 301 to `/contact`. The `priceFrom`
+field is gone from `services.ts` and `priceRange` is no longer emitted in the
+LocalBusiness schema.
+
+The trust message survives without the numbers: the homepage carries a
+"how we quote" band (describe the job → we quote it → anything changes you hear
+it first → you pay what we said), and the FAQ still explains why rock-bottom
+phone quotes from lead-gen outfits are not real.
+
+If prices are ever republished, put them back in `services.ts` as `priceFrom`
+and rebuild the `/pricing` page — do not scatter figures through page copy,
+or the next change means hunting them across nine files, which is what this
+removal had to do.
 
 ## 5. What only the owner can do
 

@@ -15,9 +15,10 @@
 /neighborhoods            /service-areas/                301
 /neighborhoods/*          /service-areas/:splat          301
 /service/*                /services/:splat               301
-/prices                   /pricing/                      301
-/price                    /pricing/                      301
-/rates                    /pricing/                      301
+/pricing                  /contact/                      301
+/prices                   /contact/                      301
+/price                    /contact/                      301
+/rates                    /contact/                      301
 /testimonials             /reviews/                      301
 /faqs                     /faq/                          301
 /questions                /faq/                          301
