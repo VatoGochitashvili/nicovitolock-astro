@@ -25,10 +25,19 @@ export const business = {
   phoneAltDisplay: '(347) 613-0218',
   email: 'nicoandvitolock@gmail.com',
 
-  // Service-area business: van-based, no walk-in storefront. We publish the
-  // base neighborhood (correct + honest) but no street address, which is what
-  // Google expects for an SAB and avoids a false-address listing problem.
-  isServiceAreaBusiness: true,
+  // There IS a walk-in shop — confirmed by the storefront photograph in
+  // /public/work/storefront-5th-avenue.webp, whose sign carries this phone
+  // number and this domain. The business is BOTH a storefront and a mobile
+  // service ("MOBILE LOCKSMITH SERVICE" is on the same sign), so the schema
+  // publishes a street address AND an areaServed covering both boroughs.
+  isServiceAreaBusiness: false,
+  address: {
+    street: '8516 5th Avenue',
+    city: 'Brooklyn',
+    state: 'NY',
+    zip: '11209',
+    country: 'US',
+  },
   base: {
     neighborhood: 'Bay Ridge',
     city: 'Brooklyn',
@@ -36,8 +45,9 @@ export const business = {
     zip: '11209',
     country: 'US',
   },
-  // Bay Ridge, Brooklyn (approx. 3rd Ave & 86th St)
-  geo: { lat: 40.6255, lng: -74.0298 },
+  // Approximate — 5th Ave between 85th and 86th, Bay Ridge. Replace with the
+  // exact pin from the Google Business Profile when convenient.
+  geo: { lat: 40.6218, lng: -74.0288 },
 
   hours: {
     // NOT 24/7 — real hours, every day.

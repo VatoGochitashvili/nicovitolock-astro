@@ -8,10 +8,12 @@ import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
+import WorkGallery from '@/components/WorkGallery.astro';
+import { workPhotos } from '@/data/work';
 import { serviceAreas, nearbyAreas } from '@/data/locations';
 import { services } from '@/data/services';
 import { business } from '@/data/business';
-import { areaCopy, areaFaqs, areaTraitNote } from '@/lib/localize';
+import { areaCopy, areaFaqs, areaTraitNote, seededHash } from '@/lib/localize';
 import { breadcrumbSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
 
 export function getStaticPaths() {
@@ -24,6 +26,10 @@ export function getStaticPaths() {
 const { area } = Astro.props;
 const copy = areaCopy(area);
 const note = areaTraitNote(area);
+// A seeded rotation so adjacent neighborhoods don't show the same three shots.
+const pool = workPhotos.filter((w) => w.slug !== 'storefront-5th-avenue');
+const off = seededHash(`photos::${area.slug}`) % pool.length;
+const photos = [...pool.slice(off), ...pool.slice(0, off)].slice(0, 3);
 // Alternate the two street photos so neighboring pages don't look identical.
 const areaPhoto = (area.slug.charCodeAt(0) + area.slug.length) % 2 ? 'rowhouses' : 'street';
 const near = nearbyAreas(area);
@@ -218,6 +224,13 @@ const schema = [
       </div>
     </div>
   </section>
+
+  <WorkGallery
+    photos={photos}
+    heading="Work from around the boroughs"
+    intro="Photographs from real jobs — locks, keys and hardware we've actually fitted. Not stock."
+    limit={3}
+  />
 
   <FaqAccordion faqs={faqs} heading={`Locksmith in ${area.name} — questions we get`} />
 

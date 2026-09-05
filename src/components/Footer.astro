@@ -51,8 +51,9 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
           <p class="flex items-start gap-2.5 text-navy-200">
             <Icon name="pin" size={17} class="text-brass-400 shrink-0 mt-0.5" />
             <span>
-              Based in {business.base.neighborhood}, {business.base.city}, {business.base.state} {business.base.zip}<br />
-              <span class="text-navy-300 text-sm">Mobile service — we come to you</span>
+              {business.address.street}<br />
+              {business.address.city}, {business.address.state} {business.address.zip}<br />
+              <span class="text-navy-300 text-sm">Walk in, or we come to you</span>
             </span>
           </p>
           <p class="flex items-start gap-2.5 text-navy-200">

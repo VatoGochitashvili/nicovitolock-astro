@@ -55,14 +55,15 @@ export function localBusinessSchema() {
     logo: abs('/brand/logo-512.png'),
     currenciesAccepted: 'USD',
     paymentAccepted: business.paymentAccepted,
-    // Service-area business: no street address published, but the base city
-    // and geo are required for local relevance.
+    // Real walk-in shop, so the street address is published. areaServed below
+    // still covers both boroughs because the business is also mobile.
     address: {
       '@type': 'PostalAddress',
-      addressLocality: business.base.city,
-      addressRegion: business.base.state,
-      postalCode: business.base.zip,
-      addressCountry: business.base.country,
+      streetAddress: business.address.street,
+      addressLocality: business.address.city,
+      addressRegion: business.address.state,
+      postalCode: business.address.zip,
+      addressCountry: business.address.country,
     },
     geo: {
       '@type': 'GeoCoordinates',

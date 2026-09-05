@@ -5,6 +5,8 @@ import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
+import WorkGallery from '@/components/WorkGallery.astro';
+import { photosForMake, photosForService } from '@/data/work';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
@@ -20,6 +22,9 @@ export function getStaticPaths() {
 
 const { vehicle } = Astro.props;
 const copy = vehicleCopy(vehicle);
+// Prefer photos of this actual make; fall back to general car key work.
+const makePhotos = photosForMake(vehicle.slug);
+const photos = makePhotos.length ? makePhotos : photosForService('car-key-replacement').slice(0, 3);
 const others = vehicles.filter((v) => v.slug !== vehicle.slug).slice(0, 8);
 // A sample of nearby neighborhoods for internal linking, not all 55.
 const nearbyAreas = tier1Areas.slice(0, 12);
@@ -247,6 +252,16 @@ const schema = [
       <p class="text-muted text-[1.02rem] leading-relaxed">{copy.closing}</p>
     </div>
   </section>
+
+  <WorkGallery
+    photos={photos}
+    heading={makePhotos.length ? `${vehicle.make} keys we've done` : 'Car key work from the road'}
+    intro={makePhotos.length
+      ? `Photographs from real ${vehicle.make} jobs — cut and programmed at the vehicle.`
+      : 'Photographs from real car key jobs across Brooklyn and Staten Island.'}
+    limit={4}
+    tone="dark"
+  />
 
   <FaqAccordion faqs={faqs} heading={`${vehicle.make} car keys — common questions`} />
 

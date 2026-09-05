@@ -5,6 +5,8 @@ import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
+import WorkGallery from '@/components/WorkGallery.astro';
+import { photosForService } from '@/data/work';
 import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import { serviceAreas, tier1Areas } from '@/data/locations';
@@ -37,6 +39,7 @@ const sceneFor: Record<string, 'residential' | 'automotive' | 'commercial' | 'se
 
 
 const related = services.filter((s) => s.slug !== service.slug).slice(0, 3);
+const photos = photosForService(service.slug);
 const brooklyn = tier1Areas.filter((a) => a.region === 'Brooklyn');
 const statenIsland = tier1Areas.filter((a) => a.region === 'Staten Island');
 
@@ -235,6 +238,15 @@ const schema = [
       </aside>
     </div>
   </section>
+
+  {photos.length > 0 && (
+    <WorkGallery
+      photos={photos}
+      heading={`${service.name} — our own work`}
+      intro="Photographs from real jobs across Brooklyn and Staten Island. Not stock."
+      limit={6}
+    />
+  )}
 
   <FaqAccordion faqs={service.faqs} heading={`${service.name} — questions we get`} />
 
