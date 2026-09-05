@@ -28,6 +28,12 @@ const fmt = (d: string) =>
     </div>
 
     {hasReviews ? (
+      <>
+      <p class="mt-4">
+        <a href={business.reviewUrl} class="link-brass" target="_blank" rel="noopener">
+          Read them all on Google →
+        </a>
+      </p>
       <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {shown.map((r, i) => (
           <figure class="card p-6 flex flex-col reveal" data-delay={i * 60}>
@@ -47,6 +53,7 @@ const fmt = (d: string) =>
           </figure>
         ))}
       </div>
+      </>
     ) : (
       <div class="mt-9 card p-8 md:p-10 text-center max-w-2xl mx-auto">
         <span class="inline-grid place-items-center w-14 h-14 rounded-full bg-brass-50 text-brass-500 mb-4">
@@ -58,10 +65,22 @@ const fmt = (d: string) =>
           anywhere in Brooklyn or Staten Island, a review on our Google profile genuinely
           helps a neighborhood shop like ours — and it's the only kind we'll ever put here.
         </p>
-        <a href={`tel:${business.phoneHref}`} class="btn btn-navy mt-6">
-          <Icon name="phone" size={18} />
-          {business.phoneDisplay}
-        </a>
+        <div class="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href={business.reviewUrl}
+            class="btn btn-brass"
+            target="_blank"
+            rel="noopener"
+            data-cta="google-review"
+          >
+            <Icon name="star" size={18} />
+            Review us on Google
+          </a>
+          <a href={`tel:${business.phoneHref}`} class="btn btn-outline">
+            <Icon name="phone" size={18} />
+            {business.phoneDisplay}
+          </a>
+        </div>
       </div>
     )}
   </div>

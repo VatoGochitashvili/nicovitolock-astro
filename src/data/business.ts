@@ -53,12 +53,20 @@ export const business = {
   yearsInBusiness: 15,
   licenseNote: 'Licensed & insured New York locksmith',
 
+  // Profile URLs. These emit as schema.org `sameAs`, which is the mechanism
+  // that tells Google "this website and that Business Profile are the same
+  // entity." Fill the rest in as the listings are created — every one you add
+  // strengthens the association.
   social: {
-    google: '',
+    // Google Business Profile (Knowledge Graph id /g/11zfjtpcvq)
+    google: 'https://share.google/mJPUbqMcGf1ZA4ZBI',
     facebook: '',
     instagram: '',
     yelp: '',
   },
+
+  /** Direct "write a review" link, used by the Reviews page CTA. */
+  reviewUrl: 'https://share.google/mJPUbqMcGf1ZA4ZBI',
 
   brands: [
     'Mul-T-Lock', 'Medeco', 'Schlage', 'Kwikset', 'Yale', 'ASSA ABLOY',
