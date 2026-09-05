@@ -47,10 +47,10 @@ const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 
     <!-- Favicons render on tab strips of every colour, so these are the
          WHITE-SQUARE variants. The transparent logo is for the page chrome. -->
-    <!-- Google requires a square favicon that is a MULTIPLE OF 48px (48, 96,
-         144, 192). 16/32 alone do not qualify, which is why the 96px entry
-         leads here. Opaque white squares: Google renders these on both light
-         and dark result pages. -->
+    <!-- Favicon is the "N&V + key" mark, NOT the full logo: at 16px the
+         logo's rim lettering vanishes and the figures turn to mush. Sizes are
+         multiples of 48 because Google documents that requirement — 16/32
+         alone do not qualify. Regenerate with brand-source/make-favicon.py. -->
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144x144.png" />
