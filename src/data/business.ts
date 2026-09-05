@@ -25,19 +25,14 @@ export const business = {
   phoneAltDisplay: '(347) 613-0218',
   email: 'nicoandvitolock@gmail.com',
 
-  // There IS a walk-in shop — confirmed by the storefront photograph in
-  // /public/work/storefront-5th-avenue.webp, whose sign carries this phone
-  // number and this domain. The business is BOTH a storefront and a mobile
-  // service ("MOBILE LOCKSMITH SERVICE" is on the same sign), so the schema
-  // publishes a street address AND an areaServed covering both boroughs.
-  isServiceAreaBusiness: false,
-  address: {
-    street: '8516 5th Avenue',
-    city: 'Brooklyn',
-    state: 'NY',
-    zip: '11209',
-    country: 'US',
-  },
+  // FULLY MOBILE — no walk-in shop. Do not publish a street address.
+  //
+  // The storefront image in /public/work is AI-GENERATED, not a photograph of
+  // a real premises. An earlier commit mistook it for proof of a shop and
+  // published 8516 5th Avenue; that was wrong and is reverted here. Publishing
+  // an address a customer cannot visit is exactly what gets locksmith listings
+  // suspended, and Google polices this category hard.
+  isServiceAreaBusiness: true,
   base: {
     neighborhood: 'Bay Ridge',
     city: 'Brooklyn',
@@ -45,9 +40,8 @@ export const business = {
     zip: '11209',
     country: 'US',
   },
-  // Approximate — 5th Ave between 85th and 86th, Bay Ridge. Replace with the
-  // exact pin from the Google Business Profile when convenient.
-  geo: { lat: 40.6218, lng: -74.0288 },
+  // Bay Ridge, Brooklyn — the service-area centre, not a premises.
+  geo: { lat: 40.6255, lng: -74.0298 },
 
   hours: {
     // NOT 24/7 — real hours, every day.
@@ -63,20 +57,34 @@ export const business = {
   yearsInBusiness: 15,
   licenseNote: 'Licensed & insured New York locksmith',
 
-  // Profile URLs. These emit as schema.org `sameAs`, which is the mechanism
-  // that tells Google "this website and that Business Profile are the same
-  // entity." Fill the rest in as the listings are created — every one you add
-  // strengthens the association.
+  // Profile URLs. These emit as schema.org `sameAs`, which is how Google ties
+  // this website and the Business Profile together as one entity.
+  //
+  // The Google URL is the canonical CID form, resolved from the owner's
+  // g.page short link: /r/CWk8jH1ykbTcEBM -> place data 1s0x…:0xdcb491727d8c3c69
+  // -> CID 15903496105070705769. The CID form is stable and does not depend on
+  // a redirect service staying up.
   social: {
-    // Google Business Profile (Knowledge Graph id /g/11zfjtpcvq)
-    google: 'https://share.google/mJPUbqMcGf1ZA4ZBI',
+    google: 'https://maps.google.com/?cid=15903496105070705769',
     facebook: '',
     instagram: '',
     yelp: '',
   },
 
-  /** Direct "write a review" link, used by the Reviews page CTA. */
-  reviewUrl: 'https://share.google/mJPUbqMcGf1ZA4ZBI',
+  /** Deep link that opens the "write a review" dialog directly. */
+  reviewUrl: 'https://g.page/r/CWk8jH1ykbTcEBM/review',
+  /** The profile itself, for "read our reviews" links. */
+  profileUrl: 'https://maps.google.com/?cid=15903496105070705769',
+
+  /**
+   * Rating shown on the Google Business Profile, verified 2026-09-05.
+   * DISPLAY ONLY — this is deliberately NOT emitted as AggregateRating schema.
+   * Google discounts (and can penalise) self-serving review markup where a
+   * business marks up its own rating, and it requires a review COUNT that the
+   * public profile does not expose. Linking to the profile is the correct and
+   * safe way to surface it. Re-check the value before changing it.
+   */
+  googleRating: '5.0',
 
   brands: [
     'Mul-T-Lock', 'Medeco', 'Schlage', 'Kwikset', 'Yale', 'ASSA ABLOY',

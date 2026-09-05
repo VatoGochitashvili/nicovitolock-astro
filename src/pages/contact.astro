@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import Icon from '@/components/Icon.astro';
 import ContactForm from '@/components/ContactForm.astro';
+import GoogleReviews from '@/components/GoogleReviews.astro';
 import { business } from '@/data/business';
 import { serviceAreas } from '@/data/locations';
 import { breadcrumbSchema, localBusinessSchema } from '@/lib/seo';
@@ -76,21 +77,6 @@ const crumbs = [
           </p>
         </div>
 
-        <figure class="card overflow-hidden">
-          <img
-            src="/work/storefront-5th-avenue.webp"
-            srcset="/work/storefront-5th-avenue-800.webp 800w, /work/storefront-5th-avenue.webp 1200w"
-            sizes="(min-width: 1024px) 460px, 92vw"
-            alt="The Nico & Vito Locksmith shop front at 8516 5th Avenue in Bay Ridge, Brooklyn"
-            width="1229" height="1023"
-            class="w-full object-cover"
-            loading="lazy"
-          />
-          <figcaption class="px-5 py-3 text-sm text-muted border-t border-line">
-            The shop on 5th Avenue, Bay Ridge.
-          </figcaption>
-        </figure>
-
         <div class="card p-6 md:p-7">
           <h2 class="text-navy-900 text-lg">Where we are</h2>
           <span class="rule-brass mt-2.5 block"></span>
@@ -98,11 +84,8 @@ const crumbs = [
             <li class="flex items-start gap-3">
               <Icon name="pin" size={18} class="text-brass-500 shrink-0 mt-0.5" />
               <span class="text-navy-800">
-                <strong class="text-navy-900 block">
-                  {business.address.street}, {business.address.city}, {business.address.state} {business.address.zip}
-                </strong>
-                Walk in for keys and hardware, or we come to you anywhere in
-                Brooklyn and Staten Island.
+                <strong class="text-navy-900 block">Based in Bay Ridge, Brooklyn</strong>
+                Fully mobile — we come to you, anywhere in Brooklyn and Staten Island.
               </span>
             </li>
             <li class="flex items-start gap-3">
@@ -118,6 +101,8 @@ const crumbs = [
             </li>
           </ul>
         </div>
+
+        <GoogleReviews />
 
         <div class="card p-6 md:p-7 bg-brass-50 border-brass-200">
           <h2 class="text-navy-900 text-lg flex items-center gap-2">

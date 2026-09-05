@@ -5,6 +5,7 @@ import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
 import ContactForm from '@/components/ContactForm.astro';
+import GoogleReviews from '@/components/GoogleReviews.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
@@ -84,8 +85,9 @@ const description =
           </p>
         </div>
 
-        <div class="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2">
+        <div class="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 space-y-4">
           <ContactForm variant="short" tone="dark" />
+          <GoogleReviews tone="dark" compact />
         </div>
 
         <div class="lg:col-span-7 lg:col-start-1 lg:row-start-2">
@@ -241,7 +243,7 @@ const description =
             Who you're calling
           </p>
           <h2 class="display text-navy-900 text-3xl md:text-[2.5rem]">
-            A Bay Ridge shop, not a call center
+            A Bay Ridge locksmith, not a call center
           </h2>
           <div class="mt-5 space-y-4 text-muted leading-relaxed">
             <p>
@@ -270,11 +272,11 @@ const description =
 
       <div class="order-1 lg:order-2 relative min-h-[18rem] lg:min-h-[34rem]">
         <img
-          src="/work/storefront-5th-avenue.webp"
-          srcset="/work/storefront-5th-avenue-800.webp 800w, /work/storefront-5th-avenue.webp 1200w"
+          src="/work/van-interior-equipment.webp"
+          srcset="/work/van-interior-equipment-800.webp 800w, /work/van-interior-equipment.webp 1200w"
           sizes="(min-width: 1024px) 50vw, 100vw"
-          alt="The Nico & Vito Locksmith shop at 8516 5th Avenue in Bay Ridge, Brooklyn"
-          width="1229" height="1023"
+          alt="Inside the Nico &amp; Vito service van: key machines, programming equipment and tool cases"
+          width="1200" height="1600"
           class="absolute inset-0 w-full h-full object-cover"
           loading="lazy" decoding="async"
         />

@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import Reviews from '@/components/Reviews.astro';
+import GoogleReviews from '@/components/GoogleReviews.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
 import { hasReviews, aggregateRatingSchema } from '@/data/reviews';
@@ -32,6 +33,12 @@ if (rating) businessNode.aggregateRating = rating;
     crumbs={crumbs}
     photo="rowhouses"
   />
+
+  <section class="py-12 bg-cream">
+    <div class="container-narrow">
+      <GoogleReviews />
+    </div>
+  </section>
 
   <Reviews limit={99} />
 

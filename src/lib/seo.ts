@@ -55,15 +55,14 @@ export function localBusinessSchema() {
     logo: abs('/brand/logo-512.png'),
     currenciesAccepted: 'USD',
     paymentAccepted: business.paymentAccepted,
-    // Real walk-in shop, so the street address is published. areaServed below
-    // still covers both boroughs because the business is also mobile.
+    // Service-area business: NO streetAddress. Publishing one for a mobile
+    // locksmith is a documented cause of Business Profile suspension.
     address: {
       '@type': 'PostalAddress',
-      streetAddress: business.address.street,
-      addressLocality: business.address.city,
-      addressRegion: business.address.state,
-      postalCode: business.address.zip,
-      addressCountry: business.address.country,
+      addressLocality: business.base.city,
+      addressRegion: business.base.state,
+      postalCode: business.base.zip,
+      addressCountry: business.base.country,
     },
     geo: {
       '@type': 'GeoCoordinates',

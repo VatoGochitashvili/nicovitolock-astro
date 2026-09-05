@@ -1,8 +1,16 @@
 Nico & Vito Locksmith — real work photographs
 ============================================
 
-Every image here is the business's own: shot on the job, or of the shop at
-8516 5th Avenue. None of it is stock. That is the point — these are the most
+Every image here is the business's own, shot on the job — with ONE exception
+noted below. None of it is stock.
+
+⚠️  storefront-5th-avenue.* is AI-GENERATED, not a photograph of a real place.
+    Nico & Vito is FULLY MOBILE — there is no walk-in shop and no published
+    street address. That image must never be captioned as "our shop", never
+    appear on the contact page, and never imply a visitable address. It is used
+    only as heavily dimmed background texture on /about, via
+    /brand/bg-shopfront.webp. An earlier commit mistook it for a real photo and
+    published a street address; that was wrong and has been reverted. That is the point — these are the most
 valuable images on the site because nobody else has them, they prove the
 business is real, and they give every service page unique visual content.
 

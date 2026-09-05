@@ -23,16 +23,23 @@ export interface WorkPhoto {
   orientation: 'portrait' | 'landscape';
   /** Suitable as a wide page background */
   hero?: boolean;
+  /** Illustration rather than a photograph — must never be presented as
+   *  evidence of a real place, a real job, or a real premises. */
+  aiGenerated?: boolean;
 }
 
 export const workPhotos: WorkPhoto[] = [
   {
+    // AI-GENERATED brand artwork, NOT a photograph of a real premises. The
+    // business is fully mobile. Never caption this as "our shop", never put it
+    // on the contact page, and never let it imply a visitable address — it is
+    // used as decorative brand imagery only.
     slug: 'storefront-5th-avenue',
-    alt: 'The Nico & Vito Locksmith storefront at 8516 5th Avenue in Bay Ridge, Brooklyn, with the shop sign listing auto keys, lockouts, re-key, residential and commercial service',
-    caption: 'Our shop on 5th Avenue, Bay Ridge',
+    alt: 'Nico & Vito Locksmith branding',
+    caption: 'Nico & Vito Locksmith',
     services: [],
     orientation: 'landscape',
-    hero: true,
+    aiGenerated: true,
   },
   {
     slug: 'van-interior-equipment',

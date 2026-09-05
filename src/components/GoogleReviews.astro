@@ -1,0 +1,61 @@
+---
+import Icon from './Icon.astro';
+import { business } from '@/data/business';
+
+/**
+ * Visible link to the Google Business Profile.
+ *
+ * The rating is rendered as TEXT, never as AggregateRating structured data.
+ * Google discounts self-serving review markup — a business marking up its own
+ * rating — and valid AggregateRating also requires a review count that the
+ * public profile does not expose. Linking out is both the compliant option and
+ * the one that actually sends people somewhere they can verify.
+ */
+interface Props {
+  tone?: 'light' | 'dark';
+  compact?: boolean;
+}
+const { tone = 'light', compact = false } = Astro.props;
+const dark = tone === 'dark';
+---
+<div class:list={[
+  'rounded-xl border p-6 md:p-7',
+  dark ? 'bg-white/5 border-white/15' : 'bg-white border-line',
+]}>
+  <div class="flex items-start gap-4">
+    <span class="w-11 h-11 rounded-full bg-brass-50 text-brass-600 grid place-items-center shrink-0">
+      <Icon name="star" size={22} />
+    </span>
+    <div class="min-w-0">
+      <p class:list={['font-display font-bold text-[0.72rem] uppercase tracking-[0.2em]', dark ? 'text-brass-400' : 'text-brass-600']}>
+        On Google
+      </p>
+      <p class="flex items-baseline gap-2 mt-1">
+        <span class:list={['display text-3xl', dark ? 'text-white' : 'text-navy-900']}>
+          {business.googleRating}
+        </span>
+        <span class="flex text-brass-400" aria-hidden="true">
+          {[1,2,3,4,5].map(() => <Icon name="star" size={15} class="fill-current" />)}
+        </span>
+      </p>
+      <p class:list={['mt-1 text-[0.9rem]', dark ? 'text-navy-200' : 'text-muted']}>
+        Our rating on the Google Business Profile.
+        <span class="block mt-0.5">Read every review, or add your own.</span>
+      </p>
+    </div>
+  </div>
+
+  {!compact && (
+    <div class="mt-5 flex flex-col sm:flex-row gap-3">
+      <a href={business.profileUrl} target="_blank" rel="noopener"
+         class="btn btn-brass flex-1" data-cta="google-profile">
+        <Icon name="star" size={17} />
+        Read our Google reviews
+      </a>
+      <a href={business.reviewUrl} target="_blank" rel="noopener"
+         class:list={['btn flex-1', dark ? 'btn-ghost' : 'btn-outline']} data-cta="google-review">
+        Leave a review
+      </a>
+    </div>
+  )}
+</div>
