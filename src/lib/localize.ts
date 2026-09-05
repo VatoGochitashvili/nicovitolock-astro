@@ -77,17 +77,17 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
   // ------------------------------- leads -------------------------------
   const leads = [
     `Need ${sLower} in ${city}? Nico & Vito Locksmith works out of Bay Ridge, ${eta} from here, and we cover ${city} (${zip}) every day from 7 AM to 11 PM.`,
-    `Nico & Vito Locksmith handles ${sLower} across ${city}, ${region}. We're a Bay Ridge shop — ${eta} away — not a call center that farms your job out to whoever answers.`,
+    `Nico & Vito Locksmith handles ${sLower} across ${city}, ${region}. We're Bay Ridge based — ${eta} away — not a call center that farms your job out to whoever answers.`,
     `Looking for ${sLower} in ${city}? We're licensed, insured, and based in Bay Ridge, which puts ${city} ${eta} from our door seven days a week.`,
     `For ${sLower} anywhere in ${city} (${zip}), Nico & Vito Locksmith is the local call. Bay Ridge based, ${eta} out, open 7 AM to 11 PM every single day.`,
     `${city} residents and business owners call us for ${sLower} because we're actually nearby — Bay Ridge, ${eta} from ${city}, with the parts already on the van.`,
     `When ${city} needs ${sLower}, we're ${eta} away. Nico & Vito Locksmith runs out of Bay Ridge and covers all of ${region} daily, 7 AM to 11 PM.`,
-    `${cap(sShort)} in ${city}, handled by a Bay Ridge shop that is ${eta} out and open seven days a week, 7 AM to 11 PM.`,
+    `${cap(sShort)} in ${city}, handled by a Bay Ridge locksmith who is ${eta} out and open seven days a week, 7 AM to 11 PM.`,
     `We do ${sLower} throughout ${city} and the rest of ${region}. Local, licensed, insured, and reachable on ${phone} any day between 7 AM and 11 PM.`,
     `${city} (${zip}) is inside our everyday coverage. Call ${phone} for ${sLower} and you get a Bay Ridge technician, not a subcontractor bidding on your job.`,
     `If you need ${sLower} in ${city}, you are ${eta} from a licensed local locksmith rather than a national dispatch number pretending to be one.`,
     `Nico & Vito Locksmith covers ${city} for ${sLower} every day of the week. Bay Ridge based, ${eta} out, price agreed before we leave.`,
-    `${cap(sLower)} for ${city} homes and businesses — from a family-run Bay Ridge shop ${eta} down the road, open 7 AM to 11 PM daily.`,
+    `${cap(sLower)} for ${city} homes and businesses — from a family-run Bay Ridge locksmith ${eta} down the road, open 7 AM to 11 PM daily.`,
     `Need ${sLower} around ${city}? We are the local option: Bay Ridge based, ${eta} away, licensed and insured, and open every single day.`,
   ];
 
@@ -115,7 +115,7 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     `${cap(sShort)} in ${city}: how we work`,
     `The ${city} approach to ${sShort}`,
     `${cap(sShort)}, the ${city} way`,
-    `Why ${city} property owners call a local shop`,
+    `Why ${city} property owners call a local locksmith`,
     `What sets our ${city} work apart`,
   ];
 
@@ -169,7 +169,7 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     `We would rather do one ${city} job properly than three of them twice. That is the whole reason people here call us back.`,
     `For ${sWork} anywhere in ${city} — house, apartment, storefront, or vehicle — you have a local, licensed option ${eta} down the road.`,
     `${city} is close enough that we treat it like our own block, because it more or less is. Call ${phone} and we will tell you honestly what the ${sWork} job needs.`,
-    `Book the ${sWork} work in ${city} with a shop that is licensed, insured, local, and open every day from 7 AM to 11 PM.`,
+    `Book the ${sWork} work in ${city} with a locksmith who is licensed, insured, local, and open every day from 7 AM to 11 PM.`,
   ];
 
   // ------------------------------- FAQs --------------------------------
@@ -291,14 +291,14 @@ export function areaCopy(area: ServiceArea): AreaCopy {
   const leads = [
     `Nico & Vito Locksmith covers every block of ${city}, ${region} — ${eta} from our Bay Ridge base, every day between 7 AM and 11 PM.`,
     `We're a Bay Ridge locksmith serving ${city} daily. Lockouts, lock changes, car keys, intercoms, and cameras, ${eta} from our door.`,
-    `${city} is part of our regular ${region} coverage. One licensed local shop, open seven days a week, ${eta} away.`,
-    `Locksmith service throughout ${city} (${zip}) — residential, automotive, and commercial — from a Bay Ridge shop that's ${eta} out.`,
+    `${city} is part of our regular ${region} coverage. One licensed local outfit, open seven days a week, ${eta} away.`,
+    `Locksmith service throughout ${city} (${zip}) — residential, automotive, and commercial — from a Bay Ridge locksmith that's ${eta} out.`,
     `Need a locksmith in ${city}? We're ${eta} down the road in Bay Ridge, licensed and insured, and open 7 AM to 11 PM every day of the week.`,
     `${city} sits well inside our daily route. Call ${business.phone} and you get a Bay Ridge technician rather than a national dispatch number.`,
-    `From lockouts to camera systems, ${city} gets the full range from one local shop — ${eta} away, open every day including weekends.`,
+    `From lockouts to camera systems, ${city} gets the full range from one local crew — ${eta} away, open every day including weekends.`,
     `Our ${city} coverage is not an afterthought: ${zip} is on the route every day, 7 AM to 11 PM, at the same prices we charge at home in Bay Ridge.`,
     `A licensed locksmith for ${city}, ${region}. Bay Ridge based, ${eta} out, and genuinely local rather than a call centre with a borough page.`,
-    `${city} homes, apartments, storefronts, and vehicles — all covered, every day, by a family-run Bay Ridge shop ${eta} away.`,
+    `${city} homes, apartments, storefronts, and vehicles — all covered, every day, by a family-run Bay Ridge locksmith ${eta} away.`,
     `We work ${city} the same way we work our own block: quote first, arrive when we said, and charge what we quoted.`,
     `Locksmith in ${city} (${zip}) — ${eta} from Bay Ridge, open 7 days a week, licensed, insured, and answering the phone ourselves.`,
   ];
@@ -322,7 +322,7 @@ export function areaCopy(area: ServiceArea): AreaCopy {
     `Licensed, insured, and local. We quote first, work second, and leave the door better than we found it.`,
     `No bait pricing and no surprise line items. The number you hear on the phone is the number on the invoice.`,
     `We ask for ID on lockouts, show credentials on request, and stand behind the work. That is what separates a locksmith from a dispatch service.`,
-    `One price, agreed in advance, from a licensed and insured shop that will still be here next year when you need us again.`,
+    `One price, agreed in advance, from a licensed and insured local locksmith who will still be here next year when you need us again.`,
     `We would rather talk you out of work you don't need than sell it to you. It is why ${city} customers call back.`,
     `Upfront pricing, licensed hands, and a door that closes properly when we leave — nothing more complicated than that.`,
     `If the honest answer is a cheaper fix than you expected, that's the answer you get. Same for the reverse.`,

@@ -6,6 +6,7 @@ import PhotoBg from '@/components/PhotoBg.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
@@ -27,7 +28,12 @@ const { area } = Astro.props;
 const copy = areaCopy(area);
 const note = areaTraitNote(area);
 // A seeded rotation so adjacent neighborhoods don't show the same three shots.
-const pool = workPhotos.filter((w) => w.slug !== 'storefront-5th-avenue');
+// Excluded: the AI storefront (never used), and the van interior — the owner
+// asked for that one to stay out of galleries and appear only as the blurred
+// background at /brand/bg-vanblur.webp.
+const pool = workPhotos.filter(
+  (w) => !['storefront-5th-avenue', 'van-interior-equipment'].includes(w.slug)
+);
 const off = seededHash(`photos::${area.slug}`) % pool.length;
 const photos = [...pool.slice(off), ...pool.slice(0, off)].slice(0, 3);
 // Alternate the two street photos so neighboring pages don't look identical.
@@ -233,6 +239,8 @@ const schema = [
   />
 
   <FaqAccordion faqs={faqs} heading={`Locksmith in ${area.name} — questions we get`} />
+
+  <GoogleReviewBand tone="navy" />
 
   <CtaBand
     heading={`Need a locksmith in ${area.name}?`}

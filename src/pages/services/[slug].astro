@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
@@ -249,6 +250,8 @@ const schema = [
   )}
 
   <FaqAccordion faqs={service.faqs} heading={`${service.name} — questions we get`} />
+
+  <GoogleReviewBand tone="navy" />
 
   <CtaBand
     heading={`Need ${service.short.toLowerCase()} today?`}

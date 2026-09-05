@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
@@ -264,6 +265,8 @@ const schema = [
   />
 
   <FaqAccordion faqs={faqs} heading={`${vehicle.make} car keys — common questions`} />
+
+  <GoogleReviewBand tone="navy" />
 
   <CtaBand
     heading={`Need a ${vehicle.make} key today?`}

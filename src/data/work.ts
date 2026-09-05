@@ -30,10 +30,13 @@ export interface WorkPhoto {
 
 export const workPhotos: WorkPhoto[] = [
   {
-    // AI-GENERATED brand artwork, NOT a photograph of a real premises. The
-    // business is fully mobile. Never caption this as "our shop", never put it
-    // on the contact page, and never let it imply a visitable address — it is
-    // used as decorative brand imagery only.
+    // AI-GENERATED, and NOT USED ANYWHERE ON THE SITE.
+    //
+    // Nico & Vito is a FULLY MOBILE locksmith: no shop, no walk-in premises,
+    // no published street address. This image shows a storefront carrying the
+    // company's name, so any use of it — even blurred as a background — implies
+    // a place customers could visit. It is retained here only so the file is
+    // accounted for. Do not put it on a page.
     slug: 'storefront-5th-avenue',
     alt: 'Nico & Vito Locksmith branding',
     caption: 'Nico & Vito Locksmith',
@@ -45,7 +48,9 @@ export const workPhotos: WorkPhoto[] = [
     slug: 'van-interior-equipment',
     alt: 'Inside the Nico & Vito service van: key machines, programming equipment and tool cases',
     caption: 'The van carries the parts, so most jobs finish first visit',
-    services: ['emergency-lockout-service', 'car-key-replacement', 'lock-rekeying'],
+    // Kept out of galleries at the owner's request — it is used only as the
+    // heavily blurred background texture at /brand/bg-vanblur.webp.
+    services: [],
     orientation: 'portrait',
   },
   {

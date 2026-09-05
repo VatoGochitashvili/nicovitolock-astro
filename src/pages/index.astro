@@ -6,6 +6,7 @@ import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import GoogleReviews from '@/components/GoogleReviews.astro';
+import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
@@ -57,7 +58,7 @@ const description =
        Flat navy plate, no photograph behind the type. The form is the only
        light object in the band, which makes it the focal point. -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <PhotoBg variant="rowhouses" strength={52} position="center 62%" eager />
+    <PhotoBg variant="deadbolt" strength={50} position="center 45%" eager />
     <Scene variant="bayridge" class="h-[52%] lg:h-[62%]" opacity={0.13} />
     <div class="absolute inset-x-0 top-0 h-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
@@ -113,6 +114,8 @@ const description =
     </div>
   </section>
 
+  <GoogleReviewBand />
+
   <!-- ══════════════ 02 · HOURS HONESTY ══════════════ -->
   <section class="bg-white border-b border-line-cool">
     <div class="container-x py-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
@@ -134,7 +137,7 @@ const description =
             What we do
           </p>
           <h2 class="display text-navy-900 text-3xl md:text-[2.7rem] max-w-2xl">
-            Twelve services, one local shop
+            Twelve services, one local crew
           </h2>
         </div>
         <a href="/contact" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 shrink-0 hover:text-brass-600 transition-colors">
@@ -192,7 +195,8 @@ const description =
 
   <!-- ══════════════ 04 · HOW WE QUOTE ══════════════ -->
   <section class="relative overflow-hidden py-16 md:py-20 bg-navy-900">
-    <Backdrop variant="rings" tone="dark" />
+    <PhotoBg variant="vanblur" strength={30} />
+    <Backdrop variant="rings" tone="dark" intensity={0.5} />
     <div class="container-x relative z-[1] grid lg:grid-cols-12 gap-10 lg:gap-16">
       <div class="lg:col-span-5">
         <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-3">
@@ -272,10 +276,10 @@ const description =
 
       <div class="order-1 lg:order-2 relative min-h-[18rem] lg:min-h-[34rem]">
         <img
-          src="/work/van-interior-equipment.webp"
-          srcset="/work/van-interior-equipment-800.webp 800w, /work/van-interior-equipment.webp 1200w"
+          src="/work/car-key-programming-dashboard.webp"
+          srcset="/work/car-key-programming-dashboard-800.webp 800w, /work/car-key-programming-dashboard.webp 1200w"
           sizes="(min-width: 1024px) 50vw, 100vw"
-          alt="Inside the Nico &amp; Vito service van: key machines, programming equipment and tool cases"
+          alt="A Nico &amp; Vito locksmith working under the hood of a vehicle with a key programming tool connected"
           width="1200" height="1600"
           class="absolute inset-0 w-full h-full object-cover"
           loading="lazy" decoding="async"

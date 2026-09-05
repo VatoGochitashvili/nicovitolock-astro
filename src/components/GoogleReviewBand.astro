@@ -1,0 +1,63 @@
+---
+import Icon from './Icon.astro';
+import { business } from '@/data/business';
+
+/**
+ * Full-width Google rating band. Deliberately loud — this is the strongest
+ * trust signal the business has, and a small card in a sidebar was not being
+ * seen.
+ *
+ * The rating renders as TEXT, never as AggregateRating structured data: Google
+ * discounts self-serving review markup, and valid AggregateRating also needs a
+ * review count the public profile does not expose.
+ */
+interface Props { tone?: 'brass' | 'navy'; }
+const { tone = 'brass' } = Astro.props;
+const brass = tone === 'brass';
+---
+<section class:list={[brass ? 'bg-brass-400' : 'bg-navy-900', 'relative overflow-hidden']}>
+  <div class="container-x py-9 md:py-11">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-7">
+
+      <div class="flex items-center gap-5 text-center lg:text-left">
+        <div class="shrink-0">
+          <p class:list={[
+            'display leading-none text-[3.4rem] md:text-[4.2rem]',
+            brass ? 'text-navy-950' : 'text-white',
+          ]}>{business.googleRating}</p>
+          <div class:list={['flex justify-center gap-0.5 mt-1', brass ? 'text-navy-900' : 'text-brass-400']}>
+            {[1,2,3,4,5].map(() => <Icon name="star" size={17} class="fill-current" />)}
+          </div>
+        </div>
+
+        <div class:list={['border-l pl-5', brass ? 'border-navy-900/25' : 'border-white/20']}>
+          <p class:list={[
+            'font-display font-bold text-[0.72rem] uppercase tracking-[0.22em]',
+            brass ? 'text-navy-900/70' : 'text-brass-400',
+          ]}>Rated on Google</p>
+          <h2 class:list={[
+            'display text-[1.5rem] md:text-[2rem] leading-tight mt-1',
+            brass ? 'text-navy-950' : 'text-white',
+          ]}>
+            {business.googleRating} out of 5 from our customers
+          </h2>
+          <p class:list={['mt-1.5 text-[0.95rem]', brass ? 'text-navy-900/80' : 'text-navy-200']}>
+            Read every review on our Google Business Profile — or add yours.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
+        <a href={business.profileUrl} target="_blank" rel="noopener"
+           class:list={['btn btn-lg', brass ? 'btn-navy' : 'btn-brass']} data-cta="google-profile">
+          <Icon name="star" size={18} />
+          Read our Google reviews
+        </a>
+        <a href={business.reviewUrl} target="_blank" rel="noopener"
+           class:list={['btn btn-lg', brass ? 'btn-outline' : 'btn-ghost']} data-cta="google-review">
+          Leave a review
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
