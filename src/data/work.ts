@@ -220,3 +220,24 @@ export const photosForMake = (makeSlug: string) =>
   workPhotos.filter((p) => p.makes?.includes(makeSlug));
 
 export const storefront = workPhotos.find((p) => p.slug === 'storefront-5th-avenue')!;
+
+
+/**
+ * One representative photo per service, for the homepage service cards.
+ * Chosen so the image genuinely depicts that work — a card showing the wrong
+ * job is worse than no image.
+ */
+export const serviceCardPhoto: Record<string, string> = {
+  'emergency-lockout-service': 'jimmy-proof-lock-apartment-door',
+  'lock-rekeying': 'brass-deadbolt-and-knob',
+  'lock-replacement-and-repair': 'mortise-lock-white-door',
+  'deadbolt-installation': 'brass-rim-lock-wood-door',
+  'high-security-locks': 'door-hardware-installed',
+  'car-key-replacement': 'ford-key-fobs',
+  'key-fob-and-remote-programming': 'chrysler-key-fobs',
+  'smart-lock-installation': 'keypad-access-control',
+  'intercom-systems': 'storefront-door-closer',
+  'access-control-systems': 'keypad-access-control',
+  'security-camera-installation': 'window-security-install',
+  'commercial-locksmith': 'church-door-service',
+};

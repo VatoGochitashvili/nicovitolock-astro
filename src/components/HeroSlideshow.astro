@@ -1,0 +1,83 @@
+---
+/**
+ * Cross-fading hero background.
+ *
+ * Performance rules that matter here:
+ *  - Only the FIRST frame is eager. It is the LCP element; the rest are lazy
+ *    and start loading after first paint, so the slideshow costs nothing up
+ *    front.
+ *  - The fade is pure CSS keyframes — no JS, no layout thrash, still works if
+ *    scripts fail.
+ *  - prefers-reduced-motion holds it on the first frame.
+ *
+ * Keyframe stops are computed HERE and emitted as literal percentages: CSS
+ * custom properties are not valid as @keyframes selectors, so `var(--x) { }`
+ * silently produces a broken animation.
+ *
+ * Frames are the brand-duotoned backgrounds, so the palette never jumps.
+ */
+interface Frame { src: string }
+interface Props {
+  frames: Frame[];
+  /** seconds each frame is held */
+  hold?: number;
+  strength?: number;
+}
+const { frames, hold = 6, strength = 50 } = Astro.props;
+
+const n = Math.max(1, frames.length);
+const fade = 1.2;                 // seconds of cross-fade
+const total = hold * n;
+const pct = (sec: number) => ((sec / total) * 100).toFixed(3);
+
+// visible window: fade in, hold, fade out
+const kf = `
+@keyframes heroFade {
+  0% { opacity: 0 }
+  ${pct(fade)}% { opacity: 1 }
+  ${pct(hold)}% { opacity: 1 }
+  ${pct(hold + fade)}% { opacity: 0 }
+  100% { opacity: 0 }
+}`;
+
+const show = Math.min(1, Math.max(0, strength / 100));
+const at = (m: number, floor: number) => Math.min(1, Math.max(floor, 1 - show * m)).toFixed(3);
+const left = at(0.45, 0.58), mid = at(0.62, 0.46), right = at(0.95, 0.30);
+---
+<div class="hero-bg absolute inset-0 overflow-hidden" aria-hidden="true">
+  {frames.map((f, i) => (
+    <img
+      src={f.src}
+      alt=""
+      class="hero-slide absolute inset-0 w-full h-full object-cover"
+      style={`animation-delay:${(i * hold - fade).toFixed(2)}s`}
+      loading={i === 0 ? 'eager' : 'lazy'}
+      fetchpriority={i === 0 ? 'high' : 'low'}
+      decoding="async"
+      data-slide={i}
+    />
+  ))}
+
+  <div
+    class="absolute inset-0"
+    style={`background-image: linear-gradient(100deg, rgb(16 35 48 / ${left}) 0%, rgb(16 35 48 / ${mid}) 55%, rgb(16 35 48 / ${right}) 100%);`}
+  ></div>
+  <div class="absolute inset-0 bg-navy-950/25 md:hidden"></div>
+  <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/80 to-transparent"></div>
+</div>
+
+<style is:inline set:html={`
+${kf}
+.hero-slide {
+  opacity: 0;
+  animation: heroFade ${total}s linear infinite;
+  will-change: opacity;
+}
+/* First frame is painted immediately so there is no blank flash before the
+   animation's first cycle reaches it. */
+.hero-slide[data-slide="0"] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide { animation: none; opacity: 0; }
+  .hero-slide[data-slide="0"] { opacity: 1; }
+}
+`}></style>

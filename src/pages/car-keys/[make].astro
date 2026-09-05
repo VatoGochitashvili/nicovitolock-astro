@@ -78,6 +78,7 @@ const schema = [
     name: `${vehicle.make} car key replacement`,
     description,
     url: `/car-keys/${vehicle.slug}`,
+    images: photos.map((p) => p.slug),
   }),
   faqSchema(faqs),
 ];

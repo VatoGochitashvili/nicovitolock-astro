@@ -40,10 +40,6 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
             <Icon name="phone" size={17} class="text-brass-400 shrink-0" />
             {business.phoneDisplay}
           </a>
-          <a href={`tel:${business.phoneAltHref}`} class="flex items-center gap-2.5 text-navy-200 hover:text-brass-300 transition-colors">
-            <Icon name="phone" size={17} class="text-brass-400/70 shrink-0" />
-            {business.phoneAltDisplay}
-          </a>
           <a href={`mailto:${business.email}`} class="flex items-center gap-2.5 text-navy-200 hover:text-brass-300 transition-colors break-all">
             <Icon name="mail" size={17} class="text-brass-400 shrink-0" />
             {business.email}
@@ -172,7 +168,8 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
 <div class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-navy-900/97 backdrop-blur border-t border-brass-400/40 px-3 py-2.5 flex gap-2">
   <a href={`tel:${business.phoneHref}`} class="btn btn-brass flex-1 btn-sm" data-call-cta="sticky">
     <Icon name="phone" size={17} />
-    Call {business.phoneDisplay}
+    Call
   </a>
+  <a href={business.smsHref} class="btn btn-ghost btn-sm px-4" data-cta="sms-sticky">Text</a>
   <a href="/contact" class="btn btn-ghost btn-sm px-4">Quote</a>
 </div>

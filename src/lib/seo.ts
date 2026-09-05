@@ -148,6 +148,8 @@ export function serviceSchema(opts: {
   url: string;
   areaName?: string;
   areaRegion?: string;
+  /** Work-photo slugs illustrating this service */
+  images?: string[];
 }) {
   return {
     '@context': 'https://schema.org',
@@ -155,6 +157,9 @@ export function serviceSchema(opts: {
     name: opts.name,
     description: opts.description,
     url: abs(withTrailingSlash(opts.url)),
+    ...(opts.images?.length
+      ? { image: opts.images.map((slug) => abs(`/work/${slug}.webp`)) }
+      : {}),
     serviceType: opts.name,
     areaServed: opts.areaName
       ? { '@type': 'Place', name: `${opts.areaName}, ${opts.areaRegion ?? 'Brooklyn'}, NY` }

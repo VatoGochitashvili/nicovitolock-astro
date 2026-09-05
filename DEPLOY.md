@@ -27,26 +27,54 @@ automatically. **Skipping this is the single most common launch mistake** — it
 leaves Google with two homepage variants it can't resolve, which is exactly what
 sat in the last project's Search Console for weeks.
 
-## 3. Wire up the contact form
+## 3. Wire up the contact form — DO THIS, it is where the leads go
 
-The form posts to `/api/contact`. Until an API key is set it returns 503 and the
-form falls back to showing the phone number plus a prefilled `mailto:` link, so
-no lead is ever silently lost — but you want real email.
+The form posts to `/api/contact`. Until a provider is configured it returns 503
+and falls back to showing the phone number plus a prefilled `mailto:`, so no
+lead is silently lost — but you want it landing in your inbox automatically.
 
-Pages project → **Settings** → **Environment variables** (Production):
+Pick **ONE**. Resend takes about two minutes.
 
-| Variable | Required | Value |
-|---|---|---|
-| `RESEND_API_KEY` | yes | API key from [resend.com](https://resend.com) — free tier is plenty |
-| `CONTACT_TO` | no | defaults to `nicoandvitolock@gmail.com` |
-| `CONTACT_FROM` | no | defaults to Resend's sandbox sender. Replace with an address on your verified domain, e.g. `website@nicovitolocksmith.com` |
+### Option A — Resend (recommended)
+1. Sign up at **resend.com** (free tier is far more than enough)
+2. Copy the API key (`re_...`)
+3. Cloudflare → your Pages project → **Settings → Environment variables →
+   Production**, add:
 
-To use your own domain as the sender, verify `nicovitolocksmith.com` in Resend
-(it gives you DNS records to add in Cloudflare), then set `CONTACT_FROM`.
+   | Variable | Value |
+   |---|---|
+   | `RESEND_API_KEY` | `re_...` |
+   | `CONTACT_TO` | `nicoandvitolock@gmail.com` *(optional — this is the default)* |
 
-Redeploy after adding variables — they only apply to new builds.
+4. **Redeploy** — environment variables only apply to new builds
 
-Test it by submitting the form on the live site and confirming the email arrives.
+### Option B — Web3Forms (no account at all)
+1. Go to **web3forms.com**, enter `nicoandvitolock@gmail.com`, and they email
+   you an access key
+2. Add `WEB3FORMS_KEY` as an environment variable, redeploy
+
+### Option C — your own webhook
+Set `FORM_WEBHOOK_URL` to a Zapier / Make / n8n endpoint and the raw submission
+is POSTed there as JSON.
+
+The function tries whichever of these are set, in that order, and stops at the
+first success. Test by submitting the live form and confirming the email lands.
+
+### Getting requests on your phone
+
+**Email push is the practical answer.** Install Gmail on the phone, sign in as
+`nicoandvitolock@gmail.com`, and turn notifications on for that account — a
+submission then buzzes the phone within seconds. That is what most trades use.
+
+**Real SMS is not free.** Sending a text programmatically needs a paid gateway
+(Twilio, roughly a cent a message) plus a verified sender. If you want it, say
+so and it is a small addition to the same function.
+
+Meanwhile the site already routes people to your phone directly:
+- a **Call** button and a **Text us** button on every quote form
+- **Call / Text / Quote** in the sticky bar on mobile
+- `sms:` links open the customer's own messaging app addressed to
+  718-618-6002, which costs nothing and works today
 
 ## 4. Google Search Console — launch day
 

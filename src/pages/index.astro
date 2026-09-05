@@ -4,6 +4,7 @@ import Icon from '@/components/Icon.astro';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
+import HeroSlideshow from '@/components/HeroSlideshow.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import GoogleReviews from '@/components/GoogleReviews.astro';
 import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
@@ -12,6 +13,7 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
 import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
+import { serviceCardPhoto } from '@/data/work';
 import { vehicles } from '@/data/vehicles';
 import { localBusinessSchema, webSiteSchema, organizationSchema, faqSchema } from '@/lib/seo';
 
@@ -58,7 +60,18 @@ const description =
        Flat navy plate, no photograph behind the type. The form is the only
        light object in the band, which makes it the focal point. -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <PhotoBg variant="deadbolt" strength={50} position="center 45%" eager />
+    <HeroSlideshow
+      strength={50}
+      hold={6}
+      frames={[
+        { src: '/brand/bg-deadbolt.webp' },
+        { src: '/brand/bg-rowhouses.webp' },
+        { src: '/brand/bg-carkey.webp' },
+        { src: '/brand/bg-street.webp' },
+        { src: '/brand/bg-brasslock.webp' },
+        { src: '/brand/bg-hardware.webp' },
+      ]}
+    />
     <Scene variant="bayridge" class="h-[52%] lg:h-[62%]" opacity={0.13} />
     <div class="absolute inset-x-0 top-0 h-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
@@ -127,47 +140,66 @@ const description =
     </div>
   </section>
 
-  <!-- ══════════════ 03 · SERVICES — numbered index, not a card grid ══════════════ -->
+  <!-- ══════════════ 03 · SERVICES — visual cards ══════════════ -->
   <section class="relative overflow-hidden py-16 md:py-22 bg-cream" id="services">
-    <Backdrop variant="grid" tone="light" intensity={0.8} />
+    <Backdrop variant="grid" tone="light" intensity={0.6} />
     <div class="container-x relative z-[1]">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10 pb-6 border-b-2 border-navy-900">
-        <div>
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-9">
+        <div class="max-w-xl">
           <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-600 mb-3">
             What we do
           </p>
-          <h2 class="display text-navy-900 text-3xl md:text-[2.7rem] max-w-2xl">
-            Twelve services, one local crew
+          <h2 class="display text-navy-900 text-3xl md:text-[2.7rem] leading-[1.05]">
+            Pick what you need.<br class="hidden sm:block" /> We'll be there today.
           </h2>
         </div>
-        <a href="/contact" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 shrink-0 hover:text-brass-600 transition-colors">
-          Get a quote →
+        <a href="/services" class="btn btn-outline shrink-0">
+          All {services.length} services
+          <Icon name="arrow" size={17} />
         </a>
       </div>
 
-      <ol class="divide-y divide-line">
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
         {services.map((s, i) => (
-          <li>
+          <li class="reveal" data-delay={Math.min(i, 6) * 50}>
             <a
               href={`/services/${s.slug}`}
-              class="group grid grid-cols-[2.75rem_1fr_auto] md:grid-cols-[4rem_18rem_1fr_auto] items-baseline gap-x-4 md:gap-x-8 py-5 md:py-6 hover:bg-white transition-colors"
+              class="group block h-full rounded-xl overflow-hidden bg-navy-900 relative
+                     ring-1 ring-line hover:ring-brass-400 transition-all duration-300
+                     hover:-translate-y-1"
             >
-              <span class="font-display font-bold text-[0.85rem] text-brass-500 tabular-nums">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span class="font-display font-bold text-navy-900 text-[1.15rem] md:text-[1.3rem] leading-tight group-hover:text-brass-600 transition-colors">
-                {s.name}
-              </span>
-              <span class="col-span-2 md:col-span-1 text-muted text-[0.95rem] leading-relaxed mt-1.5 md:mt-0">
-                {s.summary}
-              </span>
-              <span class="hidden md:block text-brass-500 self-center">
-                <Icon name="arrow" size={18} />
-              </span>
+              <div class="aspect-[16/10] overflow-hidden">
+                <img
+                  src={`/work/${serviceCardPhoto[s.slug]}-card.webp`}
+                  alt={`${s.name} — Nico & Vito Locksmith, Brooklyn`}
+                  width="760" height="475" loading="lazy" decoding="async"
+                  class="w-full h-full object-cover opacity-70 transition-all duration-500
+                         group-hover:opacity-90 group-hover:scale-[1.05]"
+                />
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/70 to-navy-950/10"></div>
+
+              <div class="absolute inset-x-0 bottom-0 p-5">
+                <span class="inline-grid place-items-center w-9 h-9 rounded-lg bg-brass-400 text-navy-950 mb-3
+                             transition-transform duration-300 group-hover:scale-110">
+                  <Icon name={s.icon} size={18} />
+                </span>
+                <h3 class="font-display font-bold text-white text-[1.12rem] leading-tight">
+                  {s.name}
+                </h3>
+                <p class="mt-1.5 text-navy-200 text-[0.86rem] leading-snug line-clamp-2">
+                  {s.summary}
+                </p>
+                <span class="mt-3 inline-flex items-center gap-1.5 text-[0.82rem] font-bold text-brass-400
+                             group-hover:gap-2.5 transition-all">
+                  See details
+                  <Icon name="arrow" size={14} />
+                </span>
+              </div>
             </a>
           </li>
         ))}
-      </ol>
+      </ul>
 
       <div class="mt-10 pt-8 border-t border-line">
         <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 mb-4">

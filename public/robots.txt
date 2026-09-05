@@ -5,3 +5,4 @@ Allow: /
 # No crawl-delay: this is a small static site, crawl it freely.
 
 Sitemap: https://nicovitolocksmith.com/sitemap-index.xml
+Sitemap: https://nicovitolocksmith.com/image-sitemap.xml
