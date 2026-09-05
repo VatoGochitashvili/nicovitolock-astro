@@ -47,6 +47,14 @@ const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 
     <!-- Favicons render on tab strips of every colour, so these are the
          WHITE-SQUARE variants. The transparent logo is for the page chrome. -->
+    <!-- Google requires a square favicon that is a MULTIPLE OF 48px (48, 96,
+         144, 192). 16/32 alone do not qualify, which is why the 96px entry
+         leads here. Opaque white squares: Google renders these on both light
+         and dark result pages. -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
