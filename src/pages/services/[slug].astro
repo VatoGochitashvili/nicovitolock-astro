@@ -7,7 +7,7 @@ import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { photosForService } from '@/data/work';
+import { ownPhotosForService } from '@/data/work';
 import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import { serviceAreas, tier1Areas } from '@/data/locations';
@@ -40,7 +40,7 @@ const sceneFor: Record<string, 'residential' | 'automotive' | 'commercial' | 'se
 
 
 const related = services.filter((s) => s.slug !== service.slug).slice(0, 3);
-const photos = photosForService(service.slug);
+const photos = ownPhotosForService(service.slug);
 const brooklyn = tier1Areas.filter((a) => a.region === 'Brooklyn');
 const statenIsland = tier1Areas.filter((a) => a.region === 'Staten Island');
 

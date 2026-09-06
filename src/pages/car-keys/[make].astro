@@ -7,7 +7,7 @@ import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { photosForMake, photosForService } from '@/data/work';
+import { photosForMake, ownPhotosForService } from '@/data/work';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
@@ -25,7 +25,7 @@ const { vehicle } = Astro.props;
 const copy = vehicleCopy(vehicle);
 // Prefer photos of this actual make; fall back to general car key work.
 const makePhotos = photosForMake(vehicle.slug);
-const photos = makePhotos.length ? makePhotos : photosForService('car-key-replacement').slice(0, 3);
+const photos = makePhotos.length ? makePhotos : ownPhotosForService('car-key-replacement').slice(0, 3);
 const others = vehicles.filter((v) => v.slug !== vehicle.slug).slice(0, 8);
 // A sample of nearby neighborhoods for internal linking, not all 55.
 const nearbyAreas = tier1Areas.slice(0, 12);

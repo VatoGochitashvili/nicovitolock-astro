@@ -140,7 +140,7 @@ const description =
     </div>
   </section>
 
-  <!-- ══════════════ 03 · SERVICES — visual cards ══════════════ -->
+  <!-- ══════════════ 03 · SERVICES — bento grid ══════════════ -->
   <section class="relative overflow-hidden py-16 md:py-22 bg-cream" id="services">
     <Backdrop variant="grid" tone="light" intensity={0.6} />
     <div class="container-x relative z-[1]">
@@ -150,7 +150,8 @@ const description =
             What we do
           </p>
           <h2 class="display text-navy-900 text-3xl md:text-[2.7rem] leading-[1.05]">
-            Pick what you need.<br class="hidden sm:block" /> We'll be there today.
+            Locked out, or locking up?<br class="hidden sm:block" />
+            <span class="text-brass-600">Start here.</span>
           </h2>
         </div>
         <a href="/services" class="btn btn-outline shrink-0">
@@ -159,47 +160,37 @@ const description =
         </a>
       </div>
 
-      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-        {services.map((s, i) => (
-          <li class="reveal" data-delay={Math.min(i, 6) * 50}>
+      {/* Two feature tiles span wide so the grid has rhythm instead of reading
+          like a spreadsheet of identical squares. */}
+      <div class="svc-grid">
+        {services.map((s, i) => {
+          const wide = i === 0 || i === 5;
+          return (
             <a
               href={`/services/${s.slug}`}
-              class="group block h-full rounded-xl overflow-hidden bg-navy-900 relative
-                     ring-1 ring-line hover:ring-brass-400 transition-all duration-300
-                     hover:-translate-y-1"
+              class:list={['svc-card reveal', wide && 'svc-card--wide']}
+              data-delay={Math.min(i, 7) * 45}
             >
-              <div class="aspect-[16/10] overflow-hidden">
-                <img
-                  src={`/work/${serviceCardPhoto[s.slug]}-card.webp`}
-                  alt={`${s.name} — Nico & Vito Locksmith, Brooklyn`}
-                  width="760" height="475" loading="lazy" decoding="async"
-                  class="w-full h-full object-cover opacity-70 transition-all duration-500
-                         group-hover:opacity-90 group-hover:scale-[1.05]"
-                />
-              </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/70 to-navy-950/10"></div>
-
-              <div class="absolute inset-x-0 bottom-0 p-5">
-                <span class="inline-grid place-items-center w-9 h-9 rounded-lg bg-brass-400 text-navy-950 mb-3
-                             transition-transform duration-300 group-hover:scale-110">
-                  <Icon name={s.icon} size={18} />
-                </span>
-                <h3 class="font-display font-bold text-white text-[1.12rem] leading-tight">
-                  {s.name}
-                </h3>
-                <p class="mt-1.5 text-navy-200 text-[0.86rem] leading-snug line-clamp-2">
-                  {s.summary}
-                </p>
-                <span class="mt-3 inline-flex items-center gap-1.5 text-[0.82rem] font-bold text-brass-400
-                             group-hover:gap-2.5 transition-all">
-                  See details
-                  <Icon name="arrow" size={14} />
-                </span>
-              </div>
+              <img
+                src={`/work/${serviceCardPhoto[s.slug]}-card.webp`}
+                alt={`${s.name} in Brooklyn and Staten Island — Nico & Vito Locksmith`}
+                width="760" height="475" loading="lazy" decoding="async"
+              />
+              <span class="svc-card__icon">
+                <Icon name={s.icon} size={17} />
+              </span>
+              <span class="svc-card__body">
+                <span class="svc-card__rule block mb-2.5"></span>
+                <span class:list={[
+                  'font-display font-bold text-white leading-tight block',
+                  wide ? 'text-[1.25rem] md:text-[1.5rem]' : 'text-[1.02rem] md:text-[1.12rem]',
+                ]}>{s.name}</span>
+                <span class="svc-card__desc block">{s.summary}</span>
+              </span>
             </a>
-          </li>
-        ))}
-      </ul>
+          );
+        })}
+      </div>
 
       <div class="mt-10 pt-8 border-t border-line">
         <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 mb-4">
@@ -213,7 +204,7 @@ const description =
             <li>
               <a
                 href={`/car-keys/${v.slug}`}
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 transition-colors"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 hover:-translate-y-0.5 transition-all duration-200"
               >
                 <Icon name="car" size={13} class="text-brass-500" />
                 {v.make}
@@ -270,48 +261,71 @@ const description =
     </div>
   </section>
 
-  <!-- ══════════════ 05 · THE VAN — hard-edged split, no overlay ══════════════ -->
-  <section class="bg-cream-deep">
+  <!-- ══════════════ 05 · WHY US — stat strip + proof ══════════════ -->
+  <section class="relative overflow-hidden bg-cream-deep">
     <div class="grid lg:grid-cols-2">
       <div class="order-2 lg:order-1 flex items-center">
         <div class="px-5 sm:px-10 lg:pl-[max(1.25rem,calc((100vw-1200px)/2))] lg:pr-16 py-14 md:py-20 max-w-2xl">
           <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-600 mb-3">
-            Who you're calling
+            Why people call us back
           </p>
-          <h2 class="display text-navy-900 text-3xl md:text-[2.5rem]">
-            A Bay Ridge locksmith, not a call center
+          <h2 class="display text-navy-900 text-3xl md:text-[2.5rem] leading-[1.06]">
+            Everything on the van.<br />
+            Everything quoted first.
           </h2>
-          <div class="mt-5 space-y-4 text-muted leading-relaxed">
+
+          <div class="mt-6 space-y-4 text-muted leading-relaxed">
             <p>
-              Search "locksmith near me" in New York and most of what you get is a
-              national dispatch office that auctions your job to whoever bids. The
-            throwaway phone quote becomes a far larger invoice at your door.
+              Most locksmith trouble is the same story: nobody tells you what it
+              costs until the work is done. We do it the other way round — you get
+              the number on the phone, and that is the number on the invoice.
             </p>
             <p>
-              <strong class="text-navy-900">The number on this page rings us.</strong>
-              The same people who answer it are the ones who show up. No dispatcher,
-              no subcontractor, no handoff.
+              The van carries the cylinders, blanks, programming gear and cutting
+              machines, so the majority of jobs are finished on the first visit
+              rather than turning into a second appointment for a part.
             </p>
             <p>
-              Working one neighborhood for years teaches you the housing stock — the
-              jimmy-proof locks on Brooklyn apartment doors, the prewar mortise sets in
-              brownstones, the salt-corroded hardware along the Belt and the Staten
-              Island shore. It's why most of our jobs finish on the first visit.
+              Fifteen years around the same streets teaches you the housing stock —
+              the jimmy-proof locks on Brooklyn apartment doors, the prewar mortise
+              sets in the brownstones, the salt-eaten hardware along the Belt and
+              the Staten Island shore.
             </p>
           </div>
-          <a href="/about" class="btn btn-navy mt-8">
-            More about us
-            <Icon name="arrow" size={17} />
-          </a>
+
+          <dl class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-5 gap-y-6">
+            {[
+              { v: '20–30', k: 'min in Brooklyn' },
+              { v: '7am–11pm', k: 'every day' },
+              { v: '105', k: 'neighborhoods' },
+              { v: '5.0', k: 'on Google' },
+            ].map((x) => (
+              <div class="reveal">
+                <dt class="display text-navy-900 text-[1.6rem] leading-none">{x.v}</dt>
+                <dd class="mt-1.5 text-[0.72rem] uppercase tracking-[0.13em] text-muted leading-tight">{x.k}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href={`tel:${business.phoneHref}`} class="btn btn-brass" data-call-cta="whyus">
+              <Icon name="phone" size={18} />
+              {business.phoneDisplay}
+            </a>
+            <a href="/about" class="btn btn-outline">
+              More about us
+              <Icon name="arrow" size={17} />
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="order-1 lg:order-2 relative min-h-[18rem] lg:min-h-[34rem]">
+      <div class="order-1 lg:order-2 relative min-h-[16rem] lg:min-h-[36rem]">
         <img
-          src="/work/car-key-programming-dashboard.webp"
-          srcset="/work/car-key-programming-dashboard-800.webp 800w, /work/car-key-programming-dashboard.webp 1200w"
+          src="/work/brass-deadbolt-and-knob.webp"
+          srcset="/work/brass-deadbolt-and-knob-800.webp 800w, /work/brass-deadbolt-and-knob.webp 1200w"
           sizes="(min-width: 1024px) 50vw, 100vw"
-          alt="A Nico &amp; Vito locksmith working under the hood of a vehicle with a key programming tool connected"
+          alt="A brass deadbolt and matching knob fitted to a wooden front door in Brooklyn"
           width="1200" height="1600"
           class="absolute inset-0 w-full h-full object-cover"
           loading="lazy" decoding="async"

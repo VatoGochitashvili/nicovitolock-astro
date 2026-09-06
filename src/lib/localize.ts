@@ -77,7 +77,7 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
   // ------------------------------- leads -------------------------------
   const leads = [
     `Need ${sLower} in ${city}? Nico & Vito Locksmith works out of Bay Ridge, ${eta} from here, and we cover ${city} (${zip}) every day from 7 AM to 11 PM.`,
-    `Nico & Vito Locksmith handles ${sLower} across ${city}, ${region}. We're Bay Ridge based — ${eta} away — not a call center that farms your job out to whoever answers.`,
+    `Nico & Vito Locksmith handles ${sLower} across ${city}, ${region}. Bay Ridge based, ${eta} away, and the number you ring reaches the person who turns up.`,
     `Looking for ${sLower} in ${city}? We're licensed, insured, and based in Bay Ridge, which puts ${city} ${eta} from our door seven days a week.`,
     `For ${sLower} anywhere in ${city} (${zip}), Nico & Vito Locksmith is the local call. Bay Ridge based, ${eta} out, open 7 AM to 11 PM every single day.`,
     `${city} residents and business owners call us for ${sLower} because we're actually nearby — Bay Ridge, ${eta} from ${city}, with the parts already on the van.`,
@@ -297,7 +297,7 @@ export function areaCopy(area: ServiceArea): AreaCopy {
     `${city} sits well inside our daily route. Call ${business.phone} and you get a Bay Ridge technician rather than a national dispatch number.`,
     `From lockouts to camera systems, ${city} gets the full range from one local crew — ${eta} away, open every day including weekends.`,
     `Our ${city} coverage is not an afterthought: ${zip} is on the route every day, 7 AM to 11 PM, at the same prices we charge at home in Bay Ridge.`,
-    `A licensed locksmith for ${city}, ${region}. Bay Ridge based, ${eta} out, and genuinely local rather than a call centre with a borough page.`,
+    `A licensed locksmith for ${city}, ${region}. Bay Ridge based, ${eta} out, and on these streets every day of the week.`,
     `${city} homes, apartments, storefronts, and vehicles — all covered, every day, by a family-run Bay Ridge locksmith ${eta} away.`,
     `We work ${city} the same way we work our own block: quote first, arrive when we said, and charge what we quoted.`,
     `Locksmith in ${city} (${zip}) — ${eta} from Bay Ridge, open 7 days a week, licensed, insured, and answering the phone ourselves.`,

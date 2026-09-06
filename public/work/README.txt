@@ -27,6 +27,25 @@ Which photo appears on which page is decided in src/data/work.ts, by the
 illustrates that work: the BMW key shots appear on /car-keys/bmw, the keypad
 appears on access control and commercial, and so on.
 
+LICENSED STOCK — four files, clearly marked
+  stock-security-cameras.*  stock-smart-lock.*
+  stock-access-control.*    stock-intercom-panel.*
+
+  These four services had no first-party photo, and the cards were previously
+  showing the WRONG job (intercom illustrated by a door closer, CCTV by a
+  window). Unsplash License, commercial use permitted.
+
+  They are flagged `stock: true` in src/data/work.ts and are EXCLUDED from the
+  "Recent work" galleries by ownPhotosForService() — those galleries claim the
+  work is ours, so only our own photographs belong there. Stock appears solely
+  on the homepage service cards, which illustrate a service rather than claim a
+  job.
+
+  Replace each one the moment a real photo exists. A genuine install beats
+  stock for trust and for image search every time. Worth shooting: a camera you
+  mounted, an intercom panel you replaced, a keypad you fitted, a smart lock on
+  a customer's door.
+
 TO ADD MORE
   1. Drop the originals anywhere and process them to the same spec:
        ~1200px and 800px wide, WebP, quality 68 / 74

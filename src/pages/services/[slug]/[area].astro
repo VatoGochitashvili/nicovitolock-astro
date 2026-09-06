@@ -9,7 +9,7 @@ import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { photosForService } from '@/data/work';
+import { ownPhotosForService } from '@/data/work';
 import { services } from '@/data/services';
 import { tier1Areas, nearbyAreas } from '@/data/locations';
 import { business } from '@/data/business';
@@ -46,7 +46,7 @@ const copy = localCopy(service, area);
 const note = traitNote(service, area);
 const lists = localLists(service, area);
 // Seeded slice so neighbouring pages don't all show the same three photos.
-const allPhotos = photosForService(service.slug);
+const allPhotos = ownPhotosForService(service.slug);
 const offset = allPhotos.length ? seededHash(area.slug) % allPhotos.length : 0;
 const photos = allPhotos.length ? [...allPhotos.slice(offset), ...allPhotos.slice(0, offset)].slice(0, 3) : [];
 const near = nearbyAreas(area);

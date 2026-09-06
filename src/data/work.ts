@@ -26,6 +26,10 @@ export interface WorkPhoto {
   /** Illustration rather than a photograph — must never be presented as
    *  evidence of a real place, a real job, or a real premises. */
   aiGenerated?: boolean;
+  /** Licensed stock, not our own job. Fine for illustrating a service we
+   *  offer; never caption it as "our work" and keep it out of the
+   *  "Recent work" galleries. */
+  stock?: boolean;
 }
 
 export const workPhotos: WorkPhoto[] = [
@@ -209,11 +213,55 @@ export const workPhotos: WorkPhoto[] = [
   },
 ];
 
+// ------------------------- licensed stock -------------------------
+// Used only where we have no first-party photo yet. Unsplash License,
+// commercial use permitted. Replace each one the moment a real job photo
+// exists — our own beats stock every time, for trust and for image search.
+workPhotos.push(
+  {
+    slug: 'stock-security-cameras',
+    alt: 'Two bullet security cameras mounted on an exterior wall',
+    caption: 'CCTV coverage on a building exterior',
+    services: ['security-camera-installation'],
+    orientation: 'landscape',
+    stock: true,
+  },
+  {
+    slug: 'stock-smart-lock',
+    alt: 'A smart door lock being operated from a phone app',
+    caption: 'Smart lock set up and paired to the phone',
+    services: ['smart-lock-installation'],
+    orientation: 'landscape',
+    stock: true,
+  },
+  {
+    slug: 'stock-access-control',
+    alt: 'A hand presenting a credential to a wall-mounted access control reader',
+    caption: 'Fob and card access on a controlled door',
+    services: ['access-control-systems'],
+    orientation: 'landscape',
+    stock: true,
+  },
+  {
+    slug: 'stock-intercom-panel',
+    alt: 'A multi-button apartment intercom panel mounted beside a brick entrance',
+    caption: 'Multi-unit intercom panel',
+    services: ['intercom-systems'],
+    orientation: 'landscape',
+    stock: true,
+  },
+);
+
 export const photoBySlug = (slug: string) => workPhotos.find((p) => p.slug === slug);
 
 /** Photos that legitimately illustrate a given service. */
 export const photosForService = (serviceSlug: string) =>
   workPhotos.filter((p) => p.services.includes(serviceSlug));
+
+/** Only our OWN photographs — for the "Recent work" galleries, where stock
+ *  would be dishonest. */
+export const ownPhotosForService = (serviceSlug: string) =>
+  workPhotos.filter((p) => p.services.includes(serviceSlug) && !p.stock && !p.aiGenerated);
 
 /** Photos showing a given car make. */
 export const photosForMake = (makeSlug: string) =>
@@ -235,9 +283,9 @@ export const serviceCardPhoto: Record<string, string> = {
   'high-security-locks': 'door-hardware-installed',
   'car-key-replacement': 'ford-key-fobs',
   'key-fob-and-remote-programming': 'chrysler-key-fobs',
-  'smart-lock-installation': 'keypad-access-control',
-  'intercom-systems': 'storefront-door-closer',
-  'access-control-systems': 'keypad-access-control',
-  'security-camera-installation': 'window-security-install',
+  'smart-lock-installation': 'stock-smart-lock',
+  'intercom-systems': 'stock-intercom-panel',
+  'access-control-systems': 'stock-access-control',
+  'security-camera-installation': 'stock-security-cameras',
   'commercial-locksmith': 'church-door-service',
 };
