@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // Must match the existing Worker, or a deploy creates a second one and the
+  // custom domain stays pointed at the old script.
+  "name": "nicovitolock-astro",
+  "main": "worker/index.js",
+  "compatibility_date": "2025-09-01",
+
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+
+    // /api/* must reach the Worker before the asset router, which would
+    // otherwise 301 POST /api/contact to /api/contact/ and drop the body.
+    "run_worker_first": ["/api/*"]
+  },
+
+  "observability": { "enabled": true }
+}

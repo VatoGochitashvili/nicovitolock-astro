@@ -1,31 +1,50 @@
-# Deploying to Cloudflare Pages
+# Deploying to Cloudflare Workers
 
-## 1. Push to GitHub, then connect the repo
+This ships as a **Worker with static assets**, not Cloudflare Pages. The
+distinction matters and this file used to get it wrong, which cost the site a
+working contact form from launch until it was noticed in Search Console.
 
-Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
-**Connect to Git**.
+`wrangler.jsonc` is the source of truth:
 
 | Setting | Value |
 |---|---|
-| Framework preset | Astro |
+| Worker name | `nicovitolock-astro` — must not change, the custom domain points at it |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
+| Assets | `./dist`, bound as `ASSETS` |
+| Server code | `worker/index.js` |
 | Node version | `22.12.0` (env var `NODE_VERSION`) |
 
-`functions/api/contact.js` is picked up automatically — Pages Functions live in
-`functions/` at the repo root, no config needed.
+**There is no `functions/` directory and there must not be one.** That is a
+Cloudflare *Pages* convention. A Worker ignores it silently — no build error,
+no warning, the endpoint simply 404s. Server-side routes go in `worker/`.
 
-## 2. Custom domain — do BOTH
+## 2. Custom domains — BOTH hostnames need to be attached
 
-Pages project → **Custom domains** → Add:
+Worker → **Domains** (Custom Domains and Routes). Both must appear:
 
 1. `nicovitolocksmith.com`
 2. `www.nicovitolocksmith.com`
 
-Adding `www` as a custom domain makes Cloudflare redirect it to the apex
-automatically. **Skipping this is the single most common launch mistake** — it
-leaves Google with two homepage variants it can't resolve, which is exactly what
-sat in the last project's Search Console for weeks.
+A proxied `www` CNAME pointing at the apex is **not** enough. Cloudflare routes
+proxied traffic on the Host header, and for a proxied record it treats the
+CNAME target as the origin to connect to — but the apex is a Workers custom
+domain, which has no origin behind it. The result is `522 Connection timed
+out` on every www request, which Search Console reports as a site-wide server
+error and which throttles crawling of the whole property.
+
+If the **Add Domain** dialog says "No zones match www.nicovitolocksmith.com",
+that is a UI bug: it string-matches against zone names and a subdomain is not
+a zone. **Do not click "Onboard domain"** — that would create a duplicate zone.
+Use **Add Route** instead: zone `nicovitolocksmith.com`, route
+`www.nicovitolocksmith.com/*` (keep the `/*`).
+
+Verify from a terminal, not the dashboard:
+
+```
+curl -s -o /dev/null -w "%{http_code}\n" https://www.nicovitolocksmith.com/
+```
+
+`200` or a `301` to the apex is healthy. `522` means it is still unattached.
 
 ## 3. Wire up the contact form — DO THIS, it is where the leads go
 
@@ -38,8 +57,8 @@ Pick **ONE**. Resend takes about two minutes.
 ### Option A — Resend (recommended)
 1. Sign up at **resend.com** (free tier is far more than enough)
 2. Copy the API key (`re_...`)
-3. Cloudflare → your Pages project → **Settings → Environment variables →
-   Production**, add:
+3. Cloudflare → **Workers & Pages → nicovitolock-astro → Settings →
+   Variables and Secrets**, add:
 
    | Variable | Value |
    |---|---|
@@ -51,14 +70,24 @@ Pick **ONE**. Resend takes about two minutes.
 ### Option B — Web3Forms (no account at all)
 1. Go to **web3forms.com**, enter `nicoandvitolock@gmail.com`, and they email
    you an access key
-2. Add `WEB3FORMS_KEY` as an environment variable, redeploy
+2. Add `WEB3FORMS_KEY` as a variable on the Worker, redeploy
 
 ### Option C — your own webhook
 Set `FORM_WEBHOOK_URL` to a Zapier / Make / n8n endpoint and the raw submission
 is POSTed there as JSON.
 
-The function tries whichever of these are set, in that order, and stops at the
-first success. Test by submitting the live form and confirming the email lands.
+The handler tries whichever of these are set, in that order, and stops at the
+first success. Test by submitting the live form and confirming the email lands,
+or from a terminal:
+
+```
+curl -i -X POST https://nicovitolocksmith.com/api/contact \
+  -F name="Test" -F phone="7186186002" -F message="ignore"
+```
+
+`503 mail_not_configured` means the endpoint is alive and no provider is set
+yet. `404` means the Worker is not serving `/api/` — check `run_worker_first`
+in `wrangler.jsonc`. `200 {"ok":true,"via":...}` means a lead was delivered.
 
 ### Getting requests on your phone
 
@@ -82,7 +111,12 @@ Meanwhile the site already routes people to your phone directly:
 2. Submit the sitemap: `https://nicovitolocksmith.com/sitemap-index.xml`
 3. **URL Inspection → Request indexing** for the homepage, `/services/`,
    `/service-areas/`, `/contact/`, and 3–4 top service pages. Don't bother
-   requesting all 786 — Google will find the rest through internal links.
+   requesting all 807 — Google will find the rest through internal links.
+
+   Submit the segmented sitemaps individually as well as the index, so coverage
+   is reported per template rather than as one number across 800 URLs:
+   `sitemap-core.xml`, `sitemap-services.xml`, `sitemap-car-keys.xml`,
+   `sitemap-areas.xml`, `sitemap-local.xml`.
 4. Watch **Indexing → Pages** over 2–4 weeks.
 
 ## 5. Google Business Profile — this matters more than the site

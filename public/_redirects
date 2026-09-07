@@ -39,3 +39,15 @@
 /access-control           /services/access-control-systems/      301
 /smart-locks              /services/smart-lock-installation/     301
 /commercial               /services/commercial-locksmith/        301
+
+# Trailing-slash canonicalisation, as a 301.
+#
+# The asset router already normalises /path -> /path/ but answers 307
+# (temporary), which tells Google to keep the slashless URL and not pass
+# signals to the real one — that is why 16 of them sat in Search Console as
+# "Page with redirect". A 301 consolidates them instead. Nothing on the site
+# links to the slashless form any more; these are for old links and typed URLs.
+/services/:service/:area   /services/:service/:area/   301
+/services/:service         /services/:service/         301
+/service-areas/:area       /service-areas/:area/       301
+/car-keys/:make            /car-keys/:make/            301

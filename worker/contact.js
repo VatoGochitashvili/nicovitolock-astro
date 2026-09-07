@@ -1,5 +1,10 @@
 /**
- * Cloudflare Pages Function — POST /api/contact
+ * POST /api/contact — quote-form delivery.
+ *
+ * This was written as a Cloudflare PAGES function and lived in functions/.
+ * The site is deployed as a WORKER, which does not read that directory, so
+ * the endpoint 404'd from launch and no submission was ever delivered. It is
+ * now a plain handler called from worker/index.js.
  *
  * Delivers quote-form submissions to the shop. Tries providers in order and
  * stops at the first success, so ONE of these being configured is enough:
@@ -8,8 +13,8 @@
  *   2. WEB3FORMS_KEY       — web3forms.com, free, no account, key by email
  *   3. FORM_WEBHOOK_URL    — any endpoint (Zapier / Make / n8n / your own)
  *
- * SETUP — Cloudflare dashboard → Pages project → Settings → Environment
- * variables → Production. Add ONE of the above, then redeploy.
+ * SETUP — Cloudflare dashboard → Workers & Pages → nicovitolock-astro →
+ * Settings → Variables and Secrets. Add ONE of the above, then redeploy.
  *
  *   RESEND_API_KEY   re_xxxxxxxx
  *   CONTACT_TO       nicoandvitolock@gmail.com   (optional, this is default)
@@ -109,7 +114,11 @@ async function viaWebhook(env, f) {
   return res.ok;
 }
 
-export async function onRequestPost({ request, env }) {
+export async function handleContact(request, env) {
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405, headers: { allow: 'POST' } });
+  }
+
   let form;
   try {
     form = await request.formData();
@@ -154,7 +163,3 @@ export async function onRequestPost({ request, env }) {
   }
   return json({ ok: false, error: 'send_failed', tried }, 502);
 }
-
-// Method-specific handlers only: a catch-all `onRequest` would take precedence.
-export const onRequestGet = () =>
-  new Response('Method not allowed', { status: 405, headers: { allow: 'POST' } });
