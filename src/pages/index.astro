@@ -5,6 +5,7 @@ import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
 import HeroSlideshow from '@/components/HeroSlideshow.astro';
+import CoverageMap from '@/components/CoverageMap.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import GoogleReviews from '@/components/GoogleReviews.astro';
 import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
@@ -377,6 +378,13 @@ const description =
   </section>
 
   <FaqAccordion faqs={homeFaqs} heading="Straight answers before you call" />
+
+  <CoverageMap
+    heading="Where we work"
+    intro="Every Brooklyn and Staten Island neighborhood we cover, with the drive time from our Bay Ridge base. Tap a pin for that neighborhood's page."
+    height="420px"
+  />
+
 
   <CtaBand />
 </BaseLayout>

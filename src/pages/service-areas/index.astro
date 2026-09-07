@@ -1,4 +1,5 @@
 ---
+import CoverageMap from '@/components/CoverageMap.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import Icon from '@/components/Icon.astro';
@@ -140,6 +141,13 @@ const schema = [
       </div>
     </div>
   </section>
+
+  <CoverageMap
+    heading="The whole service area, mapped"
+    intro="Every neighborhood below is on our daily route. Pins show approximate neighborhood centres — we are a mobile locksmith and come to you."
+    height="520px"
+  />
+
 
   <CtaBand />
 </BaseLayout>

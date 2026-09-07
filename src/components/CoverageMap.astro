@@ -1,0 +1,260 @@
+---
+/**
+ * Interactive coverage map — every neighborhood we cover, plotted.
+ *
+ * Leaflet + OpenStreetMap rather than a Google Maps embed: no API key, no
+ * billing account, and no third-party request at all until the map scrolls
+ * into view. That last part matters — this site self-hosts its fonts and
+ * makes zero third-party requests on load, and a map that eagerly pulled a
+ * library plus a grid of tiles would undo that on the homepage.
+ *
+ * The pins are APPROXIMATE neighborhood centres. Nico & Vito is a mobile
+ * business with no premises, so nothing here is an address and the copy must
+ * never imply one.
+ */
+import { serviceAreas } from '@/data/locations';
+import { business } from '@/data/business';
+
+interface Props {
+  heading?: string;
+  intro?: string;
+  /** Map height. Shorter on the homepage than on the dedicated areas page. */
+  height?: string;
+  region?: 'Brooklyn' | 'Staten Island' | 'all';
+  class?: string;
+}
+const {
+  heading = 'Every neighborhood we cover',
+  intro = 'Brooklyn and Staten Island, plotted. Tap a pin for the drive time from Bay Ridge and the local page.',
+  height = '440px',
+  region = 'all',
+  class: className = '',
+} = Astro.props;
+
+const areas = region === 'all' ? serviceAreas : serviceAreas.filter((a) => a.region === region);
+
+const points = areas.map((a) => ({
+  n: a.name,
+  s: a.slug,
+  r: a.region,
+  e: a.eta,
+  t: a.tier,
+  c: a.coords,
+}));
+
+const brooklyn = areas.filter((a) => a.region === 'Brooklyn').length;
+const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
+---
+
+<section class={`relative py-14 md:py-18 bg-cream-deep ${className}`}>
+  <div class="container-x">
+    <div class="max-w-3xl">
+      <h2 class="display text-navy-900 text-2xl md:text-[2.1rem] pb-3 border-b-2 border-navy-900">
+        {heading}
+      </h2>
+      <p class="mt-5 text-navy-800 leading-relaxed text-[1.06rem]">{intro}</p>
+      <p class="mt-3 text-muted text-[0.92rem]">
+        <strong class="text-navy-800">{brooklyn}</strong> Brooklyn ·
+        <strong class="text-navy-800">{statenIsland}</strong> Staten Island ·
+        open every day 7 AM – 11 PM
+      </p>
+    </div>
+
+    <div
+      class="mt-8 relative rounded-2xl overflow-hidden border border-line shadow-[0_18px_50px_-28px_rgba(16,35,48,0.45)]"
+      style={`height:${height}`}
+    >
+      <div
+        data-coverage-map
+        data-points={JSON.stringify(points)}
+        class="w-full h-full bg-navy-50"
+        role="application"
+        aria-label={`Map of the ${areas.length} neighborhoods Nico & Vito Locksmith covers`}
+      ></div>
+
+      <!-- Shown until Leaflet initialises, and left in place if it never does. -->
+      <div
+        data-coverage-fallback
+        class="absolute inset-0 flex items-center justify-center bg-navy-50 pointer-events-none"
+      >
+        <p class="text-muted text-sm">Loading coverage map…</p>
+      </div>
+    </div>
+
+    <!-- The map is an enhancement. The list is the content, and it is what a
+         crawler and a screen reader actually read. -->
+    <details class="mt-6 group">
+      <summary class="cursor-pointer font-display font-bold text-navy-900 hover:text-brass-600 transition-colors">
+        See all {areas.length} neighborhoods as a list
+      </summary>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {areas.map((a) => (
+          <li>
+            <a
+              href={`/service-areas/${a.slug}/`}
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 transition-colors"
+            >
+              {a.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  </div>
+</section>
+
+<script is:inline define:vars={{ phone: business.phoneDisplay, phoneHref: business.phoneHref }}>
+  (function () {
+    var LEAFLET_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css';
+    var LEAFLET_JS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js';
+    var loading = null;
+
+    function loadLeaflet() {
+      if (window.L) return Promise.resolve(window.L);
+      if (loading) return loading;
+      loading = new Promise(function (resolve, reject) {
+        var css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = LEAFLET_CSS;
+        document.head.appendChild(css);
+
+        var js = document.createElement('script');
+        js.src = LEAFLET_JS;
+        js.async = true;
+        js.onload = function () { resolve(window.L); };
+        js.onerror = reject;
+        document.head.appendChild(js);
+      });
+      return loading;
+    }
+
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function build(el) {
+      var points;
+      try {
+        points = JSON.parse(el.getAttribute('data-points') || '[]');
+      } catch (e) {
+        return;
+      }
+      if (!points.length) return;
+
+      loadLeaflet().then(function (L) {
+        var map = L.map(el, {
+          scrollWheelZoom: false, // page scroll must not get trapped
+          attributionControl: true,
+        });
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        var bounds = [];
+        points.forEach(function (p) {
+          var home = p.s === 'bay-ridge';
+          var marker = L.circleMarker([p.c[0], p.c[1]], {
+            radius: home ? 9 : p.t === 1 ? 6 : 5,
+            color: '#102330',
+            weight: home ? 2 : 1,
+            fillColor: home ? '#f2ae39' : p.t === 1 ? '#f2ae39' : '#8aa2ad',
+            fillOpacity: home ? 1 : p.t === 1 ? 0.9 : 0.75,
+          }).addTo(map);
+
+          marker.bindPopup(
+            '<div style="font:600 14px system-ui;color:#102330;margin-bottom:2px">' +
+              esc(p.n) + (home ? ' · our base' : '') +
+            '</div>' +
+            '<div style="font:13px system-ui;color:#5d6f78;margin-bottom:8px">' +
+              esc(p.r) + ' · ' + esc(p.e) + ' away' +
+            '</div>' +
+            '<a href="/service-areas/' + esc(p.s) + '/" style="font:600 13px system-ui;color:#b8791a">' +
+              'Locksmith in ' + esc(p.n) + ' &rarr;</a>' +
+            '<div style="margin-top:8px"><a href="tel:' + esc(phoneHref) +
+              '" style="font:600 13px system-ui;color:#102330">' + esc(phone) + '</a></div>'
+          );
+          bounds.push([p.c[0], p.c[1]]);
+        });
+
+        map.fitBounds(bounds, { padding: [28, 28] });
+
+        // Wheel zoom only after a deliberate click into the map.
+        map.on('click', function () { map.scrollWheelZoom.enable(); });
+        map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
+
+        var fb = el.parentElement && el.parentElement.querySelector('[data-coverage-fallback]');
+        if (fb) fb.remove();
+      }).catch(function () {
+        var fb = el.parentElement && el.parentElement.querySelector('[data-coverage-fallback]');
+        if (fb) fb.querySelector('p').textContent = 'Map unavailable — the full list is below.';
+      });
+    }
+
+    // Manual proximity check. IntersectionObserver is the primary trigger,
+    // but it does not fire in every context — a hidden or background-rendered
+    // pane throttles it away entirely, and this codebase already had to add a
+    // backstop for the same reason on the scroll-reveal animations. A map
+    // that silently never loads is worse than one that loads slightly early.
+    function near(el) {
+      var r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) return false;
+      var margin = Math.max(400, window.innerHeight);
+      return r.top < window.innerHeight + margin && r.bottom > -margin;
+    }
+
+    function sweep(maps) {
+      var pending = false;
+      maps.forEach(function (m) {
+        if (m.dataset.coverageBuilt) return;
+        if (near(m)) {
+          m.dataset.coverageBuilt = '1';
+          build(m);
+        } else {
+          pending = true;
+        }
+      });
+      return pending;
+    }
+
+    function init() {
+      var maps = Array.prototype.slice.call(document.querySelectorAll('[data-coverage-map]'));
+      if (!maps.length) return;
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            io.unobserve(entry.target);
+            if (entry.target.dataset.coverageBuilt) return;
+            entry.target.dataset.coverageBuilt = '1';
+            build(entry.target);
+          });
+        }, { rootMargin: '400px' });
+        maps.forEach(function (m) { io.observe(m); });
+      }
+
+      // Backstop: check on scroll and on a short poll, and stop once every
+      // map on the page has been built.
+      var onScroll = function () {
+        if (!sweep(maps)) {
+          window.removeEventListener('scroll', onScroll);
+          clearInterval(timer);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      var timer = setInterval(onScroll, 1200);
+      sweep(maps);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
