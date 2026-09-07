@@ -20,8 +20,9 @@
  *   CONTACT_TO       services@nicovitolocksmith.com  (optional, this is default;
  *                                    Cloudflare Email Routing forwards it to
  *                                    nicoandvitolock@gmail.com)
- *   CONTACT_FROM     onboarding@resend.dev       (optional; use your own
- *                                                 domain once verified)
+ *   CONTACT_FROM     noreply@nicovitolocksmith.com  (optional; the domain is
+ *                                    verified in Resend, DKIM on the root and
+ *                                    SPF on send.nicovitolocksmith.com)
  *
  * GETTING IT ON YOUR PHONE: install Gmail on the phone and turn notifications
  * on for that address — a submission then pushes within seconds. Real SMS
@@ -79,12 +80,17 @@ async function viaResend(env, to, f) {
     method: 'POST',
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
     body: JSON.stringify({
-      from: env.CONTACT_FROM || 'Nico & Vito Website <onboarding@resend.dev>',
+      from: env.CONTACT_FROM || 'Nico & Vito Locksmith <noreply@nicovitolocksmith.com>',
       to: [to],
       reply_to: f.email || undefined,
       subject, html, text,
     }),
   });
+  if (!res.ok) {
+    // Logged to Workers observability, which wrangler.jsonc enables. Without
+    // this a rejected send looks identical to a network failure.
+    console.log('resend rejected', res.status, (await res.text()).slice(0, 300));
+  }
   return res.ok;
 }
 
@@ -104,6 +110,7 @@ async function viaWeb3Forms(env, to, f) {
       phone: f.phone,
     }),
   });
+  if (!res.ok) console.log('web3forms rejected', res.status, (await res.text()).slice(0, 300));
   return res.ok;
 }
 

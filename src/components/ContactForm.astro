@@ -70,7 +70,7 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
   <!-- brass cap -->
   <div class="h-1.5 bg-gradient-to-r from-brass-400 via-brass-300 to-brass-500"></div>
 
-  <div class="p-5 md:p-6">
+  <div class="p-5">
     {!compact && !short && (
       <>
         <h2 class="display text-navy-900 text-2xl">Request a quote or callback</h2>
@@ -84,12 +84,19 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
     {short && (
       <div class="flex items-start justify-between gap-4">
         <div>
-          <h2 class="display text-navy-900 text-[1.4rem] leading-tight">Get a price in 2 minutes</h2>
-          <p class="mt-1 text-muted text-[0.88rem]">No obligation. We call you straight back.</p>
+          <h2 class="display text-navy-900 text-[1.3rem] leading-tight">Get a price in 2 minutes</h2>
+          <p class="mt-0.5 text-muted text-[0.86rem]">No obligation. We call you straight back.</p>
         </div>
-        <span class="hidden sm:flex items-center gap-1.5 shrink-0 rounded-full bg-green-50 border border-green-200 px-2.5 py-1 text-[0.72rem] font-bold text-green-800">
-          <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-          Open now
+        <!-- Static markup is the always-true statement of the hours. JS
+             upgrades it to a live status in New York time; if JS never runs
+             the badge is still correct, just not live. It used to say
+             "Open now" unconditionally, which was a lie at 3 AM. -->
+        <span
+          data-hours-badge
+          class="hidden sm:flex items-center gap-1.5 shrink-0 rounded-full bg-cream border border-line px-2.5 py-1 text-[0.72rem] font-bold text-navy-700"
+        >
+          <span data-hours-dot class="w-1.5 h-1.5 rounded-full bg-brass-400"></span>
+          <span data-hours-text>7am–11pm daily</span>
         </span>
       </div>
     )}
@@ -218,6 +225,58 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
     <div data-qf-status class="mt-4 hidden rounded-lg px-4 py-3 text-sm" role="status" aria-live="polite"></div>
   </div>
 </form>
+
+<script is:inline>
+  // Live open/closed badge. The shop runs 7 AM - 11 PM New York time, every
+  // day, and is explicitly NOT 24/7 — so the badge has to be computed in that
+  // timezone rather than the visitor's, or someone in London sees "Open now"
+  // at 4 AM Brooklyn time and calls a phone nobody is holding.
+  (function () {
+    function nyHour() {
+      try {
+        const parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/New_York',
+          hour: 'numeric',
+          hour12: false,
+        }).formatToParts(new Date());
+        const h = parts.find((p) => p.type === 'hour');
+        // 'en-US' with hour12:false can render midnight as 24.
+        return h ? Number(h.value) % 24 : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function paint() {
+      const h = nyHour();
+      if (h === null) return; // leave the static "7am-11pm daily" in place
+      const open = h >= 7 && h < 23;
+      document.querySelectorAll('[data-hours-badge]').forEach(function (b) {
+        const dot = b.querySelector('[data-hours-dot]');
+        const txt = b.querySelector('[data-hours-text]');
+        if (!dot || !txt) return;
+        b.classList.remove('bg-cream', 'border-line', 'text-navy-700');
+        if (open) {
+          b.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
+          dot.className = 'w-1.5 h-1.5 rounded-full bg-green-500';
+          txt.textContent = 'Open now';
+        } else {
+          b.classList.add('bg-navy-50', 'border-line', 'text-navy-700');
+          dot.className = 'w-1.5 h-1.5 rounded-full bg-navy-300';
+          txt.textContent = h < 7 ? 'Opens 7 AM' : 'Closed · opens 7 AM';
+        }
+      });
+    }
+
+    paint();
+    // Re-check on the hour so a page left open overnight does not keep
+    // claiming the shop is open.
+    setInterval(paint, 60000);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) paint();
+    });
+  })();
+</script>
 
 <script is:inline define:vars={{ phone: business.phoneDisplay, phoneHref: business.phoneHref, email: business.email }}>
   (function () {
