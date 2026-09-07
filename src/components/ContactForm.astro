@@ -70,7 +70,7 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
   <!-- brass cap -->
   <div class="h-1.5 bg-gradient-to-r from-brass-400 via-brass-300 to-brass-500"></div>
 
-  <div class="p-5">
+  <div class="p-5" data-qf-body>
     {!compact && !short && (
       <>
         <h2 class="display text-navy-900 text-2xl">Request a quote or callback</h2>
@@ -302,9 +302,11 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
         chips.forEach(function (c) {
           var on = c.getAttribute('data-qf-chip') === serviceSel.value;
           c.setAttribute('aria-pressed', String(on));
+          // Must stay in step with the markup above, or a selected chip
+          // changes size the moment it is clicked.
           c.className = on
-            ? 'inline-flex items-center gap-1.5 rounded-full border border-navy-900 bg-navy-900 px-3 py-1.5 text-[0.85rem] font-semibold text-white transition-colors'
-            : 'inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-3 py-1.5 text-[0.85rem] font-semibold text-navy-800 hover:border-navy-300 transition-colors';
+            ? 'inline-flex items-center gap-1.5 rounded-full border border-navy-900 bg-navy-900 px-2.5 py-1 text-[0.82rem] font-semibold text-white transition-colors'
+            : 'inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-2.5 py-1 text-[0.82rem] font-semibold text-navy-800 hover:border-navy-300 transition-colors';
         });
       }
       chips.forEach(function (c) {
@@ -327,6 +329,34 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
         etaBox.classList.add('flex');
       }
       if (areaSel) { areaSel.addEventListener('change', syncEta); syncEta(); }
+
+      // On success the form is done: swapping it for a confirmation is
+      // clearer than a green strip under fields the customer has no reason to
+      // look at again, and it stops accidental double submissions outright.
+      function showSuccess(nm) {
+        var body = form.querySelector('[data-qf-body]');
+        if (!body) return;
+        var first = (nm || '').split(' ')[0];
+        body.innerHTML =
+          '<div class="text-center py-6">' +
+            '<div class="mx-auto w-14 h-14 rounded-full bg-green-100 border border-green-300 flex items-center justify-center">' +
+              '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" ' +
+                'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>' +
+            '</div>' +
+            '<h2 class="display text-navy-900 text-[1.35rem] mt-4">' +
+              (first ? 'Thanks, ' + first + ' — request sent' : 'Request sent') +
+            '</h2>' +
+            '<p class="mt-2 text-muted text-[0.95rem] leading-relaxed max-w-sm mx-auto">' +
+              'We have your details and we will call you back shortly. ' +
+              'We answer 7 AM to 11 PM, every day.' +
+            '</p>' +
+            '<a href="tel:' + phoneHref + '" class="btn btn-brass mt-5" data-call-cta="form-success">' +
+              phone +
+            '</a>' +
+            '<p class="mt-3 text-[0.8rem] text-muted">In a hurry? Calling is always faster.</p>' +
+          '</div>';
+        body.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
 
       function show(kind, html) {
         status.className =
@@ -355,9 +385,7 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
         fetch(form.action, { method: 'POST', body: new FormData(form) })
           .then(function (r) { return r.ok ? r.json().catch(function () { return { ok: true }; }) : Promise.reject(r); })
           .then(function () {
-            form.reset();
-            syncChips(); syncEta();
-            show('ok', "<strong>Got it.</strong> We'll call you back shortly. If it's urgent, ring <a class='underline font-semibold' href='tel:" + phoneHref + "'>" + phone + '</a>.');
+            showSuccess(name);
           })
           .catch(function () {
             var body = encodeURIComponent(
@@ -377,8 +405,11 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
             );
           })
           .finally(function () {
-            submit.disabled = false;
-            submit.innerHTML = submitLabel;
+            // The success path replaces the card body, so the button is gone.
+            if (document.body.contains(submit)) {
+              submit.disabled = false;
+              submit.innerHTML = submitLabel;
+            }
           });
       });
     }

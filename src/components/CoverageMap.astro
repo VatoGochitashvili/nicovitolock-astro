@@ -46,6 +46,40 @@ const brooklyn = areas.filter((a) => a.region === 'Brooklyn').length;
 const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
 ---
 
+<style is:global>
+  /* Leaflet's stylesheet is appended to <head> at runtime, so it lands AFTER
+     this one and wins any tie on specificity. Every rule here is therefore
+     qualified with Leaflet's own class to outrank it. */
+  .leaflet-tooltip.nv-tip {
+    background: #102330;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    padding: 6px 9px;
+    box-shadow: 0 6px 18px -6px rgba(16, 35, 48, 0.55);
+    white-space: nowrap;
+  }
+  .leaflet-tooltip.nv-tip::before { border-top-color: #102330; }
+
+  .leaflet-container { font: inherit; background: #eef2f4; }
+  .leaflet-container .leaflet-popup-content-wrapper {
+    border-radius: 10px;
+    box-shadow: 0 18px 40px -20px rgba(16, 35, 48, 0.55);
+  }
+  .leaflet-container a.leaflet-popup-close-button { color: #5d6f78; }
+  .leaflet-container .leaflet-interactive { cursor: pointer; }
+  .leaflet-container .leaflet-bar a {
+    color: #102330;
+    border-bottom-color: #dfe5e8;
+  }
+  .leaflet-container .leaflet-bar a:hover { background: #f7f4ee; color: #b8791a; }
+  .leaflet-container .leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 10px;
+  }
+</style>
+
 <section class={`relative py-14 md:py-18 bg-cream-deep ${className}`}>
   <div class="container-x">
     <div class="max-w-3xl">
@@ -147,6 +181,14 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
         var map = L.map(el, {
           scrollWheelZoom: false, // page scroll must not get trapped
           attributionControl: true,
+          // Canvas rather than one SVG node per pin: 105 markers with hover
+          // states are noticeably smoother to pan and zoom this way.
+          preferCanvas: true,
+          zoomSnap: 0.25,
+          wheelPxPerZoomLevel: 120,
+          zoomAnimation: true,
+          fadeAnimation: true,
+          inertia: true,
         });
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -157,13 +199,35 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
         var bounds = [];
         points.forEach(function (p) {
           var home = p.s === 'bay-ridge';
-          var marker = L.circleMarker([p.c[0], p.c[1]], {
+          var base = {
             radius: home ? 9 : p.t === 1 ? 6 : 5,
             color: '#102330',
             weight: home ? 2 : 1,
             fillColor: home ? '#f2ae39' : p.t === 1 ? '#f2ae39' : '#8aa2ad',
             fillOpacity: home ? 1 : p.t === 1 ? 0.9 : 0.75,
-          }).addTo(map);
+          };
+          var marker = L.circleMarker([p.c[0], p.c[1]], base).addTo(map);
+
+          // Name on hover, so the map is readable without clicking 105 pins.
+          marker.bindTooltip(p.n, {
+            direction: 'top',
+            offset: [0, -4],
+            opacity: 1,
+            className: 'nv-tip',
+          });
+
+          marker.on('mouseover', function () {
+            marker.setStyle({
+              radius: base.radius + 4,
+              weight: 2,
+              color: '#b8791a',
+              fillColor: '#f2ae39',
+              fillOpacity: 1,
+            });
+          });
+          marker.on('mouseout', function () {
+            marker.setStyle(base);
+          });
 
           marker.bindPopup(
             '<div style="font:600 14px system-ui;color:#102330;margin-bottom:2px">' +
@@ -202,8 +266,12 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
     function near(el) {
       var r = el.getBoundingClientRect();
       if (r.width === 0 && r.height === 0) return false;
-      var margin = Math.max(400, window.innerHeight);
-      return r.top < window.innerHeight + margin && r.bottom > -margin;
+      // window.innerHeight can be 0 in a hidden or not-yet-laid-out context,
+      // which would make every element look infinitely far away and the map
+      // would never load at all. Fall back before trusting it.
+      var vh = window.innerHeight || document.documentElement.clientHeight || 800;
+      var margin = Math.max(400, vh);
+      return r.top < vh + margin && r.bottom > -margin;
     }
 
     function sweep(maps) {
