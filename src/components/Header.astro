@@ -69,6 +69,27 @@ const nav = [
     </nav>
 
     <div class="flex items-center gap-2">
+      <!-- Map and email, reachable from every page without scrolling to the
+           footer. Icon-only, so they cost no horizontal space next to the
+           phone CTA; the accessible name carries the meaning. -->
+      <a
+        href={business.social.google}
+        target="_blank"
+        rel="noopener"
+        class="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg text-navy-700 hover:text-brass-600 hover:bg-navy-50 transition-colors"
+        title="Find us on Google Maps"
+        aria-label="Find us on Google Maps"
+      >
+        <Icon name="pin" size={19} />
+      </a>
+      <a
+        href={`mailto:${business.email}`}
+        class="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg text-navy-700 hover:text-brass-600 hover:bg-navy-50 transition-colors"
+        title={`Email ${business.email}`}
+        aria-label={`Email ${business.email}`}
+      >
+        <Icon name="mail" size={19} />
+      </a>
       <a
         href={`tel:${business.phoneHref}`}
         class="btn btn-navy btn-sm md:btn"
@@ -114,6 +135,27 @@ const nav = [
             {s.short}
           </a>
         ))}
+      </div>
+
+      <!-- The header icons are hidden below sm, so the drawer carries them
+           with labels rather than dropping them on mobile entirely. -->
+      <div class="flex items-center gap-2 border-t border-line-cool pt-4 pb-5">
+        <a
+          href={business.social.google}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-line-cool text-[0.88rem] font-semibold text-navy-800 hover:text-brass-600 transition-colors"
+        >
+          <Icon name="pin" size={16} class="text-brass-500" />
+          Google Maps
+        </a>
+        <a
+          href={`mailto:${business.email}`}
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-line-cool text-[0.88rem] font-semibold text-navy-800 hover:text-brass-600 transition-colors"
+        >
+          <Icon name="mail" size={16} class="text-brass-500" />
+          Email us
+        </a>
       </div>
     </nav>
   </div>

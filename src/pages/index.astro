@@ -64,11 +64,15 @@ const description =
       strength={50}
       hold={6}
       frames={[
-        { src: '/brand/bg-deadbolt.webp' },
+        // bg-deadbolt is dropped: despite the filename it is the panic-bar
+        // photo, which reads as commercial hardware rather than the lock work
+        // most visitors arrive for. bg-van is also out — the van in that shot
+        // still carries the old 347 number.
+        { src: '/brand/bg-brasslock.webp' },
         { src: '/brand/bg-rowhouses.webp' },
         { src: '/brand/bg-carkey.webp' },
+        { src: '/brand/bg-mortise.webp' },
         { src: '/brand/bg-street.webp' },
-        { src: '/brand/bg-brasslock.webp' },
         { src: '/brand/bg-hardware.webp' },
       ]}
     />
@@ -78,21 +82,21 @@ const description =
       class="pointer-events-none select-none absolute -left-6 bottom-[-3rem] display text-white/[0.035] text-[13rem] lg:text-[20rem] leading-none"
       aria-hidden="true">11209</span>
 
-    <div class="container-x relative z-[1] py-12 md:py-16 lg:py-20">
-      <div class="grid gap-10 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-8 lg:items-center">
+    <div class="container-x relative z-[1] py-7 md:py-9 lg:py-10">
+      <div class="grid gap-7 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-6 lg:items-start">
 
         <div class="lg:col-span-7 lg:col-start-1 lg:row-start-1">
-          <p class="flex items-center gap-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-5">
+          <p class="flex items-center gap-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-4">
             <span class="w-8 h-px bg-brass-400"></span>
             Bay Ridge · Brooklyn · Staten Island
           </p>
 
-          <h1 class="display text-white text-[2.3rem] sm:text-[3rem] lg:text-[3.7rem] leading-[1.02]">
+          <h1 class="display text-white text-[1.95rem] sm:text-[2.5rem] lg:text-[3.05rem] leading-[1.04]">
             The locksmith your<br class="hidden sm:block" />
             block already calls.
           </h1>
 
-          <p class="mt-6 text-navy-200 text-lg md:text-xl leading-relaxed max-w-xl">
+          <p class="mt-4 text-navy-200 text-[1.02rem] md:text-lg leading-relaxed max-w-xl">
             Licensed, family-run, and working out of Bay Ridge — lockouts, lock changes,
             car keys, intercoms and cameras across every Brooklyn and Staten Island
             neighborhood. Price agreed before we start.
@@ -100,7 +104,7 @@ const description =
         </div>
 
         <div class="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 space-y-4">
-          <ContactForm variant="short" tone="dark" />
+          <ContactForm variant="short" tone="dark" hideContactRow />
           <GoogleReviews tone="dark" compact />
         </div>
 
@@ -109,7 +113,7 @@ const description =
             <Icon name="phone" size={20} />
             {business.phoneDisplay}
           </a>
-          <dl class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 border-t border-white/10 pt-6">
+          <dl class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 border-t border-white/10 pt-5">
             {[
               { k: 'Open daily', v: '7am–11pm' },
               { k: 'Brooklyn arrival', v: '20–30 min' },
@@ -118,7 +122,7 @@ const description =
             ].map((x) => (
               <div>
                 <dt class="text-[0.68rem] uppercase tracking-[0.14em] text-navy-300">{x.k}</dt>
-                <dd class="display text-brass-400 text-[1.35rem] mt-1">{x.v}</dd>
+                <dd class="display text-brass-400 text-[1.2rem] mt-1">{x.v}</dd>
               </div>
             ))}
           </dl>
