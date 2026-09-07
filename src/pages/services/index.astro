@@ -1,4 +1,5 @@
 ---
+import Backdrop from '@/components/Backdrop.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import CtaBand from '@/components/CtaBand.astro';
@@ -53,7 +54,8 @@ const categoryBlurbs: Record<string, string> = {
     photo="keys"
   />
 
-  <section class="py-14 md:py-18 bg-cream">
+  <section class="py-14 md:py-18 bg-cream relative overflow-hidden">
+    <Backdrop variant="subway" tone="light" intensity={0.45} />
     <div class="container-x">
       {serviceCategories.map((cat, ci) => {
         const list = services.filter((s) => s.category === cat);

@@ -14,6 +14,10 @@
  */
 interface Props {
   variant?: 'rowhouses' | 'street' | 'key' | 'keys' | 'van' | 'deadbolt' | 'vanblur' | 'brasslock';
+  /** Explicit image, overriding `variant`. Used so a service page carries the
+   *  same photograph the card that linked to it was showing — clicking a card
+   *  should land you somewhere that looks like where you clicked. */
+  src?: string;
   /** 0–100: how much photo shows through. */
   strength?: number;
   class?: string;
@@ -23,6 +27,7 @@ interface Props {
 }
 const {
   variant = 'rowhouses',
+  src,
   strength = 55,
   class: className = '',
   position = 'center',
@@ -44,9 +49,9 @@ const right = at(0.95, 0.30);
 ---
 <div class:list={['hero-bg absolute inset-0 overflow-hidden', className]} aria-hidden="true">
   <picture>
-    <source srcset={`/brand/bg-${variant}.webp`} type="image/webp" />
+    {!src && <source srcset={`/brand/bg-${variant}.webp`} type="image/webp" />}
     <img
-      src={`/brand/bg-${variant}.jpg`}
+      src={src ?? `/brand/bg-${variant}.jpg`}
       alt=""
       class="absolute inset-0 w-full h-full object-cover"
       style={`object-position:${position}`}

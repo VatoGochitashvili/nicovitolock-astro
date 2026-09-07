@@ -185,7 +185,10 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
           // states are noticeably smoother to pan and zoom this way.
           preferCanvas: true,
           zoomSnap: 0.25,
+          zoomDelta: 0.5,
           wheelPxPerZoomLevel: 120,
+          zoomAnimationThreshold: 6,
+          markerZoomAnimation: true,
           zoomAnimation: true,
           fadeAnimation: true,
           inertia: true,
@@ -216,17 +219,31 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
             className: 'nv-tip',
           });
 
+          // Canvas markers cannot be transitioned with CSS, so the grow is
+          // animated frame by frame. Snapping between two radii on 105 pins
+          // reads as a flicker when the pointer crosses the map.
+          var anim = null;
+          function tween(to) {
+            if (anim) cancelAnimationFrame(anim);
+            var from = marker.options.radius;
+            var start = performance.now();
+            var dur = 140;
+            (function step(now) {
+              var t = Math.min(1, (now - start) / dur);
+              var e = 1 - Math.pow(1 - t, 3); // ease-out cubic
+              marker.setStyle({ radius: from + (to - from) * e });
+              if (t < 1) anim = requestAnimationFrame(step);
+            })(start);
+          }
+
           marker.on('mouseover', function () {
-            marker.setStyle({
-              radius: base.radius + 4,
-              weight: 2,
-              color: '#b8791a',
-              fillColor: '#f2ae39',
-              fillOpacity: 1,
-            });
+            marker.setStyle({ weight: 2.5, color: '#b8791a', fillColor: '#f2ae39', fillOpacity: 1 });
+            tween(base.radius + 5);
+            if (marker.bringToFront) marker.bringToFront();
           });
           marker.on('mouseout', function () {
-            marker.setStyle(base);
+            marker.setStyle({ weight: base.weight, color: base.color, fillColor: base.fillColor, fillOpacity: base.fillOpacity });
+            tween(base.radius);
           });
 
           marker.bindPopup(
@@ -244,7 +261,14 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
           bounds.push([p.c[0], p.c[1]]);
         });
 
-        map.fitBounds(bounds, { padding: [28, 28] });
+        map.fitBounds(bounds, { padding: [28, 28], animate: false });
+
+        // Respect a reduced-motion preference for the pan/zoom easing.
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          map.options.zoomAnimation = false;
+          map.options.fadeAnimation = false;
+          map.options.inertia = false;
+        }
 
         // Wheel zoom only after a deliberate click into the map.
         map.on('click', function () { map.scrollWheelZoom.enable(); });

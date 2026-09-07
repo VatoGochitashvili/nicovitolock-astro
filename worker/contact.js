@@ -13,6 +13,17 @@
  *   2. WEB3FORMS_KEY       — web3forms.com, free, no account, key by email
  *   3. FORM_WEBHOOK_URL    — any endpoint (Zapier / Make / n8n / your own)
  *
+ * SMS TO THE SHOP PHONE is separate and additive: if the TWILIO_* vars are
+ * set, every submission also texts SMS_TO (default 718-618-6002) with the
+ * name, number and job. It runs alongside whichever email provider is
+ * configured — a failed text never fails the request, because the email is
+ * the record and the text is only the nudge.
+ *
+ *   TWILIO_ACCOUNT_SID  ACxxxxxxxx
+ *   TWILIO_AUTH_TOKEN   xxxxxxxx
+ *   TWILIO_FROM         +1XXXXXXXXXX   (a number bought in the Twilio console)
+ *   SMS_TO              +17186186002   (optional, this is the default)
+ *
  * SETUP — Cloudflare dashboard → Workers & Pages → nicovitolock-astro →
  * Settings → Variables and Secrets. Add ONE of the above, then redeploy.
  *
@@ -123,6 +134,36 @@ async function viaWebhook(env, f) {
   return res.ok;
 }
 
+/**
+ * Text the shop. Deliberately fire-and-forget: the email is the record of the
+ * lead, so a Twilio outage or an expired token must not turn a captured lead
+ * into a 502 for the customer.
+ */
+async function textShop(env, f) {
+  const sid = env.TWILIO_ACCOUNT_SID;
+  const token = env.TWILIO_AUTH_TOKEN;
+  const from = env.TWILIO_FROM;
+  if (!sid || !token || !from) return false;
+
+  const to = env.SMS_TO || '+17186186002';
+  const body =
+    `New ${f.service || 'locksmith'} request\n` +
+    `${f.name} — ${f.phone}\n` +
+    (f.area ? `${f.area}\n` : '') +
+    (f.message ? `\n${f.message.slice(0, 320)}` : '');
+
+  const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+    method: 'POST',
+    headers: {
+      authorization: 'Basic ' + btoa(`${sid}:${token}`),
+      'content-type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({ To: to, From: from, Body: body }),
+  });
+  if (!res.ok) console.log('twilio rejected', res.status, (await res.text()).slice(0, 300));
+  return res.ok;
+}
+
 export async function handleContact(request, env) {
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405, headers: { allow: 'POST' } });
@@ -161,14 +202,20 @@ export async function handleContact(request, env) {
     return json({ ok: false, error: 'mail_not_configured' }, 503);
   }
 
+  // Kick the text off before the email so the phone buzzes as early as
+  // possible; it is awaited at the end so the Worker is not torn down first.
+  const sms = textShop(env, f).catch(() => false);
+
   const tried = [];
   for (const [name, send] of providers) {
     tried.push(name);
     try {
-      if (await send()) return json({ ok: true, via: name });
+      if (await send()) return json({ ok: true, via: name, sms: await sms });
     } catch {
       /* try the next provider */
     }
   }
-  return json({ ok: false, error: 'send_failed', tried }, 502);
+  // The email failed. If the text got through the lead is not lost, and the
+  // response says so rather than reporting a flat failure.
+  return json({ ok: false, error: 'send_failed', tried, sms: await sms }, 502);
 }

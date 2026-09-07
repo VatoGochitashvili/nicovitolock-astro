@@ -1,4 +1,5 @@
 ---
+import Backdrop from '@/components/Backdrop.astro';
 import CoverageMap from '@/components/CoverageMap.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
@@ -39,7 +40,8 @@ const crumbs = [
     cta={false}
   />
 
-  <section class="py-14 md:py-18 bg-cream">
+  <section class="py-14 md:py-18 bg-cream relative overflow-hidden">
+    <Backdrop variant="subway" tone="light" intensity={0.45} />
     <div class="container-x grid lg:grid-cols-12 gap-10">
       <!-- Contact details -->
       <div class="lg:col-span-5 space-y-5">

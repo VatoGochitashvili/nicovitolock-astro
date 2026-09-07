@@ -23,12 +23,14 @@ interface Props {
   scene?: 'bayridge' | 'residential' | 'automotive' | 'commercial' | 'security' | 'emergency';
   /** Duotone photograph behind the band */
   photo?: 'rowhouses' | 'street' | 'key' | 'keys' | 'van' | 'deadbolt' | 'vanblur' | 'brasslock';
+  /** Explicit hero image, overriding `photo`. */
+  photoSrc?: string;
 }
-const { eyebrow, title, subtitle, crumbs, cta = true, ghost, scene, photo } = Astro.props;
+const { eyebrow, title, subtitle, crumbs, cta = true, ghost, scene, photo, photoSrc } = Astro.props;
 ---
 <section class="relative bg-navy-900 overflow-hidden">
-  {photo
-    ? <PhotoBg variant={photo} strength={48} eager />
+  {(photo || photoSrc)
+    ? <PhotoBg variant={photo} src={photoSrc} strength={48} eager />
     : <Backdrop variant="pins" tone="dark" intensity={0.7} />}
   {scene && <Scene variant={scene} class="h-[58%]" opacity={photo ? 0.11 : 0.17} />}
   <!-- Brass index rule down the left edge -->

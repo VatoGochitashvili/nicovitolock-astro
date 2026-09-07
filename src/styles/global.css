@@ -409,12 +409,33 @@ details[open] .acc-chevron { transform: rotate(180deg); }
   position: relative;
   display: block;
   overflow: hidden;
-  border-radius: 0.9rem;
+  border-radius: 1rem;
   background: var(--color-navy-900);
   min-height: 190px;
   isolation: isolate;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset,
+              0 10px 24px -18px rgb(16 35 48 / 0.5);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* Hairline edge that warms to brass on hover — drawn as a ring rather than a
+   border so it cannot shift the layout by a pixel when it changes. */
+.svc-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.09) inset;
+  transition: box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-card:hover::before,
+.svc-card:focus-visible::before {
+  box-shadow: 0 0 0 1px rgb(242 174 57 / 0.55) inset,
+              0 0 0 4px rgb(242 174 57 / 0.10);
 }
 @media (min-width: 768px) {
   .svc-card { min-height: 232px; }
@@ -422,9 +443,11 @@ details[open] .acc-chevron { transform: rotate(180deg); }
 }
 .svc-card:hover,
 .svc-card:focus-visible {
-  transform: translateY(-6px);
-  box-shadow: 0 26px 50px -28px rgba(16, 35, 48, 0.75);
+  transform: translateY(-4px);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.08) inset,
+              0 30px 55px -30px rgb(16 35 48 / 0.8);
 }
+.svc-card:active { transform: translateY(-1px); }
 
 .svc-card img {
   position: absolute;
@@ -433,11 +456,11 @@ details[open] .acc-chevron { transform: rotate(180deg); }
   height: 100%;
   object-fit: cover;
   opacity: 0.6;
-  transform: scale(1.02);
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+  transform: scale(1.03);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
 }
 .svc-card:hover img,
-.svc-card:focus-visible img { transform: scale(1.09); opacity: 0.78; }
+.svc-card:focus-visible img { transform: scale(1.08); opacity: 0.8; }
 
 .svc-card::after {
   content: "";

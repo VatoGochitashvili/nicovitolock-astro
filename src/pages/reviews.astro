@@ -1,4 +1,5 @@
 ---
+import Backdrop from '@/components/Backdrop.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import Reviews from '@/components/Reviews.astro';
@@ -34,7 +35,8 @@ if (rating) businessNode.aggregateRating = rating;
     photo="rowhouses"
   />
 
-  <section class="py-12 bg-cream">
+  <section class="py-12 bg-cream relative overflow-hidden">
+    <Backdrop variant="subway" tone="light" intensity={0.45} />
     <div class="container-narrow">
       <GoogleReviews />
     </div>

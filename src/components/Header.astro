@@ -2,6 +2,7 @@
 import { business } from '@/data/business';
 import { services } from '@/data/services';
 import Icon from './Icon.astro';
+import Skyline from './Skyline.astro';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 // hrefs carry a trailing slash, so compare on a normalised path.
@@ -38,14 +39,14 @@ const nav = [
          business name for screen readers and for search. -->
     <a href="/" class="shrink-0 group" aria-label={`${business.name} — home`}>
       <picture>
-        <source srcset="/brand/logo-176.webp 176w, /brand/logo-256.webp 256w" sizes="88px" type="image/webp" />
+        <source srcset="/brand/logo-176.webp 176w, /brand/logo-256.webp 256w" sizes="104px" type="image/webp" />
         <img
           src="/brand/logo-176.png"
           alt={`${business.name} — Bay Ridge, Brooklyn`}
           width="176"
           height="176"
           fetchpriority="high"
-          class="h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 md:h-[5.5rem] md:w-[5.5rem] object-contain transition-transform duration-300 group-hover:scale-[1.05]"
+          class="h-[5.1rem] w-[5.1rem] sm:h-[5.6rem] sm:w-[5.6rem] md:h-[6.3rem] md:w-[6.3rem] object-contain transition-transform duration-300 group-hover:scale-[1.05]"
         />
       </picture>
     </a>
@@ -111,6 +112,10 @@ const nav = [
       </button>
     </div>
   </div>
+
+  <!-- The same Brooklyn roofline that closes the hero, as a hairline under
+       the nav so the motif reads as the brand rather than a one-off. -->
+  <Skyline height="26px" class="opacity-90" color="#1a3341" opacity={0.5} />
 
   <!-- Mobile drawer -->
   <div id="mobile-nav" class="lg:hidden hidden border-t border-line-cool bg-white">
