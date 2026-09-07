@@ -13,7 +13,7 @@ import { ownPhotosForService } from '@/data/work';
 import { services } from '@/data/services';
 import { tier1Areas, nearbyAreas } from '@/data/locations';
 import { business } from '@/data/business';
-import { localCopy, traitNote, localLists, seededHash } from '@/lib/localize';
+import { localCopy, traitNote, localLists, seededHash, pickManyPublic } from '@/lib/localize';
 import { breadcrumbSchema, serviceSchema, faqSchema, pickTitle } from '@/lib/seo';
 
 export function getStaticPaths() {
@@ -50,7 +50,14 @@ const allPhotos = ownPhotosForService(service.slug);
 const offset = allPhotos.length ? seededHash(area.slug) % allPhotos.length : 0;
 const photos = allPhotos.length ? [...allPhotos.slice(offset), ...allPhotos.slice(0, offset)].slice(0, 3) : [];
 const near = nearbyAreas(area);
-const otherServices = services.filter((s) => s.slug !== service.slug).slice(0, 6);
+// Seeded rather than the first six, so the cross-link block is not the same
+// twelve words on all 55 pages of a service.
+const otherServices = pickManyPublic(
+  services.filter((s) => s.slug !== service.slug),
+  seededHash(`other::${service.slug}::${area.slug}`),
+  3,
+  6,
+);
 
 const crumbs = [
   { name: 'Home', url: '/' },
@@ -144,6 +151,7 @@ const facts = [
       <div class="max-w-3xl prose-local text-[1.06rem]">
         <p class="text-navy-800 text-[1.15rem] leading-relaxed">{copy.localAngle}</p>
         <p>{note}</p>
+        {copy.traitNotes.map((t) => <p>{t}</p>)}
       </div>
 
       <div class="mt-12 grid md:grid-cols-2 gap-10 md:gap-14 max-w-5xl">
@@ -184,6 +192,14 @@ const facts = [
         <p>{copy.landmarkLine}{copy.coverage ? ` ${copy.coverage}` : ''}</p>
         <p>{copy.close}</p>
       </div>
+
+      {copy.fieldNotes.length > 0 && (
+        <div class="mt-12 max-w-3xl grid gap-6">
+          {copy.fieldNotes.map((n) => (
+            <p class="border-l-2 border-brass-400 pl-5 text-navy-800 leading-relaxed">{n}</p>
+          ))}
+        </div>
+      )}
     </div>
   </section>
 
@@ -195,11 +211,7 @@ const facts = [
         <h2 class="display text-white text-2xl md:text-[2.1rem]">
           Get a price for {area.name}
         </h2>
-        <p class="mt-4 text-navy-200 leading-relaxed">
-          Tell us the door, the lock, or the vehicle and we'll quote the
-          {' '}{service.short.toLowerCase()} work before we leave Bay Ridge —
-          {' '}{area.eta} from you.
-        </p>
+        <p class="mt-4 text-navy-200 leading-relaxed">{copy.quoteBlurb}</p>
         <a href={`tel:${business.phoneHref}`} class="btn btn-brass mt-6" data-call-cta="local-band">
           <Icon name="phone" size={18} />
           {business.phoneDisplay}
@@ -258,7 +270,7 @@ const facts = [
     <WorkGallery
       photos={photos}
       heading={`${service.short} work from the road`}
-      intro="Real jobs across Brooklyn and Staten Island, photographed on site — not stock."
+      intro={copy.galleryIntro}
       limit={3}
     />
   )}
@@ -267,6 +279,6 @@ const facts = [
 
   <CtaBand
     heading={`${service.name} in ${area.name}?`}
-    body={`We're ${area.eta} away, open every day 7 AM to 11 PM. Call for a price before we roll out.`}
+    body={copy.ctaBody}
   />
 </BaseLayout>

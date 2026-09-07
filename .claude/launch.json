@@ -1,11 +1,6 @@
 {
   "version": "0.0.1",
   "configurations": [
-    {
-      "name": "nico-vito-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "4331"],
-      "port": 4331
-    }
+    { "name": "nico-vito", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 4321 }
   ]
 }

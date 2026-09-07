@@ -39,6 +39,9 @@ const sceneFor: Record<string, 'residential' | 'automotive' | 'commercial' | 'se
 };
 
 
+import { fieldNotesFor } from '@/data/fieldnotes';
+// The hub carries the full set; the local pages draw two each.
+const notes = fieldNotesFor(service.slug, 'Brooklyn', 'Brooklyn and Staten Island');
 const related = services.filter((s) => s.slug !== service.slug).slice(0, 3);
 const photos = ownPhotosForService(service.slug);
 const brooklyn = tier1Areas.filter((a) => a.region === 'Brooklyn');
@@ -100,6 +103,15 @@ const schema = [
 
         <!-- What's included -->
         <div class="mt-9">
+          {notes.length > 0 && (
+            <div class="mt-10 grid gap-6">
+              <h2 class="display text-navy-900 text-2xl md:text-[1.85rem]">What we tell customers before booking</h2>
+              {notes.map((n) => (
+                <p class="border-l-2 border-brass-400 pl-5 text-navy-800 leading-relaxed">{n}</p>
+              ))}
+            </div>
+          )}
+
           <h2 class="display text-navy-900 text-2xl md:text-[1.85rem]">What's included</h2>
           <span class="rule-brass mt-3 block"></span>
           <ul class="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-3">

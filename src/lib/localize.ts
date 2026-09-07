@@ -10,6 +10,9 @@
 import type { Service } from '@/data/services';
 import type { ServiceArea } from '@/data/locations';
 import { business } from '@/data/business';
+import { traitServiceNote } from '@/data/localknowledge';
+import { SERVICE_LOCAL_FAQS, TRAIT_FAQS, fillFaq } from '@/data/localfaqs';
+import { fieldNotesFor } from '@/data/fieldnotes';
 
 /** FNV-1a — stable unsigned 32-bit hash from a seed string. */
 export function seededHash(str: string): number {
@@ -25,25 +28,59 @@ export function seededHash(str: string): number {
  *  interpolated landmark or character string need it. */
 const cap = (t: string) => (t ? t.charAt(0).toUpperCase() + t.slice(1) : t);
 
-const pick = <T>(arr: T[], seed: number, salt: number): T =>
-  arr[(seed + salt * 7919) % arr.length];
-
-/** Pick n distinct items, deterministically. */
-const pickMany = <T>(arr: T[], seed: number, salt: number, n: number): T[] => {
-  const out: T[] = [];
-  const used = new Set<number>();
-  for (let i = 0; out.length < Math.min(n, arr.length); i++) {
-    const idx = (seed + (salt + i) * 104729) % arr.length;
-    if (!used.has(idx)) {
-      used.add(idx);
-      out.push(arr[idx]);
-    }
-  }
-  return out;
+const pick = <T>(arr: T[], seed: number, salt: number): T => {
+  // Mix the salt into the seed rather than adding it, so two pages with
+  // adjacent seeds do not select adjacent pool entries across every slot.
+  let h = (seed ^ Math.imul(salt + 1, 2246822519)) >>> 0;
+  h ^= h << 13; h >>>= 0;
+  h ^= h >>> 17;
+  h ^= h << 5; h >>>= 0;
+  return arr[h % arr.length];
 };
+
+/**
+ * Pick n distinct items, deterministically.
+ *
+ * This does a full seeded Fisher-Yates shuffle and takes the first n, rather
+ * than stepping a modular index. The modular version looked random but it is
+ * not: two pages whose seeds differ by a small amount land on overlapping
+ * index sets, which is why neighbouring service x area pages kept drawing two
+ * of the same three FAQs. A shuffle spreads the draws properly, and with a
+ * twelve-item pool that alone removes most of the shared text between
+ * sibling pages.
+ */
+const pickMany = <T>(arr: T[], seed: number, salt: number, n: number): T[] => {
+  const idx = arr.map((_, i) => i);
+  let h = (seed ^ Math.imul(salt + 1, 2654435761)) >>> 0;
+  const next = () => {
+    // xorshift32 — cheap, deterministic, and well distributed for small n.
+    h ^= h << 13; h >>>= 0;
+    h ^= h >>> 17;
+    h ^= h << 5; h >>>= 0;
+    return h;
+  };
+  for (let i = idx.length - 1; i > 0; i--) {
+    const j = next() % (i + 1);
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  return idx.slice(0, Math.min(n, arr.length)).map((i) => arr[i]);
+};
+
+/** pickMany, exposed for templates that need the same seeded spread. */
+export const pickManyPublic = <T>(arr: T[], seed: number, salt: number, n: number): T[] =>
+  pickMany(arr, seed, salt, n);
 
 export interface LocalCopy {
   lead: string;
+  /** Service x housing-trait paragraphs — the substance that makes this page
+   *  different from the same service in the next neighborhood over. */
+  traitNotes: string[];
+  /** Two of eight per-service field notes — a second axis of variation, so
+   *  same-service pages in different areas discuss different parts of the job. */
+  fieldNotes: string[];
+  quoteBlurb: string;
+  ctaBody: string;
+  galleryIntro: string;
   localAngle: string;
   process: string;
   close: string;
@@ -225,8 +262,63 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     a: `Yes. Bay Ridge is where we're based and where we live, so ${sWork} calls here are usually minutes away rather than a cross-borough dispatch.`,
   };
 
-  const chosenFaqs = pickMany(faqPool, seed, 11, 3);
+  // FAQs are drawn service-first. The generic "do you charge extra to come
+  // out" questions were identical on ~180 pages each; service-specific ones
+  // plus a trait-specific one leave almost no shared text between siblings.
+  const vars = {
+    CITY: city, ZIP: zip, ETA: eta, REGION: region, PHONE: phone,
+  };
+  const svcFaqs = SERVICE_LOCAL_FAQS[service.slug] ?? [];
+  const chosenFaqs = pickMany(svcFaqs, seed, 11, 3).map((f) => fillFaq(f, vars));
+
+  // One question driven by what this neighborhood is actually built from.
+  const faqTrait = area.traits[seed % area.traits.length];
+  const traitFaqPool = TRAIT_FAQS[faqTrait] ?? [];
+  if (traitFaqPool.length) {
+    chosenFaqs.push(fillFaq(pick(traitFaqPool, seed, 17), vars));
+  }
+
+  // Keep exactly one logistics question, rotated over a wide pool so it is
+  // not the same answer on every page.
+  chosenFaqs.push(pick(faqPool, seed, 23));
   if (isHome) chosenFaqs.unshift(homeFaq);
+
+  // Two service x trait paragraphs, ordered by the area's own trait list.
+  const traitNotes = area.traits
+    .map((t) => traitServiceNote(service.slug, t, city))
+    .filter((x): x is string => Boolean(x));
+  const rotated = traitNotes.length
+    ? [...traitNotes.slice(seed % traitNotes.length), ...traitNotes.slice(0, seed % traitNotes.length)]
+    : [];
+
+  const quoteBlurbs = [
+    `Tell us the door, the lock, or the vehicle and we'll quote the ${sShort} work before we leave Bay Ridge — ${eta} from you.`,
+    `Describe what the ${sWork} job involves and we'll price it now, not after a technician is standing in ${city}.`,
+    `Send us the details and you'll get a real number for the ${sWork} work, agreed before anyone leaves for ${city}.`,
+    `Tell us what happened. We quote the ${sWork} job on the phone, and ${city} is ${eta} away once you say go.`,
+    `Give us the door type and the problem. You get a price for the ${sShort} work up front, and no trip charge for ${city}.`,
+    `A short description is enough to quote most ${sWork} jobs. ${cap(city)} is ${eta} out and we carry the common parts.`,
+    `Tell us where in ${city} and what the ${sWork} problem is — we'll price it before the van moves.`,
+  ];
+
+  const ctaBodies = [
+    `We're ${eta} away, open every day 7 AM to 11 PM. Call for a price before we roll out.`,
+    `${cap(city)} is ${eta} from Bay Ridge. Phones are answered 7 AM to 11 PM, every day of the year.`,
+    `Licensed, insured, and ${eta} out. Call and you'll have a price for the ${sWork} work before we leave.`,
+    `Open seven days, 7 AM to 11 PM. Tell us about the ${sWork} job and we'll quote it on the call.`,
+    `${eta} from you, every day of the week. No trip surcharge for ${city}, and the price is agreed first.`,
+    `One call reaches the people who turn up. ${cap(city)} is ${eta} away, 7 AM to 11 PM daily.`,
+    `We'll tell you what the ${sWork} job needs and what it costs before a van leaves Bay Ridge.`,
+  ];
+
+  const galleryIntros = [
+    `${cap(sWork)} jobs shot on site across ${region} — our own work, not stock photography.`,
+    `Photographs from real ${sWork} calls. Every one of these is a job we did ourselves.`,
+    `Our own ${sWork} work, photographed on the job rather than bought from a library.`,
+    `Real ${sWork} jobs across Brooklyn and Staten Island, taken on site.`,
+    `These are our jobs, photographed as we did them — no stock images.`,
+    `A few ${sWork} jobs from the road, shot on site during the work.`,
+  ];
 
   const landmarkLines = [
     `We cover all of ${city}, from ${markLine} to the residential blocks in between.`,
@@ -258,6 +350,11 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     coverage: coverages ? pick(coverages, seed, 9) : null,
     landmarkLine: pick(landmarkLines, seed, 10),
     faqs: chosenFaqs,
+    traitNotes: rotated.slice(0, 2),
+    fieldNotes: pickMany(fieldNotesFor(service.slug, city, region), seed, 53, 2),
+    quoteBlurb: pick(quoteBlurbs, seed, 31),
+    ctaBody: pick(ctaBodies, seed, 33),
+    galleryIntro: pick(galleryIntros, seed, 41),
     metaDescription: pick(metaVariants, seed, 12).slice(0, 158),
   };
 }

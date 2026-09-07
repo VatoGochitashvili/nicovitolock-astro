@@ -15,6 +15,8 @@ import { serviceAreas, nearbyAreas } from '@/data/locations';
 import { services } from '@/data/services';
 import { business } from '@/data/business';
 import { areaCopy, areaFaqs, areaTraitNote, seededHash } from '@/lib/localize';
+import { areaTraitParagraphs, TRAIT_SERVICE_PRIORITY } from '@/data/areaknowledge';
+import { serviceBySlug } from '@/data/services';
 import { breadcrumbSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
 
 export function getStaticPaths() {
@@ -48,6 +50,29 @@ const crumbs = [
 ];
 
 const faqs = areaFaqs(area);
+
+// Paragraphs about what this neighborhood is actually built from — one per
+// trait, so a rowhouse-and-commercial area reads nothing like a waterfront
+// single-family one.
+const traitParas = areaTraitParagraphs(area.traits, area.name, seededHash(`atp::${area.slug}`));
+
+// The services that genuinely come up in this kind of housing, with the
+// reason. Replaces the identical twelve-service list every area page carried.
+const focus = Array.from(
+  new Map(
+    area.traits
+      .flatMap((t) => TRAIT_SERVICE_PRIORITY[t] ?? [])
+      .map((f) => [f.slug, f]),
+  ).values(),
+)
+  .map((f) => ({ ...f, service: serviceBySlug(f.slug) }))
+  .filter((f): f is typeof f & { service: NonNullable<typeof f.service> } => Boolean(f.service));
+// Order and length vary per neighborhood so the block is not the same five
+// lines wherever two areas happen to share a trait set.
+const focusSeed = seededHash(`focus::${area.slug}`);
+focus.sort((x, y) =>
+  ((seededHash(x.slug + area.slug) % 97) - (seededHash(y.slug + area.slug) % 97)));
+focus.length = Math.min(focus.length, 3 + (focusSeed % 2));
 
 const title = pickTitle([
   `Locksmith in ${area.name}, ${area.region} | Nico & Vito Locksmith`,
@@ -150,6 +175,34 @@ const schema = [
         <p>{note}</p>
         <p>{copy.trust}{copy.coverage ? ` ${copy.coverage}` : ''}</p>
       </div>
+
+      <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
+        What the buildings in {area.name} need
+      </h2>
+      <div class="max-w-3xl prose-local text-[1.06rem] grid gap-5">
+        {traitParas.map((t) => <p>{t}</p>)}
+      </div>
+
+      {focus.length > 0 && (
+        <>
+          <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
+            What comes up most in {area.name}
+          </h2>
+          <ul class="max-w-3xl grid gap-4">
+            {focus.map((f) => (
+              <li class="border-l-2 border-brass-400 pl-5">
+                <a
+                  href={isTier1 ? `/services/${f.slug}/${area.slug}` : `/services/${f.slug}`}
+                  class="font-display font-bold text-navy-900 hover:text-brass-600 transition-colors"
+                >
+                  {f.service.name}{isTier1 ? ` in ${area.name}` : ''}
+                </a>
+                <p class="mt-1 text-navy-800 leading-relaxed">{f.why}</p>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
         {copy.heading}

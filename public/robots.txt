@@ -5,4 +5,11 @@ Allow: /
 # No crawl-delay: this is a small static site, crawl it freely.
 
 Sitemap: https://nicovitolocksmith.com/sitemap-index.xml
+# Segments are listed individually as well, so Search Console reports coverage
+# per page type rather than one undifferentiated number across 800 URLs.
+Sitemap: https://nicovitolocksmith.com/sitemap-core.xml
+Sitemap: https://nicovitolocksmith.com/sitemap-services.xml
+Sitemap: https://nicovitolocksmith.com/sitemap-car-keys.xml
+Sitemap: https://nicovitolocksmith.com/sitemap-areas.xml
+Sitemap: https://nicovitolocksmith.com/sitemap-local.xml
 Sitemap: https://nicovitolocksmith.com/image-sitemap.xml

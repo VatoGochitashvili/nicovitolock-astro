@@ -15,7 +15,7 @@ import { vehicles } from '@/data/vehicles';
 import { tier1Areas } from '@/data/locations';
 import { business } from '@/data/business';
 import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
-import { vehicleCopy } from '@/lib/localize';
+import { vehicleCopy, pickManyPublic, seededHash } from '@/lib/localize';
 
 export function getStaticPaths() {
   return vehicles.map((vehicle) => ({ params: { make: vehicle.slug }, props: { vehicle } }));
@@ -26,7 +26,16 @@ const copy = vehicleCopy(vehicle);
 // Prefer photos of this actual make; fall back to general car key work.
 const makePhotos = photosForMake(vehicle.slug);
 const photos = makePhotos.length ? makePhotos : ownPhotosForService('car-key-replacement').slice(0, 3);
-const others = vehicles.filter((v) => v.slug !== vehicle.slug).slice(0, 8);
+import { MAKE_OWNER_NOTES } from '@/data/vehiclenotes';
+const ownerNote = MAKE_OWNER_NOTES[vehicle.slug];
+// Seeded rather than the first eight, so the cross-link block differs page to
+// page instead of repeating the same eight make names on all 22.
+const others = pickManyPublic(
+  vehicles.filter((v) => v.slug !== vehicle.slug),
+  seededHash(`makes::${vehicle.slug}`),
+  5,
+  8,
+);
 // A sample of nearby neighborhoods for internal linking, not all 55.
 const nearbyAreas = tier1Areas.slice(0, 12);
 
@@ -136,6 +145,7 @@ const schema = [
       <div class="max-w-3xl prose-local text-[1.06rem]">
         <p class="text-navy-800 text-[1.15rem] leading-relaxed">{vehicle.notes}</p>
         <p>{vehicle.yearNotes}</p>
+        {ownerNote && <p>{ownerNote}</p>}
         <p>{copy.process}</p>
         {vehicle.caveat && (
           <p class="!text-navy-900 bg-brass-50 border-l-4 border-brass-400 px-5 py-4 rounded-r-lg">
