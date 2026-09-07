@@ -17,7 +17,9 @@
  * Settings → Variables and Secrets. Add ONE of the above, then redeploy.
  *
  *   RESEND_API_KEY   re_xxxxxxxx
- *   CONTACT_TO       nicoandvitolock@gmail.com   (optional, this is default)
+ *   CONTACT_TO       services@nicovitolocksmith.com  (optional, this is default;
+ *                                    Cloudflare Email Routing forwards it to
+ *                                    nicoandvitolock@gmail.com)
  *   CONTACT_FROM     onboarding@resend.dev       (optional; use your own
  *                                                 domain once verified)
  *
@@ -140,7 +142,7 @@ export async function handleContact(request, env) {
   };
   if (!f.name || !f.phone) return json({ ok: false, error: 'missing_fields' }, 400);
 
-  const to = env.CONTACT_TO || 'nicoandvitolock@gmail.com';
+  const to = env.CONTACT_TO || 'services@nicovitolocksmith.com';
 
   const providers = [];
   if (env.RESEND_API_KEY) providers.push(['resend', () => viaResend(env, to, f)]);

@@ -63,7 +63,7 @@ Pick **ONE**. Resend takes about two minutes.
    | Variable | Value |
    |---|---|
    | `RESEND_API_KEY` | `re_...` |
-   | `CONTACT_TO` | `nicoandvitolock@gmail.com` *(optional — this is the default)* |
+   | `CONTACT_TO` | `services@nicovitolocksmith.com` *(optional — this is the default)* |
 
 4. **Redeploy** — environment variables only apply to new builds
 
