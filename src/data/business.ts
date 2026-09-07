@@ -18,7 +18,12 @@ export const business = {
   phoneDisplay: '(718) 618-6002',
   /** Same number, formatted for an SMS link — locksmith customers text. */
   smsHref: 'sms:+17186186002',
-  email: 'nicoandvitolock@gmail.com',
+  // Published everywhere on the site: footer, contact page, about page, the
+  // LocalBusiness schema, and the form's mailto fallback. Cloudflare Email
+  // Routing forwards it to nicoandvitolock@gmail.com, so it reaches the same
+  // inbox while presenting the domain rather than a Gmail address — which is
+  // what the Business Profile and any citation should match.
+  email: 'info@nicovitolocksmith.com',
 
   // FULLY MOBILE — no walk-in shop. Do not publish a street address.
   //
