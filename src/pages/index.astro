@@ -6,6 +6,7 @@ import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
 import HeroSlideshow from '@/components/HeroSlideshow.astro';
 import CoverageMap from '@/components/CoverageMap.astro';
+import Skyline from '@/components/Skyline.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import GoogleReviews from '@/components/GoogleReviews.astro';
 import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
@@ -130,6 +131,9 @@ const description =
         </div>
       </div>
     </div>
+
+    <!-- The roofline the whole business works under, closing the hero. -->
+    <Skyline height="72px" class="absolute inset-x-0 bottom-0" color="#f7d693" opacity={0.19} />
   </section>
 
   <GoogleReviewBand />
@@ -147,7 +151,7 @@ const description =
 
   <!-- ══════════════ 03 · SERVICES — bento grid ══════════════ -->
   <section class="relative overflow-hidden py-16 md:py-22 bg-cream" id="services">
-    <Backdrop variant="grid" tone="light" intensity={0.6} />
+    <Backdrop variant="subway" tone="light" intensity={0.55} />
     <div class="container-x relative z-[1]">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-9">
         <div class="max-w-xl">

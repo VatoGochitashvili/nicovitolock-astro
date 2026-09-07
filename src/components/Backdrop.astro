@@ -8,13 +8,15 @@
  *   pins     — pin-tumbler stacks, like the inside of a cylinder
  *   grid     — a street grid on the Brooklyn angle
  *   rings    — concentric cylinder cross-sections
+ *   subway   — offset beveled tile, the wall of every station on the R line
+ *              and half the kitchens in Brooklyn
  *
  * They render as inline SVG (a few hundred bytes, gzipped to almost nothing)
  * and sit BEHIND content at very low opacity. Text contrast is unaffected:
  * the strokes never exceed 0.06 alpha on dark or 0.05 on light.
  */
 interface Props {
-  variant?: 'bitting' | 'pins' | 'grid' | 'rings';
+  variant?: 'bitting' | 'pins' | 'grid' | 'rings' | 'subway';
   /** 'dark' = light strokes for navy sections, 'light' = navy strokes for cream */
   tone?: 'dark' | 'light';
   class?: string;
@@ -75,6 +77,27 @@ const id = `bd-${variant}-${tone}-${String(intensity).replace('.', '')}`;
           <path d="M0 0 V160 M56 0 V160 M112 0 V160" stroke={stroke} stroke-width="1.5" stroke-opacity={o(0.7)} />
           <rect x="56" y="52" width="56" height="52" fill={stroke} fill-opacity={o(0.35)} />
           <circle cx="112" cy="52" r="3.5" fill={accent} fill-opacity={o(2.2)} />
+        </pattern>
+      )}
+
+      {variant === 'subway' && (
+        <pattern id={id} width="120" height="80" patternUnits="userSpaceOnUse">
+          {/* 3x6 proportion, running bond — the standard subway tile. Two
+              rows offset by half a tile is the whole pattern. */}
+          <g fill="none" stroke={stroke} stroke-width="1.5" opacity={o(1)}>
+            <rect x="0" y="0" width="58" height="38" rx="2" />
+            <rect x="62" y="0" width="58" height="38" rx="2" />
+            <rect x="-30" y="42" width="58" height="38" rx="2" />
+            <rect x="32" y="42" width="58" height="38" rx="2" />
+            <rect x="94" y="42" width="58" height="38" rx="2" />
+          </g>
+          {/* the bevel: a highlight along the top-left of each tile */}
+          <g fill="none" stroke={accent} stroke-width="1" opacity={o(0.5)}>
+            <path d="M2 36 L2 2 L56 2" />
+            <path d="M64 36 L64 2 L118 2" />
+            <path d="M34 78 L34 44 L88 44" />
+            <path d="M96 78 L96 44 L150 44" />
+          </g>
         </pattern>
       )}
 

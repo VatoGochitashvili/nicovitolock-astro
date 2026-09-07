@@ -1,0 +1,90 @@
+---
+/**
+ * Brooklyn roofline — a tiling silhouette of attached rowhouses with their
+ * cornices, a rooftop water tower, and a suspension-bridge tower.
+ *
+ * Drawn rather than sourced: it is the skyline this business actually works
+ * under (Bay Ridge sits at the foot of the Verrazzano) instead of generic
+ * skyscraper clip-art, which would say Manhattan and mean nothing to anyone
+ * on 3rd Avenue.
+ *
+ * Rendered as a repeating CSS background rather than an inline <svg> that
+ * stretches: an SVG scaled to the container width distorts the proportions
+ * badly on a wide screen, where the houses end up three times their natural
+ * width. As a background it tiles at a fixed aspect ratio instead, so the
+ * cornices stay the right shape from a phone to an ultrawide.
+ */
+interface Props {
+  /** Silhouette colour. Explicit because currentColor cannot cross into a
+   *  background-image data URI. */
+  color?: string;
+  opacity?: number;
+  height?: string;
+  /** Roofline pointing down, for the top edge of a section. */
+  flip?: boolean;
+  class?: string;
+}
+const {
+  color = '#f7d693',
+  opacity = 0.18,
+  height = '72px',
+  flip = false,
+  class: className = '',
+} = Astro.props;
+
+const W = 240;
+const H = 80;
+const CORNICE = 3;
+
+// [x, width, roof height] — attached, so they share party walls.
+const houses: [number, number, number][] = [
+  [0, 44, 36],
+  [44, 38, 27],
+  [82, 30, 44],
+  [112, 46, 21],
+  [158, 34, 38],
+  [192, 48, 30],
+];
+
+let roofPath = `M0 ${H}`;
+for (const [x, w, roof] of houses) {
+  const top = H - roof;
+  // The cornice lip is what makes this read as a rowhouse and not a box.
+  roofPath += ` L${x} ${top + CORNICE} L${x - 1.5} ${top + CORNICE} L${x - 1.5} ${top}`;
+  roofPath += ` L${x + w + 1.5} ${top} L${x + w + 1.5} ${top + CORNICE} L${x + w} ${top + CORNICE}`;
+}
+roofPath += ` L${W} ${H} Z`;
+
+const wt = { x: 90, base: H - 44, tank: 15, w: 14 };
+const bt = { x: 212, top: 8 };
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+<g fill="${color}" opacity="${opacity}">
+<path d="${roofPath}"/>
+<rect x="${wt.x + 2}" y="${wt.base - 2}" width="1.6" height="6"/>
+<rect x="${wt.x + wt.w - 3.6}" y="${wt.base - 2}" width="1.6" height="6"/>
+<rect x="${wt.x}" y="${wt.base - wt.tank}" width="${wt.w}" height="${wt.tank}" rx="1"/>
+<path d="M${wt.x - 1.5} ${wt.base - wt.tank} L${wt.x + wt.w / 2} ${wt.base - wt.tank - 6} L${wt.x + wt.w + 1.5} ${wt.base - wt.tank} Z"/>
+<rect x="${bt.x}" y="${bt.top}" width="3" height="${H - bt.top}"/>
+<rect x="${bt.x + 11}" y="${bt.top}" width="3" height="${H - bt.top}"/>
+<rect x="${bt.x - 1}" y="${bt.top + 9}" width="16" height="2.5"/>
+<rect x="${bt.x - 1}" y="${bt.top + 20}" width="16" height="2.5"/>
+<path d="M${bt.x + 14} ${bt.top + 3} Q${W} ${bt.top + 26} ${W} ${bt.top + 30}" fill="none" stroke="${color}" stroke-width="1.4"/>
+<path d="M${bt.x} ${bt.top + 3} Q${bt.x - 40} ${bt.top + 26} ${bt.x - 60} ${bt.top + 30}" fill="none" stroke="${color}" stroke-width="1.4"/>
+</g></svg>`;
+
+const uri = `url("data:image/svg+xml,${encodeURIComponent(svg.replace(/\n/g, ''))}")`;
+---
+
+<div
+  class={`pointer-events-none select-none w-full ${className}`}
+  style={[
+    `height:${height}`,
+    `background-image:${uri}`,
+    'background-repeat:repeat-x',
+    'background-position:bottom left',
+    'background-size:auto 100%',
+    flip ? 'transform:scaleY(-1)' : '',
+  ].filter(Boolean).join(';')}
+  aria-hidden="true"
+></div>
