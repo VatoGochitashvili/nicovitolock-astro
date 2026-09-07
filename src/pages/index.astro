@@ -154,7 +154,7 @@ const description =
             <span class="text-brass-600">Start here.</span>
           </h2>
         </div>
-        <a href="/services" class="btn btn-outline shrink-0">
+        <a href="/services/" class="btn btn-outline shrink-0">
           All {services.length} services
           <Icon name="arrow" size={17} />
         </a>
@@ -167,7 +167,7 @@ const description =
           const wide = i === 0 || i === 5;
           return (
             <a
-              href={`/services/${s.slug}`}
+              href={`/services/${s.slug}/`}
               class:list={['svc-card reveal', wide && 'svc-card--wide']}
               data-delay={Math.min(i, 7) * 45}
             >
@@ -195,7 +195,7 @@ const description =
       <div class="mt-10 pt-8 border-t border-line">
         <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 mb-4">
           <h3 class="display text-navy-900 text-xl">Car keys, by make</h3>
-          <a href="/car-keys" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 hover:text-brass-600 transition-colors">
+          <a href="/car-keys/" class="text-navy-900 font-semibold border-b-2 border-brass-400 pb-0.5 hover:text-brass-600 transition-colors">
             All {vehicles.length} makes →
           </a>
         </div>
@@ -203,7 +203,7 @@ const description =
           {vehicles.map((v) => (
             <li>
               <a
-                href={`/car-keys/${v.slug}`}
+                href={`/car-keys/${v.slug}/`}
                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 hover:-translate-y-0.5 transition-all duration-200"
               >
                 <Icon name="car" size={13} class="text-brass-500" />
@@ -234,7 +234,7 @@ const description =
           many times what you were told. We price the actual job, before we leave
           Bay Ridge, and we hold to it.
         </p>
-        <a href="/contact" class="btn btn-brass mt-7">
+        <a href="/contact/" class="btn btn-brass mt-7">
           Get a quote
           <Icon name="arrow" size={17} />
         </a>
@@ -312,7 +312,7 @@ const description =
               <Icon name="phone" size={18} />
               {business.phoneDisplay}
             </a>
-            <a href="/about" class="btn btn-outline">
+            <a href="/about/" class="btn btn-outline">
               More about us
               <Icon name="arrow" size={17} />
             </a>
@@ -360,7 +360,7 @@ const description =
             <ul class="columns-2 gap-6 text-[0.92rem]">
               {group.areas.map((a) => (
                 <li class="mb-1.5 break-inside-avoid">
-                  <a href={`/service-areas/${a.slug}`} class="text-navy-800 hover:text-brass-600 hover:underline underline-offset-2 transition-colors">
+                  <a href={`/service-areas/${a.slug}/`} class="text-navy-800 hover:text-brass-600 hover:underline underline-offset-2 transition-colors">
                     {a.name}
                   </a>
                 </li>

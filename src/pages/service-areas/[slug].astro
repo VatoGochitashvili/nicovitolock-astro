@@ -45,8 +45,8 @@ const isTier1 = area.tier === 1;
 
 const crumbs = [
   { name: 'Home', url: '/' },
-  { name: 'Service Areas', url: '/service-areas' },
-  { name: area.name, url: `/service-areas/${area.slug}` },
+  { name: 'Service Areas', url: '/service-areas/' },
+  { name: area.name, url: `/service-areas/${area.slug}/` },
 ];
 
 const faqs = areaFaqs(area);
@@ -192,7 +192,7 @@ const schema = [
             {focus.map((f) => (
               <li class="border-l-2 border-brass-400 pl-5">
                 <a
-                  href={isTier1 ? `/services/${f.slug}/${area.slug}` : `/services/${f.slug}`}
+                  href={isTier1 ? `/services/${f.slug}/${area.slug}/` : `/services/${f.slug}/`}
                   class="font-display font-bold text-navy-900 hover:text-brass-600 transition-colors"
                 >
                   {f.service.name}{isTier1 ? ` in ${area.name}` : ''}
@@ -211,7 +211,7 @@ const schema = [
         {services.map((s, i) => (
           <li class="border-b border-line">
             <a
-              href={isTier1 ? `/services/${s.slug}/${area.slug}` : `/services/${s.slug}`}
+              href={isTier1 ? `/services/${s.slug}/${area.slug}/` : `/services/${s.slug}/`}
               class="group flex items-baseline gap-3 py-3"
             >
               <span class="font-display font-bold text-[0.72rem] text-brass-500 tabular-nums">
@@ -247,7 +247,7 @@ const schema = [
             {near.map((n) => (
               <li>
                 <a
-                  href={`/service-areas/${n.slug}`}
+                  href={`/service-areas/${n.slug}/`}
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 transition-colors"
                 >
                   <Icon name="pin" size={13} class="text-brass-500" />

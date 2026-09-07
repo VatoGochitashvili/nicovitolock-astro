@@ -11,7 +11,7 @@ import { breadcrumbSchema, serviceSchema, faqSchema } from '@/lib/seo';
 
 const crumbs = [
   { name: 'Home', url: '/' },
-  { name: 'Car Keys by Make', url: '/car-keys' },
+  { name: 'Car Keys by Make', url: '/car-keys/' },
 ];
 
 const faqs = [
@@ -38,7 +38,7 @@ const schema = [
   serviceSchema({
     name: 'Car key replacement by make',
     description: 'Car keys and fobs cut and programmed at your vehicle across Brooklyn and Staten Island.',
-    url: '/car-keys',
+    url: '/car-keys/',
   }),
   faqSchema(faqs),
   {
@@ -92,7 +92,7 @@ const schema = [
       <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1">
         {vehicles.map((v) => (
           <li class="border-b border-line">
-            <a href={`/car-keys/${v.slug}`} class="group flex items-center gap-3 py-3.5">
+            <a href={`/car-keys/${v.slug}/`} class="group flex items-center gap-3 py-3.5">
               <Icon name="car" size={17} class="text-brass-600 shrink-0" />
               <span class="font-display font-bold text-navy-900 text-[1rem] group-hover:text-brass-600 transition-colors">
                 {v.make}

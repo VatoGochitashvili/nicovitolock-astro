@@ -4,15 +4,16 @@ import { services } from '@/data/services';
 import Icon from './Icon.astro';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+// hrefs carry a trailing slash, so compare on a normalised path.
 const isActive = (href: string) =>
-  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+  href === '/' ? path === '/' : path === href || path.startsWith(href);
 
 const nav = [
-  { href: '/services', label: 'Services' },
-  { href: '/service-areas', label: 'Service Areas' },
-  { href: '/car-keys', label: 'Car Keys' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/services/', label: 'Services' },
+  { href: '/service-areas/', label: 'Service Areas' },
+  { href: '/car-keys/', label: 'Car Keys' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
 ];
 ---
 
@@ -109,7 +110,7 @@ const nav = [
       </p>
       <div class="grid grid-cols-2 gap-x-4 pb-4">
         {services.slice(0, 8).map((s) => (
-          <a href={`/services/${s.slug}`} class="py-2 text-[0.92rem] text-muted hover:text-navy-900">
+          <a href={`/services/${s.slug}/`} class="py-2 text-[0.92rem] text-muted hover:text-navy-900">
             {s.short}
           </a>
         ))}

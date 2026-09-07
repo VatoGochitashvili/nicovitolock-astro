@@ -67,7 +67,7 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
         <ul class="mt-4 space-y-2 text-[0.93rem]">
           {services.map((s) => (
             <li>
-              <a href={`/services/${s.slug}`} class="text-navy-200 hover:text-white transition-colors">
+              <a href={`/services/${s.slug}/`} class="text-navy-200 hover:text-white transition-colors">
                 {s.name}
               </a>
             </li>
@@ -79,18 +79,18 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
       <div class="lg:col-span-2">
         <h2 class="font-display text-sm font-bold uppercase tracking-[0.18em] text-brass-400">Company</h2>
         <ul class="mt-4 space-y-2 text-[0.93rem]">
-          <li><a href="/about" class="text-navy-200 hover:text-white transition-colors">About Us</a></li>
-          <li><a href="/faq" class="text-navy-200 hover:text-white transition-colors">FAQ</a></li>
-          <li><a href="/reviews" class="text-navy-200 hover:text-white transition-colors">Reviews</a></li>
+          <li><a href="/about/" class="text-navy-200 hover:text-white transition-colors">About Us</a></li>
+          <li><a href="/faq/" class="text-navy-200 hover:text-white transition-colors">FAQ</a></li>
+          <li><a href="/reviews/" class="text-navy-200 hover:text-white transition-colors">Reviews</a></li>
           <li>
             <a href={business.social.google} target="_blank" rel="noopener"
                class="text-navy-200 hover:text-white transition-colors">
               Google Business Profile
             </a>
           </li>
-          <li><a href="/contact" class="text-navy-200 hover:text-white transition-colors">Contact</a></li>
-          <li><a href="/service-areas" class="text-navy-200 hover:text-white transition-colors">All Service Areas</a></li>
-          <li><a href="/car-keys" class="text-navy-200 hover:text-white transition-colors">Car Keys by Make</a></li>
+          <li><a href="/contact/" class="text-navy-200 hover:text-white transition-colors">Contact</a></li>
+          <li><a href="/service-areas/" class="text-navy-200 hover:text-white transition-colors">All Service Areas</a></li>
+          <li><a href="/car-keys/" class="text-navy-200 hover:text-white transition-colors">Car Keys by Make</a></li>
         </ul>
       </div>
 
@@ -125,7 +125,7 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
         <ul class="flex flex-wrap gap-x-1 gap-y-1.5 text-[0.82rem] text-navy-300">
           {brooklyn.map((a, i) => (
             <li>
-              <a href={`/service-areas/${a.slug}`} class="hover:text-brass-300 transition-colors">{a.name}</a>
+              <a href={`/service-areas/${a.slug}/`} class="hover:text-brass-300 transition-colors">{a.name}</a>
               {i < brooklyn.length - 1 && <span class="text-navy-600 mx-0.5">·</span>}
             </li>
           ))}
@@ -137,7 +137,7 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
         <ul class="flex flex-wrap gap-x-1 gap-y-1.5 text-[0.82rem] text-navy-300">
           {vehicles.map((v, i) => (
             <li>
-              <a href={`/car-keys/${v.slug}`} class="hover:text-brass-300 transition-colors">{v.make}</a>
+              <a href={`/car-keys/${v.slug}/`} class="hover:text-brass-300 transition-colors">{v.make}</a>
               {i < vehicles.length - 1 && <span class="text-navy-600 mx-0.5">·</span>}
             </li>
           ))}
@@ -149,7 +149,7 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
         <ul class="flex flex-wrap gap-x-1 gap-y-1.5 text-[0.82rem] text-navy-300">
           {statenIsland.map((a, i) => (
             <li>
-              <a href={`/service-areas/${a.slug}`} class="hover:text-brass-300 transition-colors">{a.name}</a>
+              <a href={`/service-areas/${a.slug}/`} class="hover:text-brass-300 transition-colors">{a.name}</a>
               {i < statenIsland.length - 1 && <span class="text-navy-600 mx-0.5">·</span>}
             </li>
           ))}
@@ -171,5 +171,5 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
     Call
   </a>
   <a href={business.smsHref} class="btn btn-ghost btn-sm px-4" data-cta="sms-sticky">Text</a>
-  <a href="/contact" class="btn btn-ghost btn-sm px-4">Quote</a>
+  <a href="/contact/" class="btn btn-ghost btn-sm px-4">Quote</a>
 </div>

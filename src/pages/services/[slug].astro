@@ -49,8 +49,8 @@ const statenIsland = tier1Areas.filter((a) => a.region === 'Staten Island');
 
 const crumbs = [
   { name: 'Home', url: '/' },
-  { name: 'Services', url: '/services' },
-  { name: service.name, url: `/services/${service.slug}` },
+  { name: 'Services', url: '/services/' },
+  { name: service.name, url: `/services/${service.slug}/` },
 ];
 
 const description = clampDescription(
@@ -70,7 +70,7 @@ const schema = [
   serviceSchema({
     name: service.name,
     description: service.summary,
-    url: `/services/${service.slug}`,
+    url: `/services/${service.slug}/`,
     images: photos.map((p) => p.slug),
   }),
   faqSchema(service.faqs),
@@ -154,7 +154,7 @@ const schema = [
               {vehicles.map((v) => (
                 <li>
                   <a
-                    href={`/car-keys/${v.slug}`}
+                    href={`/car-keys/${v.slug}/`}
                     class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 transition-colors"
                   >
                     <Icon name="car" size={13} class="text-brass-500" />
@@ -181,7 +181,7 @@ const schema = [
           <div class="mt-3 flex flex-wrap gap-2">
             {brooklyn.map((a) => (
               <a
-                href={`/services/${service.slug}/${a.slug}`}
+                href={`/services/${service.slug}/${a.slug}/`}
                 class="px-2.5 py-1.5 rounded-md bg-white border border-line text-[0.85rem] text-navy-800 hover:bg-brass-400 hover:border-brass-400 hover:text-navy-950 transition-colors"
               >{a.name}</a>
             ))}
@@ -191,14 +191,14 @@ const schema = [
           <div class="mt-3 flex flex-wrap gap-2">
             {statenIsland.map((a) => (
               <a
-                href={`/services/${service.slug}/${a.slug}`}
+                href={`/services/${service.slug}/${a.slug}/`}
                 class="px-2.5 py-1.5 rounded-md bg-white border border-line text-[0.85rem] text-navy-800 hover:bg-brass-400 hover:border-brass-400 hover:text-navy-950 transition-colors"
               >{a.name}</a>
             ))}
           </div>
 
           <p class="mt-5 text-sm text-muted">
-            Don't see your block? <a href="/service-areas" class="link-brass">See all {serviceAreas.length} neighborhoods</a> —
+            Don't see your block? <a href="/service-areas/" class="link-brass">See all {serviceAreas.length} neighborhoods</a> —
             we cover all of Brooklyn and Staten Island.
           </p>
         </div>
@@ -237,7 +237,7 @@ const schema = [
           <ul class="mt-4 space-y-2.5">
             {related.map((r) => (
               <li>
-                <a href={`/services/${r.slug}`} class="flex items-center gap-3 group">
+                <a href={`/services/${r.slug}/`} class="flex items-center gap-3 group">
                   <span class="w-8 h-8 rounded-md bg-navy-50 text-navy-700 grid place-items-center shrink-0 group-hover:bg-brass-400 group-hover:text-navy-950 transition-colors">
                     <Icon name={r.icon} size={16} />
                   </span>

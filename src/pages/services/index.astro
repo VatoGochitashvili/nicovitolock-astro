@@ -9,7 +9,7 @@ import { breadcrumbSchema, serviceSchema } from '@/lib/seo';
 
 const crumbs = [
   { name: 'Home', url: '/' },
-  { name: 'Services', url: '/services' },
+  { name: 'Services', url: '/services/' },
 ];
 
 const schema = [
@@ -26,7 +26,7 @@ const schema = [
     })),
   },
   ...services.slice(0, 4).map((s) =>
-    serviceSchema({ name: s.name, description: s.summary, url: `/services/${s.slug}` })
+    serviceSchema({ name: s.name, description: s.summary, url: `/services/${s.slug}/` })
   ),
 ];
 
@@ -68,7 +68,7 @@ const categoryBlurbs: Record<string, string> = {
               {list.map((s) => (
                 <li>
                   <a
-                    href={`/services/${s.slug}`}
+                    href={`/services/${s.slug}/`}
                     class="group grid grid-cols-[1fr_auto] md:grid-cols-[17rem_1fr_auto] items-baseline gap-x-4 md:gap-x-8 py-5 hover:bg-white transition-colors"
                   >
                     <span class="font-display font-bold text-navy-900 text-[1.1rem] md:text-[1.25rem] leading-tight group-hover:text-brass-600 transition-colors">
@@ -105,7 +105,7 @@ const categoryBlurbs: Record<string, string> = {
       <div class="flex flex-wrap gap-2">
         {serviceAreas.map((a) => (
           <a
-            href={`/service-areas/${a.slug}`}
+            href={`/service-areas/${a.slug}/`}
             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-line text-[0.86rem] text-navy-800 hover:bg-navy-800 hover:border-navy-800 hover:text-white transition-colors"
           >
             <Icon name="pin" size={13} class="text-brass-500" />
