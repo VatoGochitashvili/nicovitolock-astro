@@ -7,6 +7,12 @@
   "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
 
+  // Cloudflare's build for this project runs `npx wrangler deploy` with no
+  // build step of its own, so without this dist/ does not exist at deploy
+  // time and the assets.directory below fails to resolve. wrangler runs this
+  // first. Do not remove it assuming the dashboard covers it — it does not.
+  "build": { "command": "npm run build" },
+
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
