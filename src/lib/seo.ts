@@ -53,6 +53,10 @@ export function localBusinessSchema() {
     email: business.email,
     image: abs('/brand/van-2.jpg'),
     logo: abs('/brand/logo-512.png'),
+    // Google surfaces priceRange on local results. It is a band, not a price:
+    // the site quotes every job individually and publishes no price list.
+    priceRange: '$$',
+    hasMap: business.social.google,
     currenciesAccepted: 'USD',
     paymentAccepted: business.paymentAccepted,
     // Service-area business: NO streetAddress. Publishing one for a mobile

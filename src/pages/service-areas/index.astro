@@ -53,6 +53,30 @@ const schema = [
     height="520px"
   />
 
+  <!-- Borough hubs. Two clicks to any neighborhood, and the level the site
+       was missing between the homepage and 105 neighborhood pages. -->
+  <section class="py-12 bg-cream-deep">
+    <div class="container-x grid sm:grid-cols-2 gap-5">
+      {[
+        { slug: 'brooklyn', name: 'Brooklyn', n: 50, blurb: 'Bay Ridge to Greenpoint — prewar mortise, row-house sets and the storefront strips.' },
+        { slug: 'staten-island', name: 'Staten Island', n: 55, blurb: 'St. George to Tottenville — detached houses, gates, and car keys cut on the driveway.' },
+      ].map((x) => (
+        <a
+          href={`/service-areas/${x.slug}/`}
+          class="group block p-6 bg-white border border-line rounded-xl hover:border-brass-400 transition-colors"
+        >
+          <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.2em] text-brass-600">
+            {x.n} neighborhoods
+          </p>
+          <h2 class="display text-navy-900 text-xl mt-2 group-hover:text-brass-600 transition-colors">
+            {x.name} Locksmith
+          </h2>
+          <p class="mt-2 text-muted text-[0.95rem] leading-relaxed">{x.blurb}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
   <section class="py-14 md:py-18 bg-cream relative overflow-hidden">
     <Backdrop variant="subway" tone="light" intensity={0.45} />
     <div class="container-x">

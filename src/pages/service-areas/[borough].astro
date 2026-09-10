@@ -1,0 +1,152 @@
+---
+/**
+ * Borough landing pages — /service-areas/brooklyn/ and /service-areas/staten-island/.
+ *
+ * These sit between the homepage (both boroughs at once) and the 105
+ * neighborhood pages, which is the level the site was missing entirely.
+ * "Brooklyn locksmith" and "Staten Island locksmith" are the highest-volume
+ * terms this business can realistically compete for, and nothing targeted them.
+ *
+ * They are also the strongest internal hubs here: each links every
+ * neighborhood in its borough plus every service, from a page that is itself
+ * about the term those pages want to rank for.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Backdrop from '@/components/Backdrop.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import CoverageMap from '@/components/CoverageMap.astro';
+import { boroughs } from '@/data/boroughs';
+import { serviceAreas } from '@/data/locations';
+import { services } from '@/data/services';
+import { business } from '@/data/business';
+import { breadcrumbSchema, faqSchema, clampDescription } from '@/lib/seo';
+
+export function getStaticPaths() {
+  return boroughs.map((b) => ({ params: { borough: b.slug }, props: { b } }));
+}
+
+const { b } = Astro.props;
+const areas = serviceAreas.filter((a) => a.region === b.name);
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Service Areas', url: '/service-areas/' },
+  { name: b.name, url: `/service-areas/${b.slug}/` },
+];
+
+const schema = [
+  breadcrumbSchema(crumbs),
+  faqSchema(b.faqs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `Locksmith services in ${b.name}`,
+    description: b.metaDescription,
+    serviceType: 'Locksmith',
+    provider: { '@type': 'Locksmith', name: business.name, telephone: business.phoneHref },
+    areaServed: {
+      '@type': 'City',
+      name: b.name,
+      containedInPlace: { '@type': 'State', name: 'New York' },
+    },
+  },
+];
+---
+
+<BaseLayout
+  title={b.title}
+  description={clampDescription(b.metaDescription)}
+  canonical={`/service-areas/${b.slug}/`}
+  schema={schema}
+>
+  <PageHero
+    eyebrow={`${areas.length} neighborhoods covered`}
+    title={b.h1}
+    subtitle={b.lead}
+    crumbs={crumbs}
+    photo={b.slug === 'brooklyn' ? 'rowhouses' : 'street'}
+  />
+
+  <CoverageMap
+    region={b.name}
+    heading={`Where we work in ${b.name}`}
+    intro={`Every ${b.name} neighborhood on our daily route, with the drive time from Bay Ridge. Tap a pin for that neighborhood's page.`}
+    height="440px"
+  />
+
+  <section class="relative overflow-hidden py-14 md:py-18 bg-cream">
+    <Backdrop variant="subway" tone="light" intensity={0.45} />
+    <div class="container-x relative z-[1] grid lg:grid-cols-12 gap-10 lg:gap-14">
+      <div class="lg:col-span-7">
+        {b.sections.map((sec) => (
+          <div class="mb-10 last:mb-0">
+            <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mb-5 border-b-2 border-navy-900">
+              {sec.heading}
+            </h2>
+            <div class="prose-local text-[1.06rem] grid gap-4">
+              {sec.body.map((p) => <p>{p}</p>)}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <aside class="lg:col-span-5">
+        <div class="lg:sticky lg:top-28">
+          <ContactForm variant="short" area={areas[0]?.name} />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-18 bg-cream-deep">
+    <div class="container-x">
+      <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mb-6 border-b-2 border-navy-900">
+        What we do across {b.name}
+      </h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1">
+        {services.map((s) => (
+          <li class="border-b border-line">
+            <a href={`/services/${s.slug}/`} class="group flex items-center gap-3 py-3">
+              <Icon name={s.icon} size={17} class="text-brass-600 shrink-0" />
+              <span class="text-navy-800 font-semibold text-[0.95rem] group-hover:text-brass-600 transition-colors">
+                {s.short}
+              </span>
+              <Icon name="arrow" size={15} class="text-brass-500 ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
+        Every {b.name} neighborhood we cover
+      </h2>
+      <ul class="flex flex-wrap gap-2">
+        {areas.map((a) => (
+          <li>
+            <a
+              href={`/service-areas/${a.slug}/`}
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white text-[0.87rem] text-navy-800 hover:bg-navy-900 hover:text-white hover:border-navy-900 transition-colors"
+            >
+              <Icon name="pin" size={13} class="text-brass-500" />
+              {a.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <GoogleReviewBand />
+
+  <FaqAccordion faqs={b.faqs} heading={`${b.name} locksmith — common questions`} />
+
+  <CtaBand
+    heading={`Need a locksmith in ${b.name}?`}
+    body={`Call ${business.phoneDisplay} — open every day, 7 AM to 11 PM, with the price agreed before we leave.`}
+  />
+</BaseLayout>
