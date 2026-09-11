@@ -37,10 +37,13 @@ const dark = tone === 'dark';
         <span class="flex text-brass-400" aria-hidden="true">
           {[1,2,3,4,5].map(() => <Icon name="star" size={15} class="fill-current" />)}
         </span>
+        <span class:list={['text-[0.88rem] font-semibold', dark ? 'text-navy-200' : 'text-muted']}>
+          {business.googleReviewCount} reviews
+        </span>
       </p>
       <p class:list={['mt-1 text-[0.9rem]', dark ? 'text-navy-200' : 'text-muted']}>
-        Our rating on the Google Business Profile.
-        <span class="block mt-0.5">Read every review, or add your own.</span>
+        From {business.googleReviewCount} reviews on our Google Business Profile.
+        <span class="block mt-0.5">Read every one, or add your own.</span>
       </p>
     </div>
   </div>

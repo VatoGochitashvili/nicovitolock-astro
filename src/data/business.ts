@@ -85,6 +85,11 @@ export const business = {
    * safe way to surface it. Re-check the value before changing it.
    */
   googleRating: '5.0',
+  /** Real count from the Google Business Profile, confirmed by the owner on
+   *  2026-09-11. A rating shown without a count reads as unverified; "5.0
+   *  from 11 reviews" is checkable and far more persuasive. Update this
+   *  whenever the profile moves — a stale number is worse than none. */
+  googleReviewCount: 11,
 
   brands: [
     'Mul-T-Lock', 'Medeco', 'Schlage', 'Kwikset', 'Yale', 'ASSA ABLOY',

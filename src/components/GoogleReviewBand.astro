@@ -39,7 +39,7 @@ const brass = tone === 'brass';
             'display text-[1.5rem] md:text-[2rem] leading-tight mt-1',
             brass ? 'text-navy-950' : 'text-white',
           ]}>
-            {business.googleRating} out of 5 from our customers
+            {business.googleRating} out of 5 from {business.googleReviewCount} Google reviews
           </h2>
           <p class:list={['mt-1.5 text-[0.95rem]', brass ? 'text-navy-900/80' : 'text-navy-200']}>
             Read every review on our Google Business Profile — or add yours.
