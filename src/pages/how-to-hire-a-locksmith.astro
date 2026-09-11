@@ -1,0 +1,220 @@
+---
+/**
+ * Guide page — "How to hire a locksmith in NYC without getting scammed".
+ *
+ * Every competitor ranking for these terms gestures at the problem in a line
+ * ("avoid $29 lockout ads") and none of them actually explain it. This does,
+ * because it is the single most useful thing that can be written for someone
+ * standing outside their own door at 9 PM.
+ *
+ * It earns its place three ways: it answers real informational queries that
+ * the service pages cannot target, it is the kind of page that attracts links
+ * in a category where almost nothing does, and it frames the exact behaviours
+ * this business already follows as the standard to judge anyone by.
+ *
+ * Everything here is checkable. No claim is made about Nico & Vito that the
+ * rest of the site does not already stand behind.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Backdrop from '@/components/Backdrop.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import { business } from '@/data/business';
+import { breadcrumbSchema, faqSchema, localBusinessSchema, clampDescription, SITE } from '@/lib/seo';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'How to hire a locksmith', url: '/how-to-hire-a-locksmith/' },
+];
+
+const checks = [
+  {
+    icon: 'badge',
+    title: 'Ask for the DCWP licence number',
+    body: 'Every locksmith working in New York City must hold a licence from the Department of Consumer and Worker Protection. It is a number, it looks like 2096389-DCA, and you can check it on the DCWP website before anyone touches your door. A locksmith who will not give you one over the phone is telling you something.',
+  },
+  {
+    icon: 'dollar',
+    title: 'Get a price for the job, not the visit',
+    body: 'The scam runs on a low call-out fee — $19, $29, $39 — quoted for arriving, not for opening. The real number appears once a technician is standing at your door and you have no other option. Ask what the total will be to open the door, and ask what would change it.',
+  },
+  {
+    icon: 'phone',
+    title: 'Ask who is actually coming',
+    body: 'Much of what appears for "locksmith near me" is a call centre that sells your job to whoever bids. Ask whether the person coming is an employee, and ask the name of the company they will arrive as. If the answer is vague, you are talking to a dispatcher, not a locksmith.',
+  },
+  {
+    icon: 'lockout',
+    title: 'A drill is a last resort, not a technique',
+    body: 'The overwhelming majority of residential locks open without damage — picked, shimmed or bypassed. Drilling is for a high-security cylinder that genuinely cannot be picked, or one already forced. If someone reaches for a drill first, you are about to pay for a new lock you did not need.',
+  },
+  {
+    icon: 'shield',
+    title: 'Expect to prove you belong there',
+    body: 'A legitimate locksmith will ask for photo ID and something tying you to the address. It is mildly annoying and it is the entire point: it is the same check that stops somebody else talking their way into your apartment next week.',
+  },
+  {
+    icon: 'check',
+    title: 'Ask them to show credentials on arrival',
+    body: 'A real locksmith carries a licence and will show it without being made to feel awkward. An unmarked car, no paperwork and cash-only pricing are three signals in a row, and any one of them is worth a second phone call.',
+  },
+];
+
+const redFlags = [
+  'A price quoted "starting at $19" with no total for the actual job',
+  'The phone answered with a generic "locksmith services" rather than a company name',
+  'No licence number offered when you ask directly',
+  'An unmarked vehicle and no identification on arrival',
+  'Drilling proposed before picking has been attempted',
+  'The price changing once work has started',
+  'Cash-only insistence with no receipt',
+  'An address on the listing that turns out to be a parking lot or a mail drop',
+];
+
+const faqs = [
+  {
+    q: 'How do I check a locksmith is licensed in New York City?',
+    a: 'Ask for the DCWP licence number on the phone, then look it up on the NYC Department of Consumer and Worker Protection website before the technician arrives. It takes under a minute. Every locksmith operating legally in the five boroughs has one.',
+  },
+  {
+    q: 'Why was the price different when the locksmith arrived?',
+    a: 'Because the number quoted was for turning up, not for the work. It is the defining mechanic of the locksmith scam: an advertised call-out fee of $19 to $39, then a much larger figure once you are standing outside with no alternative. Ask for the price of the job itself, on the phone, before anyone travels.',
+  },
+  {
+    q: 'Should a locksmith drill my lock to open it?',
+    a: 'Rarely. Most residential locks open non-destructively, and the lock is undamaged afterwards. Drilling is justified on a high-security cylinder that cannot be picked in reasonable time, or one that has already been forced — and you should be told before it happens, not after.',
+  },
+  {
+    q: 'Is a 24-hour locksmith better than one with set hours?',
+    a: 'Not necessarily, and "24/7" on a listing frequently means a dispatch service rather than somebody awake. What matters more is whether the phone reaches a person who can tell you where the technician actually is. We take calls until 11 PM and say so plainly rather than promising a truck at 3 AM that is not coming.',
+  },
+  {
+    q: 'How much should a lockout cost in Brooklyn?',
+    a: 'It depends on the door, the lock and whether the deadbolt was thrown — which is exactly why any honest answer comes after a few questions rather than from an advert. What you should insist on is a firm number before anyone travels, and that the number does not move once they arrive.',
+  },
+  {
+    q: 'What should I do if a locksmith is already overcharging me?',
+    a: 'Do not pay in cash, ask for an itemised invoice with the company name and licence number, and take a photograph of the vehicle and the paperwork. You can file a complaint with NYC DCWP, and a card payment gives you a route to dispute the charge that cash does not.',
+  },
+];
+
+const title = 'How to Hire a Locksmith in NYC Without Getting Scammed';
+const description =
+  'Six checks before you let anyone touch your door: the DCWP licence, pricing for the job rather than the visit, who is actually coming, and when drilling is justified. From a licensed Brooklyn locksmith.';
+
+const schema = [
+  localBusinessSchema(),
+  breadcrumbSchema(crumbs),
+  faqSchema(faqs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to hire a locksmith in New York City without getting scammed',
+    description,
+    totalTime: 'PT5M',
+    step: checks.map((c, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: c.title,
+      text: c.body,
+      url: `${SITE}/how-to-hire-a-locksmith/#step-${i + 1}`,
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title="How to Hire a Locksmith in NYC | Nico & Vito"
+  description={clampDescription(description)}
+  canonical="/how-to-hire-a-locksmith/"
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Guide"
+    title={title}
+    subtitle="The locksmith trade has a fraud problem, and it works because people call from the pavement with a dead phone and no options. Six checks, none of which take longer than a minute."
+    crumbs={crumbs}
+    photo="key"
+  />
+
+  <section class="relative overflow-hidden py-14 md:py-18 bg-cream">
+    <Backdrop variant="subway" tone="light" intensity={0.45} />
+    <div class="container-x relative z-[1] grid lg:grid-cols-12 gap-10 lg:gap-14">
+      <div class="lg:col-span-7">
+        <div class="prose-local text-[1.06rem]">
+          <p class="text-navy-800 text-[1.15rem] leading-relaxed">
+            Search "locksmith near me" from a Brooklyn pavement and a good share of what comes back
+            is not a locksmith. It is a call centre that will sell your job to whoever answers, quote
+            a figure designed to get a van to your door, and settle on the real price once you have
+            been standing outside for forty minutes.
+          </p>
+          <p>
+            Google polices this category harder than almost any other for exactly that reason. The
+            checks below are the ones that separate a licensed local business from a dispatch number,
+            and every one of them can be done on the phone before anybody travels.
+          </p>
+        </div>
+
+        <ol class="mt-10 grid gap-6">
+          {checks.map((c, i) => (
+            <li id={`step-${i + 1}`} class="border-l-2 border-brass-400 pl-5">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-brass-400/15 text-brass-600 grid place-items-center shrink-0">
+                  <Icon name={c.icon} size={16} />
+                </span>
+                <h2 class="display text-navy-900 text-lg md:text-xl">{c.title}</h2>
+              </div>
+              <p class="mt-2 text-navy-800 leading-relaxed">{c.body}</p>
+            </li>
+          ))}
+        </ol>
+
+        <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-5 border-b-2 border-navy-900">
+          Red flags, in one list
+        </h2>
+        <ul class="grid sm:grid-cols-2 gap-x-8 gap-y-2.5">
+          {redFlags.map((r) => (
+            <li class="flex items-start gap-2.5">
+              <Icon name="close" size={16} class="text-brick-600 shrink-0 mt-1" />
+              <span class="text-navy-800 text-[0.97rem]">{r}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-12 prose-local text-[1.06rem]">
+          <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mb-5 border-b-2 border-navy-900">
+            What this means for calling us
+          </h2>
+          <p>
+            We wrote this list because we already work to it, not the other way round. We quote the
+            job rather than the visit, and the number agreed on the phone is the number on the
+            invoice. We ask for ID on every residential lockout. We pick before we drill, and on the
+            rare occasion drilling is the right call you hear about it first.
+          </p>
+          <p>
+            We are also not a 24-hour operation. Calls are answered from 7 AM to 11 PM, every day of
+            the year, and if you ring at 2 AM we would rather tell you that than take the job and
+            leave you waiting. Apply the same six checks to us that you would to anybody else —
+            that is rather the point of publishing them.
+          </p>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-5">
+        <div class="lg:sticky lg:top-28">
+          <ContactForm variant="short" />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <FaqAccordion faqs={faqs} heading="Hiring a locksmith — common questions" />
+
+  <CtaBand
+    heading="Locked out, or just want a straight price?"
+    body={`Call ${business.phoneDisplay}. Open every day, 7 AM to 11 PM, and you get the number before we leave Bay Ridge.`}
+  />
+</BaseLayout>

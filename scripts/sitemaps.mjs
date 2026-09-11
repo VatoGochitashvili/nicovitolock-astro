@@ -46,7 +46,10 @@ function contentHash(file) {
 }
 
 const SEGMENTS = [
-  { name: 'core',      test: (p) => p === '/' || ['/about', '/contact', '/faq', '/reviews', '/services', '/service-areas', '/car-keys'].includes(p) },
+  // Any single-segment top-level page. A hardcoded list silently dropped new
+  // pages out of every sitemap — /how-to-hire-a-locksmith was missing until
+  // this changed. Matching the shape means nothing can be forgotten.
+  { name: 'core',      test: (p) => p === '/' || /^\/[^/]+$/.test(p) },
   { name: 'services',  test: (p) => /^\/services\/[^/]+$/.test(p) },
   { name: 'car-keys',  test: (p) => /^\/car-keys\/[^/]+$/.test(p) },
   { name: 'areas',     test: (p) => /^\/service-areas\/[^/]+$/.test(p) },

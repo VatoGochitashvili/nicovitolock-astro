@@ -1,15 +1,27 @@
 ---
 import Icon from './Icon.astro';
+import { business } from '@/data/business';
+
+// The licence line upgrades itself the moment a real number exists in
+// business.ts, and reads as an unverifiable claim until then — which is
+// exactly what it is.
+const licensed = business.licenseNumber
+  ? { icon: 'badge', title: `NYC DCWP #${business.licenseNumber}`,
+      body: 'Licensed and insured. Check the number — a real locksmith has one.' }
+  : { icon: 'badge', title: 'Licensed & insured',
+      body: 'A real New York locksmith. Ask for credentials — we carry them.' };
 
 const items = [
-  { icon: 'badge',  title: 'Licensed & insured',   body: 'A real New York locksmith. Ask for credentials — we carry them.' },
+  licensed,
+  { icon: 'users',  title: `${business.yearsInBusiness} years on these streets`,
+    body: 'Family-run out of Bay Ridge, not a dispatch number that sells your job on.' },
   { icon: 'pin',    title: 'Bay Ridge based',      body: 'We live here. Most Brooklyn calls are 20–30 minutes.' },
   { icon: 'dollar', title: 'Price before we work', body: 'Quoted on the phone, confirmed on site. No surprise invoice.' },
   { icon: 'clock',  title: 'Open every day',       body: '7 AM to 11 PM, weekends and holidays included.' },
 ];
 ---
 <section class="bg-navy-800 border-y border-navy-700">
-  <div class="container-x grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+  <div class="container-x grid sm:grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
     {items.map((it) => (
       <div class="flex items-start gap-3.5 py-6 sm:px-6 first:sm:pl-0 last:sm:pr-0">
         <span class="w-10 h-10 rounded-lg bg-brass-400/15 text-brass-400 grid place-items-center shrink-0">

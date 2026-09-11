@@ -57,6 +57,21 @@ export const business = {
   yearsInBusiness: 15,
   licenseNote: 'Licensed & insured New York locksmith',
 
+  /**
+   * NYC DCWP locksmith licence number, e.g. '2096389-DCA'.
+   *
+   * LEAVE EMPTY UNTIL THE REAL NUMBER IS KNOWN. Never guess one — a fabricated
+   * licence number is a false credential, and in a category Google polices
+   * specifically for lead-generation fraud it is the fastest way to lose the
+   * Business Profile.
+   *
+   * Worth filling in. Every competitor ranking for "locksmith Bay Ridge"
+   * displays theirs in the header and footer, and "licensed & insured" without
+   * a number is a claim a customer cannot check. Every component that shows it
+   * renders nothing while this is empty, so the site stays honest either way.
+   */
+  licenseNumber: '',
+
   // Profile URLs. These emit as schema.org `sameAs`, which is how Google ties
   // this website and the Business Profile together as one entity.
   //
