@@ -14,7 +14,7 @@ import PhotoBg from '@/components/PhotoBg.astro';
 import { vehicles } from '@/data/vehicles';
 import { tier1Areas } from '@/data/locations';
 import { business } from '@/data/business';
-import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
+import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle, localBusinessSchema} from '@/lib/seo';
 import { vehicleCopy, pickManyPublic, seededHash } from '@/lib/localize';
 
 export function getStaticPaths() {
@@ -82,6 +82,7 @@ const faqs = [
 ];
 
 const schema = [
+  localBusinessSchema(),
   breadcrumbSchema(crumbs),
   serviceSchema({
     name: `${vehicle.make} car key replacement`,

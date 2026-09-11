@@ -17,7 +17,7 @@ import { business } from '@/data/business';
 import { areaCopy, areaFaqs, areaTraitNote, seededHash } from '@/lib/localize';
 import { areaTraitParagraphs, TRAIT_SERVICE_PRIORITY } from '@/data/areaknowledge';
 import { serviceBySlug } from '@/data/services';
-import { breadcrumbSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
+import { breadcrumbSchema, faqSchema, clampDescription, pickTitle, localBusinessSchema} from '@/lib/seo';
 
 export function getStaticPaths() {
   return serviceAreas.map((area) => ({
@@ -87,6 +87,7 @@ const description = clampDescription(
 );
 
 const schema = [
+  localBusinessSchema(),
   breadcrumbSchema(crumbs),
   faqSchema(faqs),
   {

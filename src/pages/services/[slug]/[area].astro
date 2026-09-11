@@ -14,7 +14,7 @@ import { services } from '@/data/services';
 import { tier1Areas, nearbyAreas } from '@/data/locations';
 import { business } from '@/data/business';
 import { localCopy, traitNote, localLists, seededHash, pickManyPublic } from '@/lib/localize';
-import { breadcrumbSchema, serviceSchema, faqSchema, pickTitle } from '@/lib/seo';
+import { breadcrumbSchema, serviceSchema, faqSchema, pickTitle, localBusinessSchema} from '@/lib/seo';
 
 export function getStaticPaths() {
   return services.flatMap((service) =>
@@ -76,6 +76,7 @@ const title = pickTitle([
 ]);
 
 const schema = [
+  localBusinessSchema(),
   breadcrumbSchema(crumbs),
   serviceSchema({
     name: `${service.name} in ${area.name}`,

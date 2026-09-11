@@ -12,7 +12,7 @@ import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import { serviceAreas, tier1Areas } from '@/data/locations';
 import { business } from '@/data/business';
-import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle } from '@/lib/seo';
+import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle, localBusinessSchema} from '@/lib/seo';
 
 export function getStaticPaths() {
   return services.map((service) => ({
@@ -66,6 +66,7 @@ const title = pickTitle([
 ]);
 
 const schema = [
+  localBusinessSchema(),
   breadcrumbSchema(crumbs),
   serviceSchema({
     name: service.name,
