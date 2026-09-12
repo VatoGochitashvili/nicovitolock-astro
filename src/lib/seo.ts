@@ -51,7 +51,8 @@ export function localBusinessSchema() {
     url: SITE,
     telephone: business.phoneHref,
     email: business.email,
-    image: abs('/brand/van-2.jpg'),
+    // Not the van: it still carries the retired 347 number.
+    image: [abs('/brand/og-card.jpg'), abs('/work/brass-deadbolt-and-knob.webp')],
     logo: abs('/brand/logo-512.png'),
     // Google surfaces priceRange on local results. It is a band, not a price:
     // the site quotes every job individually and publishes no price list.

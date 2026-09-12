@@ -20,7 +20,9 @@ const {
   description,
   canonical = Astro.url.pathname,
   schema,
-  ogImage = '/brand/van-2.jpg',
+  // Purpose-built 1200x630 card. Never point this at a van photo: the
+  // vehicle is still lettered with the retired 347 number.
+  ogImage = '/brand/og-card.jpg',
   noindex = false,
 } = Astro.props;
 
