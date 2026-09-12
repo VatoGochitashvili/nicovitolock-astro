@@ -18,7 +18,12 @@ import { business } from '@/data/business';
 interface Props {
   heading?: string;
   intro?: string;
-  /** Map height. Shorter on the homepage than on the dedicated areas page. */
+  /**
+   * Map height. Defaults to a viewport-relative clamp rather than a fixed
+   * pixel value: the service area is roughly 1.3:1, so a short wide box fills
+   * the spare width with New Jersey and shrinks the boroughs to a cluster of
+   * dots. Scaling height with width keeps the aspect closer to the data.
+   */
   height?: string;
   region?: 'Brooklyn' | 'Staten Island' | 'all';
   class?: string;
@@ -26,7 +31,7 @@ interface Props {
 const {
   heading = 'Every neighborhood we cover',
   intro = 'Brooklyn and Staten Island, plotted. Tap a pin for the drive time from Bay Ridge and the local page.',
-  height = '440px',
+  height = 'clamp(360px, 44vw, 600px)',
   region = 'all',
   class: className = '',
 } = Astro.props;
@@ -62,7 +67,31 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
   }
   .leaflet-tooltip.nv-tip::before { border-top-color: #102330; }
 
-  .leaflet-container { font: inherit; background: #eef2f4; }
+  /* Leaflet stacks its own panes from 400 up to 1000 for controls, which beats
+     the sticky header at z-50 and the mobile call bar — the map rode over both
+     when scrolled past. `isolation` traps all of that inside the map's own
+     stacking context, so raising the header would be treating the symptom. */
+  .leaflet-container {
+    font: inherit;
+    background: #eef2f4;
+    isolation: isolate;
+    position: relative;
+    z-index: 0;
+  }
+  /* Popups and tooltips are appended inside the container, so they are
+     contained too — but cap them so they cannot fight the map's own controls. */
+  .leaflet-container .leaflet-pane { z-index: auto; }
+  .leaflet-container .leaflet-top,
+  .leaflet-container .leaflet-bottom { z-index: 2; }
+
+  /* Standard OSM tiles are high-chroma — pink motorways, green parks — and
+     fight a navy-and-brass palette. Desaturating and lifting them turns the
+     basemap into a quiet ground so the brass pins are the only saturated
+     thing on it. Rendering-only: the tiles are unmodified and still
+     attributed. */
+  .nv-tiles {
+    filter: saturate(0.45) contrast(0.92) brightness(1.06);
+  }
   .leaflet-container .leaflet-popup-content-wrapper {
     border-radius: 10px;
     box-shadow: 0 18px 40px -20px rgba(16, 35, 48, 0.55);
@@ -196,6 +225,7 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
+          className: 'nv-tiles',
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
@@ -261,7 +291,12 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
           bounds.push([p.c[0], p.c[1]]);
         });
 
-        map.fitBounds(bounds, { padding: [28, 28], animate: false });
+        // Without a cap, fitBounds on a wide container pulls back far enough
+        // that New Jersey takes half the frame and the service area is a
+        // cluster of dots. Bound the zoom and trim the padding so Brooklyn and
+        // Staten Island actually fill the map.
+        map.fitBounds(bounds, { padding: [18, 18], animate: false, maxZoom: 12 });
+        map.setMinZoom(Math.max(9, map.getZoom() - 2));
 
         // Respect a reduced-motion preference for the pan/zoom easing.
         if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
