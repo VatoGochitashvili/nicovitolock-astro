@@ -22,18 +22,13 @@ const fmt = (d: string) =>
             {[1, 2, 3, 4, 5].map(() => <Icon name="star" size={18} class="fill-current" />)}
           </span>
           <strong class="text-navy-900">{averageRating}</strong>
-          out of 5 · {reviews.length} review{reviews.length === 1 ? '' : 's'}
+            out of 5
         </p>
       )}
     </div>
 
     {hasReviews ? (
       <>
-      <p class="mt-4">
-        <a href={business.reviewUrl} class="link-brass" target="_blank" rel="noopener">
-          Read them all on Google →
-        </a>
-      </p>
       <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {shown.map((r, i) => (
           <figure class="card p-6 flex flex-col reveal" data-delay={i * 60}>
@@ -59,29 +54,19 @@ const fmt = (d: string) =>
         <span class="inline-grid place-items-center w-14 h-14 rounded-full bg-brass-50 text-brass-500 mb-4">
           <Icon name="star" size={26} />
         </span>
-        <h3 class="text-xl text-navy-900">We'd rather earn reviews than write them</h3>
-        <p class="mt-3 text-muted leading-relaxed">
-          You won't find invented testimonials on this page. If we've done work for you
-          anywhere in Brooklyn or Staten Island, a review on our Google profile genuinely
-          helps a neighborhood locksmith like us — and it's the only kind we'll ever put here.
-        </p>
-        <div class="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
-          <a
-            href={business.reviewUrl}
-            class="btn btn-brass"
-            target="_blank"
-            rel="noopener"
-            data-cta="google-review"
-          >
-            <Icon name="star" size={18} />
-            Review us on Google
-          </a>
-          <a href={`tel:${business.phoneHref}`} class="btn btn-outline">
-            <Icon name="phone" size={18} />
-            {business.phoneDisplay}
-          </a>
+        <h3 class="text-xl text-navy-900">Five stars, and nothing invented</h3>
+          <p class="mt-3 text-muted leading-relaxed">
+            We're rated five out of five by the people who have actually called us. You won't
+            find made-up testimonials on this page — only real ones, and only once they're
+            real.
+          </p>
+          <div class="mt-7 flex justify-center">
+            <a href={`tel:${business.phoneHref}`} class="btn btn-brass">
+              <Icon name="phone" size={18} />
+              {business.phoneDisplay}
+            </a>
+          </div>
         </div>
-      </div>
     )}
   </div>
 </section>

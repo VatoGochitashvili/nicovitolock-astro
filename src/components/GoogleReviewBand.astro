@@ -39,23 +39,22 @@ const brass = tone === 'brass';
             'display text-[1.5rem] md:text-[2rem] leading-tight mt-1',
             brass ? 'text-navy-950' : 'text-white',
           ]}>
-            {business.googleRating} out of 5 from {business.googleReviewCount} Google reviews
+            Rated {business.googleRating} out of 5 on Google
           </h2>
           <p class:list={['mt-1.5 text-[0.95rem]', brass ? 'text-navy-900/80' : 'text-navy-200']}>
-            Read every review on our Google Business Profile — or add yours.
+            Licensed, insured, and quoted before we start.
           </p>
         </div>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
-        <a href={business.profileUrl} target="_blank" rel="noopener"
-           class:list={['btn btn-lg', brass ? 'btn-navy' : 'btn-brass']} data-cta="google-profile">
-          <Icon name="star" size={18} />
-          Read our Google reviews
+        <a href={`tel:${business.phoneHref}`}
+           class:list={['btn btn-lg', brass ? 'btn-navy' : 'btn-brass']} data-call-cta="review-band">
+          <Icon name="phone" size={18} />
+          {business.phoneDisplay}
         </a>
-        <a href={business.reviewUrl} target="_blank" rel="noopener"
-           class:list={['btn btn-lg', brass ? 'btn-outline' : 'btn-ghost']} data-cta="google-review">
-          Leave a review
+        <a href="/reviews/" class:list={['btn btn-lg', brass ? 'btn-outline' : 'btn-ghost']}>
+          What customers say
         </a>
       </div>
     </div>
