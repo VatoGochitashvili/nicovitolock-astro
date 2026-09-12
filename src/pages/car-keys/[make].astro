@@ -25,6 +25,11 @@ const { vehicle } = Astro.props;
 const copy = vehicleCopy(vehicle);
 // Prefer photos of this actual make; fall back to general car key work.
 const makePhotos = photosForMake(vehicle.slug);
+// Hero carries this make's own photograph where one exists — a Jeep page
+// showing a Jeep. The previous fallback was /brand/bg-van, which is the van
+// still lettered with the old 347 number; that number was retired from the
+// site and must not reappear as a background on 23 car pages.
+const heroPhoto = makePhotos[0] ?? ownPhotosForService('car-key-replacement')[0];
 const photos = makePhotos.length ? makePhotos : ownPhotosForService('car-key-replacement').slice(0, 3);
 import { MAKE_OWNER_NOTES } from '@/data/vehiclenotes';
 const ownerNote = MAKE_OWNER_NOTES[vehicle.slug];
@@ -95,7 +100,7 @@ const schema = [
 ---
 <BaseLayout title={title} description={description} canonical={`/car-keys/${vehicle.slug}`} schema={schema}>
   <section class="relative bg-navy-900 overflow-hidden">
-    <PhotoBg variant="van" strength={46} eager />
+    <PhotoBg src={`/work/${heroPhoto.slug}.webp`} strength={46} eager />
     <Scene variant="automotive" class="h-[58%]" opacity={0.11} />
     <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span

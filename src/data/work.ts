@@ -137,6 +137,62 @@ export const workPhotos: WorkPhoto[] = [
     orientation: 'portrait',
   },
 
+  {
+    slug: 'ford-super-duty-key-cut',
+    alt: 'A freshly cut Ford H75 transponder key held in front of the grille of a Ford F-250 Super Duty',
+    caption: 'Ford Super Duty key cut and coded at the truck',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['ford'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'jeep-key-programming-autel',
+    alt: 'A Jeep smart key programmed with an Autel tool at the wheel of a push-to-start Jeep Grand Cherokee',
+    caption: 'Jeep proximity key coded to the immobiliser on site',
+    services: ['key-fob-and-remote-programming', 'car-key-replacement'],
+    makes: ['jeep', 'chrysler', 'dodge', 'ram'],
+    orientation: 'portrait',
+    hero: true,
+  },
+  {
+    slug: 'jeep-smart-fob-replaced',
+    alt: 'A replacement five-button Jeep smart fob with remote start held in front of a Jeep Cherokee',
+    caption: 'Jeep smart fob replaced without a dealer visit',
+    services: ['key-fob-and-remote-programming', 'car-key-replacement'],
+    makes: ['jeep', 'chrysler', 'dodge', 'ram'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'nissan-smart-key-fob',
+    alt: 'A replacement Nissan intelligent key with remote start held at the grille of a Nissan SUV',
+    caption: 'Nissan proximity key programmed at the vehicle',
+    services: ['key-fob-and-remote-programming', 'car-key-replacement'],
+    makes: ['nissan', 'infiniti'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'hyundai-keys-cut',
+    alt: 'Two newly cut Hyundai transponder keys held at the steering wheel of the car they were cut for',
+    caption: 'A pair of Hyundai keys originated at the car',
+    services: ['car-key-replacement'],
+    makes: ['hyundai', 'kia'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'ignition-cylinder-removed',
+    alt: 'A worn ignition lock cylinder removed from a steering column during an ignition repair',
+    caption: 'Worn ignition cylinder out — the fault behind a key that will not turn',
+    services: ['car-key-replacement', 'emergency-lockout-service'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'moving-truck-lock-picked-open',
+    alt: 'A Lishi pick and decoder in the cab door lock of a box moving truck during a commercial vehicle lockout',
+    caption: 'Box truck opened at the kerb — picked, not drilled',
+    services: ['emergency-lockout-service', 'car-key-replacement', 'commercial-locksmith'],
+    orientation: 'portrait',
+  },
+
   // ---------------------------- residential ---------------------------
   {
     slug: 'brass-rim-lock-wood-door',
@@ -249,9 +305,19 @@ export const photosForService = (serviceSlug: string) =>
 export const ownPhotosForService = (serviceSlug: string) =>
   workPhotos.filter((p) => p.services.includes(serviceSlug) && !p.stock && !p.aiGenerated);
 
-/** Photos showing a given car make. */
+/**
+ * Photos showing a given car make, most specific first.
+ *
+ * A photo listing ['jeep', 'chrysler', 'dodge'] is a Jeep photo that also
+ * suits the platform siblings; one listing ['chrysler', 'dodge', 'jeep'] is a
+ * Chrysler photo. Ranking by where the make sits in that list means the Jeep
+ * page leads with an actual Jeep rather than whichever entry happens to come
+ * first in the array.
+ */
 export const photosForMake = (makeSlug: string) =>
-  workPhotos.filter((p) => p.makes?.includes(makeSlug));
+  workPhotos
+    .filter((p) => p.makes?.includes(makeSlug))
+    .sort((a, b) => (a.makes!.indexOf(makeSlug)) - (b.makes!.indexOf(makeSlug)));
 
 export const storefront = workPhotos.find((p) => p.slug === 'storefront-5th-avenue')!;
 
