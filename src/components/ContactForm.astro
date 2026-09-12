@@ -50,7 +50,10 @@ const quickPicks = [
 ].map((slug) => services.find((s) => s.slug === slug)!).filter(Boolean);
 
 const field =
-  'w-full rounded-lg border border-line bg-white px-3.5 py-3 text-navy-900 placeholder:text-muted/60 focus:border-brass-400 focus:ring-4 focus:ring-brass-400/20 outline-none transition';
+  'field-ctl w-full rounded-lg border border-line bg-white px-3.5 py-3 text-navy-900 ' +
+  'placeholder:text-muted/60 focus:border-brass-400 outline-none';
+// Selects additionally get the custom chevron and the platform chrome removed.
+const fieldSelect = `${field} field-select`;
 const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-muted mb-2';
 ---
 <form
@@ -120,7 +123,7 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
         ))}
       </div>
       <label for={`qf-service-${uid}`} class="sr-only">Service</label>
-      <select id={`qf-service-${uid}`} name="service" class:list={[field, 'mt-2.5']} data-qf-service>
+      <select id={`qf-service-${uid}`} name="service" class:list={[fieldSelect, 'mt-2.5']} data-qf-service>
         <option value="">Something else / full list…</option>
         {services.map((s) => (
           <option value={s.name} selected={s.slug === service || s.name === service}>{s.name}</option>
@@ -134,7 +137,7 @@ const label = 'block text-[0.78rem] font-bold uppercase tracking-[0.1em] text-mu
         <span class="text-brass-600">02</span> &nbsp;Where are you?
       </legend>
       <label for={`qf-area-${uid}`} class="sr-only">Neighborhood</label>
-      <select id={`qf-area-${uid}`} name="area" class={field} data-qf-area>
+      <select id={`qf-area-${uid}`} name="area" class={fieldSelect} data-qf-area>
         <option value="">Select your neighborhood…</option>
         <optgroup label="Brooklyn">
           {brooklyn.map((a) => (
