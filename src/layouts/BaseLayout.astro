@@ -157,6 +157,79 @@ const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
           initReveal();
         }
         document.addEventListener('astro:page-load', initReveal);
+
+          // --- header condense -------------------------------------------
+          // rAF-throttled: a bare scroll handler that reads scrollY and
+          // writes a class runs layout on every event and is the usual cause
+          // of a janky sticky header.
+          function initStickyHeader() {
+            var hdr = document.querySelector('.site-header');
+            if (!hdr) return;
+            var ticking = false;
+            function apply() {
+              hdr.classList.toggle('is-stuck', window.scrollY > 8);
+              ticking = false;
+            }
+            window.addEventListener('scroll', function () {
+              if (ticking) return;
+              ticking = true;
+              window.requestAnimationFrame(apply);
+            }, { passive: true });
+            apply();
+          }
+
+          // --- count-up ---------------------------------------------------
+          // The element already contains its final text, so the correct value
+          // is on screen before this runs and stays correct if it never does.
+          function initCounters() {
+            var els = document.querySelectorAll('[data-count]');
+            if (!els.length) return;
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (!('IntersectionObserver' in window)) return;
+
+            var io = new IntersectionObserver(function (entries) {
+              entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                var el = e.target;
+                io.unobserve(el);
+                var target = parseInt(el.getAttribute('data-count'), 10);
+                if (!isFinite(target)) return;
+                var suffix = el.getAttribute('data-count-suffix') || '';
+                var start = performance.now();
+                var dur = 900;
+                (function step(now) {
+                  var t = Math.min(1, (now - start) / dur);
+                  var eased = 1 - Math.pow(1 - t, 3);
+                  el.textContent = Math.round(target * eased) + suffix;
+                  if (t < 1) requestAnimationFrame(step);
+                })(start);
+              });
+            }, { threshold: 0.4 });
+            els.forEach(function (el) { io.observe(el); });
+          }
+
+          // Hero entrance: opt in, then guarantee an exit. If the animation
+          // never runs the class comes off and the content is simply there.
+          function initHero() {
+            var hero = document.querySelector('.hero-rise');
+            if (!hero) return;
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            hero.classList.add('hero-anim');
+            var done = 0;
+            hero.addEventListener('animationend', function () {
+              if (++done >= hero.children.length) hero.classList.remove('hero-anim');
+            });
+            setTimeout(function () { hero.classList.remove('hero-anim'); }, 1600);
+          }
+
+          initHero();
+          initStickyHeader();
+          initCounters();
+          document.addEventListener('astro:page-load', function () {
+            initHero();
+            initStickyHeader();
+            initCounters();
+          });
         // Last resort — a print or a save-to-PDF must show the whole page.
         window.addEventListener('beforeprint', revealAll);
       })();

@@ -280,6 +280,64 @@
 .btn-lg { padding: 1.05rem 2rem; font-size: 1.08rem; }
 
 /* ------------------------------------------------------------------ *
+ * Motion
+ * ------------------------------------------------------------------ */
+
+/* Header condenses once the page moves. Padding and logo scale are on the
+   transition, not height, so nothing below it reflows as you scroll. */
+.site-header {
+  transition: box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.28s ease;
+}
+.site-header .hdr-row {
+  /* Owns its padding outright. Competing with Tailwind's py-2 utility on the
+     same longhand is a specificity fight with no winner worth having. */
+  padding-block: 0.5rem;
+  transition: padding 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.site-header .hdr-logo {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: left center;
+}
+.site-header.is-stuck {
+  box-shadow: 0 10px 30px -22px rgb(16 35 48 / 0.55);
+  background-color: rgb(255 255 255 / 0.97);
+}
+.site-header.is-stuck .hdr-row { padding-block: 0.25rem; }
+.site-header.is-stuck .hdr-logo { transform: scale(0.82); }
+
+/* Hero entrance.
+ *
+ * Opacity 0 is applied ONLY under .hero-anim, which JS adds and a timer
+ * removes. Three ways this stays safe: without JS the class never appears and
+ * nothing is hidden; if animations are throttled — a background tab, a
+ * prerender, a reduced-power renderer — the timer strips the class and the
+ * content simply appears; and the animation itself holds its end state.
+ * An entrance animation must never be able to leave the headline invisible.
+ */
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.js .hero-rise.hero-anim > * {
+  opacity: 0;
+  animation: heroRise 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.js .hero-rise.hero-anim > *:nth-child(1) { animation-delay: 0.05s; }
+.js .hero-rise.hero-anim > *:nth-child(2) { animation-delay: 0.13s; }
+.js .hero-rise.hero-anim > *:nth-child(3) { animation-delay: 0.21s; }
+.js .hero-rise.hero-anim > *:nth-child(4) { animation-delay: 0.29s; }
+
+/* Counters hold their final value in the markup, so the number is correct
+   before the script runs and correct if it never does. */
+.count-up { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .hero-rise.hero-anim > * { animation: none; opacity: 1; }
+  .site-header, .site-header .hdr-row, .site-header .hdr-logo { transition: none; }
+}
+
+/* ------------------------------------------------------------------ *
  * Form controls
  *
  * Native <select> is the one control a browser still renders in its own

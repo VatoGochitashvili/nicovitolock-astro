@@ -32,12 +32,12 @@ const nav = [
   </div>
 </div>
 
-<header class="sticky top-0 z-[60] bg-white/92 backdrop-blur-md border-b border-line-cool">
-  <div class="container-x flex items-center justify-between gap-6 py-2">
+<header class="site-header sticky top-0 z-[60] bg-white/92 backdrop-blur-md border-b border-line-cool">
+  <div class="hdr-row container-x flex items-center justify-between gap-6">
     <!-- The logo already reads "NICO & VITO LOCKSMITH" around the badge, so a
          separate wordmark would just repeat it. The alt text carries the
          business name for screen readers and for search. -->
-    <a href="/" class="shrink-0 group" aria-label={`${business.name} — home`}>
+    <a href="/" class="hdr-logo shrink-0 group" aria-label={`${business.name} — home`}>
       <picture>
         <source srcset="/brand/logo-176.webp 176w, /brand/logo-256.webp 256w" sizes="104px" type="image/webp" />
         <img

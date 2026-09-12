@@ -87,7 +87,7 @@ const description =
     <div class="container-x relative z-[1] py-6 md:py-7 lg:py-7">
       <div class="grid gap-7 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-6 lg:items-start">
 
-        <div class="lg:col-span-7 lg:col-start-1 lg:row-start-1">
+        <div class="hero-rise lg:col-span-7 lg:col-start-1 lg:row-start-1">
           <p class="flex items-center gap-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-400 mb-4">
             <span class="w-8 h-px bg-brass-400"></span>
             Bay Ridge · Brooklyn · Staten Island
@@ -119,12 +119,14 @@ const description =
             {[
               { k: 'Open daily', v: '7am–11pm' },
               { k: 'Brooklyn arrival', v: '20–30 min' },
-              { k: 'Neighborhoods', v: String(serviceAreas.length) },
+              { k: 'Neighborhoods', v: String(serviceAreas.length), count: serviceAreas.length },
               { k: 'Licensed & insured', v: 'Yes' },
             ].map((x) => (
               <div>
                 <dt class="text-[0.68rem] uppercase tracking-[0.14em] text-navy-300">{x.k}</dt>
-                <dd class="display text-brass-400 text-[1.2rem] mt-1">{x.v}</dd>
+                <dd class="display text-brass-400 text-[1.2rem] mt-1">
+                  {x.count ? <span class="count-up" data-count={x.count}>{x.v}</span> : x.v}
+                </dd>
               </div>
             ))}
           </dl>
