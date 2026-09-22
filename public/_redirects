@@ -51,3 +51,18 @@
 /services/:service         /services/:service/         301
 /service-areas/:area       /service-areas/:area/       301
 /car-keys/:make            /car-keys/:make/            301
+
+# Top-level pages need their own lines. A /:page placeholder would also swallow
+# /robots.txt, /favicon.ico and every asset at the root, so these are
+# enumerated. Without them the asset router answers /faq with a 307, which
+# tells Google the slashless URL is the real one and not to pass signals on —
+# exactly what left /faq and /service-areas sitting in "Page with redirect"
+# while the 88 deeper URLs resolved correctly.
+/about                     /about/                     301
+/contact                   /contact/                   301
+/faq                       /faq/                       301
+/reviews                   /reviews/                   301
+/services                  /services/                  301
+/service-areas             /service-areas/             301
+/car-keys                  /car-keys/                  301
+/how-to-hire-a-locksmith   /how-to-hire-a-locksmith/   301
