@@ -70,6 +70,54 @@ const pickMany = <T>(arr: T[], seed: number, salt: number, n: number): T[] => {
 export const pickManyPublic = <T>(arr: T[], seed: number, salt: number, n: number): T[] =>
   pickMany(arr, seed, salt, n);
 
+/**
+ * Thin out the place name.
+ *
+ * Every copy pool injects the neighborhood, so a rendered page named it in
+ * all eleven body paragraphs — once every 32 words. No one writes like that;
+ * it is the clearest tell that a page was assembled rather than written, and
+ * it is the kind of signal that keeps a page in "Crawled - currently not
+ * indexed". A human names the place in the opening, once or twice in the
+ * body, and at the close.
+ *
+ * This swaps the name for a natural stand-in on the paragraphs that do not
+ * need it, keeping sentence-initial capitalisation intact.
+ */
+const cityStandIns = ['here', 'around here', 'on these blocks', 'in the neighborhood'];
+
+function thinCity(text: string, city: string, seed: number, salt: number): string {
+  if (!text.includes(city)) return text;
+  const alt = cityStandIns[(seed + salt * 31) % cityStandIns.length];
+  const C = city.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const keepCase = (src: string, word: string) =>
+    src[0] === src[0].toUpperCase() ? word[0].toUpperCase() + word.slice(1) : word;
+
+  // Ordered, and case-insensitive on the article: these paragraphs open
+  // sentences, so "A %CITY% house" and "a %CITY% house" both occur and a
+  // case-sensitive pattern silently missed every capitalised one — which is
+  // how "A the neighborhood single-family" got rendered on 77 pages.
+  const cases: [RegExp, (m: string, a: string) => string][] = [
+    [new RegExp(`\\b(the) ${C}\\b`, 'i'), (_m, a) => `${keepCase(a, 'the')} neighborhood`],
+    [new RegExp(`\\b(an?) ${C}\\b`, 'i'), (_m, a) => `${keepCase(a, 'a')} local`],
+    // The whole phrase goes, preposition included — each stand-in already
+    // carries its own ("here", "on these blocks"), so keeping the original
+    // preposition produced "in here" on 55 pages.
+    [new RegExp(`\\b(in|across|around|throughout) ${C}\\b`, 'i'),
+      (_m, a) => keepCase(a, alt)],
+    [new RegExp(`\\b${C}'s\\b`, 'i'), () => "the neighborhood's"],
+    [new RegExp(`\\b${C}\\b`), () => 'the neighborhood'],
+  ];
+
+  for (const [re, rep] of cases) {
+    if (!re.test(text)) continue;
+    const out = text.replace(re, rep as never);
+    return out.replace(/(^|\.\s+)([a-z])/g, (_m, pre, ch) => pre + ch.toUpperCase());
+  }
+  return text;
+}
+
+
+
 export interface LocalCopy {
   lead: string;
   /** Service x housing-trait paragraphs — the substance that makes this page
@@ -350,8 +398,11 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     coverage: coverages ? pick(coverages, seed, 9) : null,
     landmarkLine: pick(landmarkLines, seed, 10),
     faqs: chosenFaqs,
-    traitNotes: rotated.slice(0, 2),
-    fieldNotes: pickMany(fieldNotesFor(service.slug, city, region), seed, 53, 2),
+    traitNotes: rotated
+      .slice(0, 2)
+      .map((t, i) => (i === 0 ? t : thinCity(t, city, seed, 61 + i))),
+    fieldNotes: pickMany(fieldNotesFor(service.slug, city, region), seed, 53, 3)
+      .map((t, i) => (i === 0 ? t : thinCity(t, city, seed, 71 + i))),
     quoteBlurb: pick(quoteBlurbs, seed, 31),
     ctaBody: pick(ctaBodies, seed, 33),
     galleryIntro: pick(galleryIntros, seed, 41),
