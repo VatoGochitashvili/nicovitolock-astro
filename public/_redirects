@@ -65,3 +65,7 @@
 /service-areas             /service-areas/             301
 /car-keys                  /car-keys/                  301
 /how-to-hire-a-locksmith   /how-to-hire-a-locksmith/   301
+
+# The flat sitemap predates the segmented ones and may still be submitted in
+# Search Console; point it at the index rather than leaving it a 404.
+/sitemap.xml               /sitemap-index.xml          301
