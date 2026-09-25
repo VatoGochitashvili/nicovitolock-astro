@@ -27,7 +27,6 @@
 /lockout                  /services/emergency-lockout-service/   301
 /lockouts                 /services/emergency-lockout-service/   301
 /emergency                /services/emergency-lockout-service/   301
-/car-keys                 /services/car-key-replacement/         301
 /car-key                  /services/car-key-replacement/         301
 /keys                     /services/car-key-replacement/         301
 /rekey                    /services/lock-rekeying/               301
