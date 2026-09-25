@@ -64,18 +64,28 @@ const description =
   <section class="relative bg-navy-900 overflow-hidden">
     <HeroSlideshow
       strength={50}
-      hold={6}
+      hold={5}
       frames={[
         // bg-deadbolt is dropped: despite the filename it is the panic-bar
         // photo, which reads as commercial hardware rather than the lock work
         // most visitors arrive for. bg-van is also out — the van in that shot
         // still carries the old 347 number.
+        //
+        // Home and car frames alternate so neither half of the business is
+        // missing for long. The six car frames are our own jobs, cropped
+        // 16:9 around the key and badge from the /work portraits.
         { src: '/brand/bg-brasslock.webp' },
+        { src: '/brand/bg-jeep-key-programming-autel.webp' },
         { src: '/brand/bg-rowhouses.webp' },
-        { src: '/brand/bg-carkey.webp' },
+        { src: '/brand/bg-ford-super-duty-key-cut.webp' },
         { src: '/brand/bg-mortise.webp' },
+        { src: '/brand/bg-nissan-smart-key-fob.webp' },
         { src: '/brand/bg-street.webp' },
+        { src: '/brand/bg-jeep-smart-fob-replaced.webp' },
         { src: '/brand/bg-hardware.webp' },
+        { src: '/brand/bg-ignition-cylinder-removed.webp' },
+        { src: '/brand/bg-carkey.webp' },
+        { src: '/brand/bg-hyundai-keys-cut.webp' },
       ]}
     />
     <Scene variant="bayridge" class="h-[52%] lg:h-[62%]" opacity={0.13} />

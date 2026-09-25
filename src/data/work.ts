@@ -34,13 +34,14 @@ export interface WorkPhoto {
 
 export const workPhotos: WorkPhoto[] = [
   {
-    // AI-GENERATED, and NOT USED ANYWHERE ON THE SITE.
+    // AI-GENERATED. Nico & Vito is a FULLY MOBILE locksmith: no shop, no
+    // walk-in premises, no published street address.
     //
-    // Nico & Vito is a FULLY MOBILE locksmith: no shop, no walk-in premises,
-    // no published street address. This image shows a storefront carrying the
-    // company's name, so any use of it — even blurred as a background — implies
-    // a place customers could visit. It is retained here only so the file is
-    // accounted for. Do not put it on a page.
+    // The owner asked (Sep 2026) for it to be used as a background. It appears
+    // ONLY as /brand/bg-storefront-blur.webp, Gaussian-blurred past legibility
+    // so neither the shopfront nor the "8516" street number reads — it is brand
+    // colour and texture, not a picture of a place. Never use this file
+    // unblurred, never in a gallery, alt text, schema or the image sitemap.
     slug: 'storefront-5th-avenue',
     alt: 'Nico & Vito Locksmith branding',
     caption: 'Nico & Vito Locksmith',
@@ -341,3 +342,39 @@ export const serviceCardPhoto: Record<string, string> = {
   'security-camera-installation': 'stock-security-cameras',
   'commercial-locksmith': 'panic-bar-exit-device-install',
 };
+
+/**
+ * Hero slideshows on the automotive hubs, as duotoned /brand/bg-* frames cut
+ * 16:9 from the portraits above. Each list leads with the duotone of that
+ * page's card photo, so clicking a card still lands on the picture you
+ * clicked. Only services whose own photos these are get a slideshow.
+ */
+const bg = (slug: string) => `/brand/bg-${slug}.webp`;
+
+export const serviceHeroSlides: Record<string, string[]> = {
+  'car-key-replacement': [
+    'ford-key-fobs',
+    'ford-super-duty-key-cut',
+    'hyundai-keys-cut',
+    'jeep-key-programming-autel',
+    'ignition-cylinder-removed',
+    'nissan-smart-key-fob',
+  ].map(bg),
+  'key-fob-and-remote-programming': [
+    'chrysler-key-fobs',
+    'jeep-smart-fob-replaced',
+    'nissan-smart-key-fob',
+    'jeep-key-programming-autel',
+    'ford-key-fobs',
+  ].map(bg),
+};
+
+/** /car-keys/ covers every make, so it cycles one frame per badge. */
+export const carKeysHubSlides: string[] = [
+  'jeep-key-programming-autel',
+  'ford-super-duty-key-cut',
+  'nissan-smart-key-fob',
+  'hyundai-keys-cut',
+  'chrysler-key-fobs',
+  'jeep-smart-fob-replaced',
+].map(bg);

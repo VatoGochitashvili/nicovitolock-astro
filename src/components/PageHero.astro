@@ -3,6 +3,7 @@ import Breadcrumbs from './Breadcrumbs.astro';
 import Backdrop from './Backdrop.astro';
 import Scene from './Scene.astro';
 import PhotoBg from './PhotoBg.astro';
+import HeroSlideshow from './HeroSlideshow.astro';
 import Icon from './Icon.astro';
 import { business } from '@/data/business';
 
@@ -22,17 +23,22 @@ interface Props {
   /** Original line-art scene anchored to the bottom of the band */
   scene?: 'bayridge' | 'residential' | 'automotive' | 'commercial' | 'security' | 'emergency';
   /** Duotone photograph behind the band */
-  photo?: 'rowhouses' | 'street' | 'key' | 'keys' | 'van' | 'deadbolt' | 'vanblur' | 'brasslock';
+  photo?: 'rowhouses' | 'street' | 'key' | 'keys' | 'van' | 'deadbolt' | 'vanblur' | 'brasslock' | 'storefront-blur';
   /** Explicit hero image, overriding `photo`. */
   photoSrc?: string;
+  /** Cross-fading duotone frames, overriding both `photo` and `photoSrc`.
+   *  Use /brand/bg-* files only — they share the palette, so fades never jump. */
+  slides?: string[];
 }
-const { eyebrow, title, subtitle, crumbs, cta = true, ghost, scene, photo, photoSrc } = Astro.props;
+const { eyebrow, title, subtitle, crumbs, cta = true, ghost, scene, photo, photoSrc, slides } = Astro.props;
 ---
 <section class="relative bg-navy-900 overflow-hidden">
-  {(photo || photoSrc)
-    ? <PhotoBg variant={photo} src={photoSrc} strength={48} eager />
-    : <Backdrop variant="pins" tone="dark" intensity={0.7} />}
-  {scene && <Scene variant={scene} class="h-[58%]" opacity={photo ? 0.11 : 0.17} />}
+  {slides?.length
+    ? <HeroSlideshow frames={slides.map((src) => ({ src }))} strength={48} hold={5} />
+    : (photo || photoSrc)
+      ? <PhotoBg variant={photo} src={photoSrc} strength={48} eager />
+      : <Backdrop variant="pins" tone="dark" intensity={0.7} />}
+  {scene && <Scene variant={scene} class="h-[58%]" opacity={photo || slides?.length ? 0.11 : 0.17} />}
   <!-- Brass index rule down the left edge -->
   <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
 

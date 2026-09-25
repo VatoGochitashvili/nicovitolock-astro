@@ -30,7 +30,7 @@ const { area } = Astro.props;
 const copy = areaCopy(area);
 const note = areaTraitNote(area);
 // A seeded rotation so adjacent neighborhoods don't show the same three shots.
-// Excluded: the AI storefront (never used), and the van interior — the owner
+// Excluded: the AI storefront (blurred background only), and the van interior — the owner
 // asked for that one to stay out of galleries and appear only as the blurred
 // background at /brand/bg-vanblur.webp.
 const pool = workPhotos.filter(
