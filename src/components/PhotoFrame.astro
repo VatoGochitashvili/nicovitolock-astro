@@ -1,0 +1,92 @@
+---
+/**
+ * One background frame, built so a photograph is never cut off.
+ *
+ * Hero bands are far wider than they are tall (≈3.6:1 on desktop) and nearly
+ * every job photo is a 3:4 portrait, so `object-fit: cover` could only ever
+ * show a thin middle strip — the key, the fob or the badge was routinely
+ * cropped out. Instead each frame is two layers:
+ *
+ *   1. /brand/fill/<slug>.webp — the same shot at 120px, blurred and
+ *      darkened, stretched across the band for colour and depth (~500 B).
+ *   2. /work/<slug>.webp — the real photograph, WHOLE (`object-fit:
+ *      contain`), in colour, with its descriptive alt text. It is the same
+ *      URL that is in the image sitemap, so every hero reinforces it.
+ *
+ * Only the owner's own photographs are accepted: stock and AI images throw at
+ * build time, so they cannot reach a background by accident.
+ */
+import { photoBySlug, photoDims } from '@/data/work';
+
+interface Props {
+  /** /work slug — shown whole, never cropped */
+  photo?: string;
+  /** A full-bleed texture instead of a photo (the blurred own shots only) */
+  texture?: 'vanblur' | 'storefront-blur';
+  /** Where the uncropped photo sits: right of the headline on inner pages,
+   *  or in the gap left of the quote form on the homepage. */
+  layout?: 'right' | 'beside-form';
+  eager?: boolean;
+  class?: string;
+  style?: string;
+  slide?: number;
+}
+const { photo, texture, layout = 'right', eager = false, class: cls = '', style, slide } = Astro.props;
+
+const p = photo ? photoBySlug(photo) : undefined;
+if (photo && !p) throw new Error(`PhotoFrame: unknown photo "${photo}"`);
+if (p && (p.stock || p.aiGenerated)) {
+  throw new Error(`PhotoFrame: "${photo}" is not one of the owner's own photographs`);
+}
+if (!p && !texture) throw new Error('PhotoFrame: pass a photo or a texture');
+
+const [w, h] = p ? photoDims(p.slug) : [0, 0];
+const area =
+  layout === 'beside-form'
+    ? 'inset-x-0 top-0 h-[min(78vh,640px)] lg:h-auto lg:inset-y-0 lg:right-[41%]'
+    : 'inset-0 md:left-[40%] md:right-[2%]';
+const fit =
+  layout === 'beside-form'
+    ? 'object-contain object-top lg:object-right'
+    : 'object-contain object-center md:object-right';
+const loading = eager ? 'eager' : 'lazy';
+---
+<div class:list={['absolute inset-0', cls]} style={style} data-slide={slide}>
+  {p ? (
+    <img
+      src={`/brand/fill/${p.slug}.webp`}
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover scale-110"
+      loading={loading}
+      decoding="async"
+    />
+  ) : (
+    <img
+      src={`/brand/bg-${texture}.webp`}
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading={loading}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding="async"
+    />
+  )}
+
+  {p && (
+    <div class:list={['absolute py-3 md:py-5', area]}>
+      <img
+        src={`/work/${p.slug}.webp`}
+        srcset={`/work/${p.slug}-800.webp 800w, /work/${p.slug}.webp 1200w`}
+        sizes="(min-width: 1024px) 560px, 90vw"
+        alt={p.alt}
+        width={w}
+        height={h}
+        class:list={['w-full h-full', fit]}
+        loading={loading}
+        fetchpriority={eager ? 'high' : 'low'}
+        decoding="async"
+      />
+    </div>
+  )}
+</div>

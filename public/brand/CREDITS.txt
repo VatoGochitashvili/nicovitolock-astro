@@ -1,49 +1,34 @@
 Image credits — nicovitolocksmith.com
 =====================================
 
-ALL BACKGROUND PHOTOGRAPHY IS PROCESSED INTO THE BRAND DUOTONE
-Navy shadows (#0a1822) to warm highlight (#e9e2d4), baked into the file rather
-than applied with CSS filters. Zero runtime cost, identical in every browser,
-and it is what stops a stock photograph from looking like a stock photograph —
-it arrives already in the palette. A light Gaussian blur is applied because
-these sit behind a ~77% scrim where fine detail is invisible but expensive:
-it roughly halved the file sizes and improved text legibility.
+EVERY PHOTOGRAPH USED AS A SLIDE OR BACKGROUND IS THE OWNER'S OWN.
+No stock photography appears behind any page. (Sep 2026, at the owner's request.)
 
-Scrim levels are measured, not guessed. Against the brightest 95th-percentile
-patch in each image's text column, body copy clears WCAG AA at 8.7:1 or better
-and the brass accent at 5.5:1 or better. Re-measure before lowering them.
+HOW BACKGROUNDS WORK  (src/components/PhotoFrame.astro)
+  Hero bands are ~3.6:1 on desktop and the job photos are 3:4 portraits, so
+  cropping them to fill the band always cut off the key, fob or badge. Each
+  frame is instead two layers:
+
+    brand/fill/<slug>.webp   the same shot at 120px, blurred and darkened,
+                             stretched across the band (~500 bytes each)
+    /work/<slug>.webp        the real photograph, WHOLE and uncropped, in
+                             colour, with its descriptive alt text — the same
+                             URL listed in /image-sitemap.xml
+
+  PhotoFrame throws at build time if handed a stock or AI image.
 
 OWNED
   logo*.png / logo*.webp    The Nico & Vito Locksmith logo.
-                            Transparent for page chrome; the favicons are
-                            opaque white squares (a navy mark vanishes on a
-                            dark browser tab).
-  van-2.jpg, van-open.jpg   The Nico & Vito service van.
-  bg-van.*                  The van, duotoned. NOTE: cropped to exclude the
-                            right flank, because the van still carries the
-                            OLD phone number (347-613-0218) and the site now
-                            leads with 718-618-6002.
+  van-2.jpg, van-open.jpg   The service van.
+  bg-van.*                  The van, duotoned. Unused: the van still carries
+                            the OLD phone number (347-613-0218).
+  bg-vanblur.*              Inside the van, heavily blurred. Texture only, at
+                            the owner's request; never shown sharp.
+  bg-storefront-blur.*      The owner's AI-generated storefront, blurred past
+                            legibility. Texture only: the business is fully
+                            mobile and must not appear to have premises.
+  fill/*.webp               Blurred fills for the /work photographs.
 
-STOCK PHOTOGRAPHY — Unsplash License
-(free for commercial use, no attribution required; credited here as practice)
-
-  bg-rowhouses.*   Brooklyn brownstone row with stoops.
-                   unsplash.com/photos/photo-1698248476376-f28f8869b622
-  bg-street.*      Brownstone street with a lamp.
-                   unsplash.com/photos/photo-1515112569565-1e4aef316db9
-  bg-key.*         A key on a dark textured surface.
-                   unsplash.com/photos/photo-1562770584-eaf50b017307
-  bg-keys.*        Old keys hanging on wood.
-                   unsplash.com/photos/photo-1550527882-b71dea5f8089
-
-  These were chosen fresh for this site. They are NOT the photos used on the
-  sibling locksandcameras.com project — sharing assets between the two made
-  them look like one template, which is the whole reason that set was removed.
-
-NOTE FOR THE OWNER
-  These are generic Brooklyn streets, not photographs of Bay Ridge, and nothing
-  on the site captions them as a specific place. Real local photos would be
-  better for trust and for local SEO. Worth shooting: the van on 3rd Avenue,
-  a tech at a door, key cutting inside the van, the Verrazzano from Shore Road.
-  Drop them in as bg-rowhouses.jpg / bg-street.jpg and the duotone script in
-  the commit history will reprocess them to match.
+STILL NEEDED
+  A security-camera installation photo. That service has no own photograph,
+  so its pages use the blurred van texture rather than stock.

@@ -15,7 +15,7 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
 import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
-import { serviceCardPhoto } from '@/data/work';
+import { serviceCardPhoto, homeHeroPhotos } from '@/data/work';
 import { vehicles } from '@/data/vehicles';
 import { localBusinessSchema, webSiteSchema, organizationSchema, faqSchema } from '@/lib/seo';
 
@@ -62,32 +62,7 @@ const description =
        Flat navy plate, no photograph behind the type. The form is the only
        light object in the band, which makes it the focal point. -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <HeroSlideshow
-      strength={50}
-      hold={5}
-      frames={[
-        // bg-deadbolt is dropped: despite the filename it is the panic-bar
-        // photo, which reads as commercial hardware rather than the lock work
-        // most visitors arrive for. bg-van is also out — the van in that shot
-        // still carries the old 347 number.
-        //
-        // Home and car frames alternate so neither half of the business is
-        // missing for long. The six car frames are our own jobs, cropped
-        // 16:9 around the key and badge from the /work portraits.
-        { src: '/brand/bg-brasslock.webp' },
-        { src: '/brand/bg-jeep-key-programming-autel.webp' },
-        { src: '/brand/bg-rowhouses.webp' },
-        { src: '/brand/bg-ford-super-duty-key-cut.webp' },
-        { src: '/brand/bg-mortise.webp' },
-        { src: '/brand/bg-nissan-smart-key-fob.webp' },
-        { src: '/brand/bg-street.webp' },
-        { src: '/brand/bg-jeep-smart-fob-replaced.webp' },
-        { src: '/brand/bg-hardware.webp' },
-        { src: '/brand/bg-ignition-cylinder-removed.webp' },
-        { src: '/brand/bg-carkey.webp' },
-        { src: '/brand/bg-hyundai-keys-cut.webp' },
-      ]}
-    />
+    <HeroSlideshow photos={homeHeroPhotos} layout="beside-form" strength={50} hold={5} />
     <Scene variant="bayridge" class="h-[52%] lg:h-[62%]" opacity={0.13} />
     <div class="absolute inset-x-0 top-0 h-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
@@ -239,7 +214,7 @@ const description =
 
   <!-- ══════════════ 04 · HOW WE QUOTE ══════════════ -->
   <section class="relative overflow-hidden py-16 md:py-20 bg-navy-900">
-    <PhotoBg variant="vanblur" strength={30} />
+    <PhotoBg texture="vanblur" strength={30} />
     <Backdrop variant="rings" tone="dark" intensity={0.5} />
     <div class="container-x relative z-[1] grid lg:grid-cols-12 gap-10 lg:gap-16">
       <div class="lg:col-span-5">

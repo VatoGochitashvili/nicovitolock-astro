@@ -9,7 +9,7 @@ import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { ownPhotosForService, serviceCardPhoto } from '@/data/work';
+import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos } from '@/data/work';
 import { services } from '@/data/services';
 import { tier1Areas, nearbyAreas } from '@/data/locations';
 import { business } from '@/data/business';
@@ -49,6 +49,12 @@ const lists = localLists(service, area);
 const allPhotos = ownPhotosForService(service.slug);
 const offset = allPhotos.length ? seededHash(area.slug) % allPhotos.length : 0;
 const photos = allPhotos.length ? [...allPhotos.slice(offset), ...allPhotos.slice(0, offset)].slice(0, 3) : [];
+// Hero rotates through the service's own photos by area, preferring one
+// that is not already in the gallery below.
+const heroAll = serviceHeroPhotos(service.slug);
+const heroPool = heroAll.filter((s) => !photos.some((g) => g.slug === s));
+const heroFrom = heroPool.length ? heroPool : heroAll;
+const heroPhoto = heroFrom.length ? heroFrom[seededHash(`hero::${service.slug}::${area.slug}`) % heroFrom.length] : undefined;
 const near = nearbyAreas(area);
 // Seeded rather than the first six, so the cross-link block is not the same
 // twelve words on all 55 pages of a service.
@@ -104,7 +110,7 @@ const facts = [
 >
   <!-- Header plate -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <PhotoBg src={`/work/${serviceCardPhoto[service.slug]}.webp`} strength={46} eager />
+    <PhotoBg photo={heroPhoto} texture={heroPhoto ? undefined : 'vanblur'} strength={46} eager />
     <Scene variant={sceneFor[service.category]} class="h-[58%]" opacity={0.11} />
     <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span

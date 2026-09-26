@@ -69,7 +69,9 @@ const schema = [
     title={b.h1}
     subtitle={b.lead}
     crumbs={crumbs}
-    photo={b.slug === 'brooklyn' ? 'rowhouses' : 'street'}
+    slides={b.slug === 'brooklyn'
+      ? ['church-door-service', 'ford-super-duty-key-cut', 'brass-rim-lock-wood-door', 'jeep-key-programming-autel']
+      : ['jeep-smart-fob-replaced', 'smart-deadbolt-keypad-front-door', 'nissan-smart-key-fob', 'brass-deadbolt-and-knob']}
   />
 
   <CoverageMap

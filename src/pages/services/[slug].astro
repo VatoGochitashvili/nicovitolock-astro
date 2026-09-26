@@ -7,7 +7,7 @@ import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { ownPhotosForService, serviceCardPhoto, serviceHeroSlides } from '@/data/work';
+import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos } from '@/data/work';
 import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import { serviceAreas, tier1Areas } from '@/data/locations';
@@ -90,8 +90,8 @@ const schema = [
     subtitle={service.summary}
     crumbs={crumbs}
     scene={sceneFor[service.category]}
-    photoSrc={`/work/${serviceCardPhoto[service.slug]}.webp`}
-    slides={serviceHeroSlides[service.slug]}
+    slides={serviceHeroPhotos(service.slug)}
+    texture={serviceHeroPhotos(service.slug).length ? undefined : 'vanblur'}
   />
 
   <section class="py-14 md:py-18 bg-cream">

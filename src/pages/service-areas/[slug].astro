@@ -10,7 +10,7 @@ import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { workPhotos } from '@/data/work';
+import { workPhotos, ownPhotos } from '@/data/work';
 import { serviceAreas, nearbyAreas } from '@/data/locations';
 import { services } from '@/data/services';
 import { business } from '@/data/business';
@@ -38,8 +38,11 @@ const pool = workPhotos.filter(
 );
 const off = seededHash(`photos::${area.slug}`) % pool.length;
 const photos = [...pool.slice(off), ...pool.slice(0, off)].slice(0, 3);
-// Alternate the two street photos so neighboring pages don't look identical.
-const areaPhoto = (area.slug.charCodeAt(0) + area.slug.length) % 2 ? 'rowhouses' : 'street';
+// Hero: one of the owner's photos, seeded per neighborhood and never one of
+// the three already in this page's gallery, so the page shows four different
+// jobs and neighbours rarely open on the same picture.
+const heroPool = ownPhotos.filter((w) => !photos.some((g) => g.slug === w.slug));
+const heroPhoto = heroPool[seededHash(`hero::${area.slug}`) % heroPool.length].slug;
 const near = nearbyAreas(area);
 const isTier1 = area.tier === 1;
 
@@ -120,7 +123,7 @@ const schema = [
 >
   <!-- Header plate -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <PhotoBg variant={areaPhoto} strength={48} position="center 58%" eager />
+    <PhotoBg photo={heroPhoto} strength={48} eager />
     <Scene variant="bayridge" class="h-[58%]" opacity={0.11} />
     <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span

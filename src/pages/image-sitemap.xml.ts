@@ -2,7 +2,10 @@ import type { APIRoute } from 'astro';
 import { workPhotos } from '@/data/work';
 import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
-import { photosForService, photosForMake } from '@/data/work';
+import {
+  photosForService, photosForMake, photoBySlug,
+  homeHeroPhotos, carKeysHubPhotos, serviceHeroPhotos,
+} from '@/data/work';
 import { SITE } from '@/lib/seo';
 
 /**
@@ -20,15 +23,21 @@ const esc = (s: string) =>
 export const GET: APIRoute = () => {
   const entries: { page: string; imgs: typeof workPhotos }[] = [];
 
+  // Entries list exactly what the page shows: the hero slideshow first (the
+  // most prominent images on the page), then the gallery.
+  const bySlug = (slugs: string[]) => slugs.map((x) => photoBySlug(x)!);
+  const uniq = (imgs: typeof workPhotos) => [...new Map(imgs.map((i) => [i.slug, i])).values()];
+
   for (const s of services) {
-    const imgs = photosForService(s.slug);
+    const imgs = uniq([...bySlug(serviceHeroPhotos(s.slug)), ...photosForService(s.slug)]);
     if (imgs.length) entries.push({ page: `/services/${s.slug}/`, imgs });
   }
   for (const v of vehicles) {
     const imgs = photosForMake(v.slug);
     if (imgs.length) entries.push({ page: `/car-keys/${v.slug}/`, imgs });
   }
-  entries.push({ page: '/', imgs: workPhotos.filter((w) => !w.aiGenerated).slice(0, 12) });
+  entries.push({ page: '/car-keys/', imgs: bySlug(carKeysHubPhotos) });
+  entries.push({ page: '/', imgs: bySlug(homeHeroPhotos) });
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

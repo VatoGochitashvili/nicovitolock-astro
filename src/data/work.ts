@@ -343,15 +343,38 @@ export const serviceCardPhoto: Record<string, string> = {
   'commercial-locksmith': 'panic-bar-exit-device-install',
 };
 
-/**
- * Hero slideshows on the automotive hubs, as duotoned /brand/bg-* frames cut
- * 16:9 from the portraits above. Each list leads with the duotone of that
- * page's card photo, so clicking a card still lands on the picture you
- * clicked. Only services whose own photos these are get a slideshow.
- */
-const bg = (slug: string) => `/brand/bg-${slug}.webp`;
+/** Pixel size of each /work original, for the <img> width/height. */
+const NON_STANDARD_DIMS: Record<string, [number, number]> = {
+  'luxury-car-key-fob': [1200, 1800],
+  'mortise-lock-wood-frame': [1200, 1830],
+  'storefront-door-closer': [1200, 1722],
+};
+export const photoDims = (slug: string): [number, number] => NON_STANDARD_DIMS[slug] ?? [1200, 1600];
 
-export const serviceHeroSlides: Record<string, string[]> = {
+/** Own photographs only — nothing stock, nothing AI-generated. */
+const own = (p: WorkPhoto) => !p.stock && !p.aiGenerated && p.slug !== 'van-interior-equipment';
+
+/**
+ * Homepage hero. Home and car jobs alternate so neither half of the business
+ * is missing for long; the six car shots re-sent in Sep 2026 are all here.
+ */
+export const homeHeroPhotos: string[] = [
+  'brass-deadbolt-and-knob',
+  'jeep-key-programming-autel',
+  'picking-lock-open-entry-door',
+  'ford-super-duty-key-cut',
+  'mortise-lock-wood-frame',
+  'nissan-smart-key-fob',
+  'smart-deadbolt-keypad-front-door',
+  'jeep-smart-fob-replaced',
+  'brass-rim-lock-wood-door',
+  'ignition-cylinder-removed',
+  'panic-bar-exit-device-install',
+  'hyundai-keys-cut',
+];
+
+/** Curated orders where a service has more photos than a slideshow needs. */
+const HERO_ORDER: Record<string, string[]> = {
   'car-key-replacement': [
     'ford-key-fobs',
     'ford-super-duty-key-cut',
@@ -359,22 +382,48 @@ export const serviceHeroSlides: Record<string, string[]> = {
     'jeep-key-programming-autel',
     'ignition-cylinder-removed',
     'nissan-smart-key-fob',
-  ].map(bg),
+    'bmw-key-grille',
+    'car-key-programming-dashboard',
+  ],
   'key-fob-and-remote-programming': [
     'chrysler-key-fobs',
     'jeep-smart-fob-replaced',
     'nissan-smart-key-fob',
     'jeep-key-programming-autel',
     'ford-key-fobs',
-  ].map(bg),
+    'luxury-car-key-fob',
+  ],
+  // No own intercom photograph yet: the entry keypad is the nearest real job.
+  'intercom-systems': ['keypad-access-control'],
+  // No own camera photograph yet — the page falls back to a blurred texture
+  // rather than stock. Replace as soon as there is an install photo.
+  'security-camera-installation': [],
+};
+
+/**
+ * Every photo a service hub's hero cycles through: its card photo first (so a
+ * click lands on the picture that was clicked, wherever it is own work), then
+ * the rest of its own photographs, up to eight.
+ */
+export const serviceHeroPhotos = (serviceSlug: string): string[] => {
+  if (HERO_ORDER[serviceSlug]) return HERO_ORDER[serviceSlug];
+  const card = serviceCardPhoto[serviceSlug];
+  const rest = workPhotos
+    .filter((p) => own(p) && p.services.includes(serviceSlug))
+    .map((p) => p.slug);
+  return [...new Set([card, ...rest])].filter((s) => own(photoBySlug(s)!)).slice(0, 8);
 };
 
 /** /car-keys/ covers every make, so it cycles one frame per badge. */
-export const carKeysHubSlides: string[] = [
+export const carKeysHubPhotos: string[] = [
   'jeep-key-programming-autel',
   'ford-super-duty-key-cut',
   'nissan-smart-key-fob',
   'hyundai-keys-cut',
   'chrysler-key-fobs',
+  'bmw-key-grille',
   'jeep-smart-fob-replaced',
-].map(bg);
+];
+
+/** Every own photograph, for pages that rotate one hero by seed. */
+export const ownPhotos: WorkPhoto[] = workPhotos.filter(own);

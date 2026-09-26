@@ -100,7 +100,7 @@ const schema = [
 ---
 <BaseLayout title={title} description={description} canonical={`/car-keys/${vehicle.slug}`} schema={schema}>
   <section class="relative bg-navy-900 overflow-hidden">
-    <PhotoBg src={`/work/${heroPhoto.slug}.webp`} strength={46} eager />
+    <PhotoBg photo={heroPhoto.slug} strength={46} eager />
     <Scene variant="automotive" class="h-[58%]" opacity={0.11} />
     <div class="absolute left-0 inset-y-0 w-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
