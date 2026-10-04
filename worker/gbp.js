@@ -1,5 +1,6 @@
 /**
- * Live Google reviews, injected into the static pages at the edge.
+ * Live Google Business Profile content — every review, and the profile's
+ * photos — injected into the static pages at the edge.
  *
  * Source: the Google Business Profile API (the owner-side API). It returns
  * EVERY review on the profile, and because they are the business's own data
@@ -24,7 +25,17 @@
  * they would not exist in the stylesheet.
  */
 
-const CACHE_KEY = 'https://nicovitolocksmith.com/__cache/google-reviews-v1';
+const CACHE_KEY = 'https://nicovitolocksmith.com/__cache/google-profile-v2';
+
+// Profile photos that must never be republished, by media item ID (the last
+// part of the item's `name`). Anything uploaded to the Google profile appears
+// on /our-work/ within six hours, so a photo showing the retired 347 number,
+// or the AI storefront, goes here if it is ever uploaded.
+const EXCLUDED_MEDIA = new Set([]);
+// Categories never shown: the logo and profile picture are not job photos,
+// and EXTERIOR is where a storefront picture would be filed — the business is
+// fully mobile and must not appear to have premises.
+const EXCLUDED_CATEGORIES = new Set(['LOGO', 'PROFILE', 'EXTERIOR']);
 const FRESH_FOR = 6 * 60 * 60; // seconds
 const STARS = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
 
@@ -54,8 +65,7 @@ function originalText(t = '') {
   return t.trim();
 }
 
-export async function fetchReviews(env) {
-  const token = await accessToken(env);
+export async function fetchReviews(env, token) {
   const base = `https://mybusiness.googleapis.com/v4/accounts/${env.GBP_ACCOUNT_ID}/locations/${env.GBP_LOCATION_ID}/reviews`;
   const all = [];
   let pageToken = '';
@@ -80,31 +90,71 @@ export async function fetchReviews(env) {
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 }
 
+/** Sized URL for a googleusercontent image ("=w800" style suffix). */
+function sized(url, w) {
+  if (!/googleusercontent\.com/.test(url)) return url;
+  return url.replace(/=[^/]*$/, '') + `=w${w}`;
+}
+
+export async function fetchPhotos(env, token) {
+  const base = `https://mybusiness.googleapis.com/v4/accounts/${env.GBP_ACCOUNT_ID}/locations/${env.GBP_LOCATION_ID}/media`;
+  const all = [];
+  let pageToken = '';
+  for (let i = 0; i < 10; i++) {
+    const r = await fetch(`${base}?pageSize=100${pageToken ? `&pageToken=${pageToken}` : ''}`,
+      { headers: { authorization: `Bearer ${token}` } });
+    if (!r.ok) throw new Error(`media ${r.status}`);
+    const j = await r.json();
+    all.push(...(j.mediaItems ?? []));
+    if (!j.nextPageToken) break;
+    pageToken = encodeURIComponent(j.nextPageToken);
+  }
+  return all
+    .filter((m) => m.mediaFormat === 'PHOTO' && m.googleUrl)
+    .filter((m) => !EXCLUDED_CATEGORIES.has(m.locationAssociation?.category))
+    .filter((m) => !EXCLUDED_MEDIA.has(String(m.name || '').split('/').pop()))
+    .map((m) => ({
+      src: sized(m.googleUrl, 800),
+      src2x: sized(m.googleUrl, 1200),
+      w: m.dimensions?.widthPixels || 0,
+      h: m.dimensions?.heightPixels || 0,
+      description: (m.description || '').trim(),
+      date: m.createTime,
+    }))
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+}
+
 async function refresh(env) {
-  const reviews = await fetchReviews(env);
-  const body = JSON.stringify({ fetchedAt: Date.now(), reviews });
+  const token = await accessToken(env);
+  // Each half can fail on its own (e.g. a quota hiccup on media); keep what
+  // succeeded rather than losing both.
+  const [reviews, photos] = await Promise.all([
+    fetchReviews(env, token).catch((e) => { console.error('reviews', e.message); return []; }),
+    fetchPhotos(env, token).catch((e) => { console.error('photos', e.message); return []; }),
+  ]);
+  const body = JSON.stringify({ fetchedAt: Date.now(), reviews, photos });
   await caches.default.put(CACHE_KEY, new Response(body, {
     headers: { 'content-type': 'application/json', 'cache-control': `max-age=${FRESH_FOR * 4}` },
   }));
-  return reviews;
 }
 
 /**
- * Cached reviews, or null. Never blocks a page on Google: a miss or a stale
- * entry triggers a background refresh and this request uses what it has.
+ * Cached { reviews, photos }, or null. Never blocks a page on Google: a miss
+ * or a stale entry triggers a background refresh and this request uses what
+ * it has.
  */
-export async function getReviews(env, ctx) {
+export async function getProfile(env, ctx) {
   if (!reviewsConfigured(env)) return null;
   const hit = await caches.default.match(CACHE_KEY);
   if (!hit) {
-    ctx.waitUntil(refresh(env).catch((e) => console.error('reviews refresh failed', e.message)));
+    ctx.waitUntil(refresh(env).catch((e) => console.error('profile refresh failed', e.message)));
     return null;
   }
   const data = await hit.json();
   if (Date.now() - data.fetchedAt > FRESH_FOR * 1000) {
-    ctx.waitUntil(refresh(env).catch((e) => console.error('reviews refresh failed', e.message)));
+    ctx.waitUntil(refresh(env).catch((e) => console.error('profile refresh failed', e.message)));
   }
-  return data.reviews;
+  return data;
 }
 
 const esc = (s = '') =>
@@ -143,17 +193,40 @@ export function renderReviews(reviews, limit) {
     <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">${cards}</div>${more}`;
 }
 
-/** Rewrites every [data-live-reviews] block on the page, and reveals it. */
-export function injectReviews(response, reviews) {
-  return new HTMLRewriter()
-    .on('[data-live-reviews]', {
+export function renderPhotos(photos) {
+  return photos.map((p) => {
+    const alt = p.description || 'Photo from the Nico & Vito Locksmith Google Business Profile';
+    const dims = p.w && p.h ? ` width="${p.w}" height="${p.h}"` : '';
+    return `
+      <li class="gallery-item">
+        <img src="${esc(p.src)}" srcset="${esc(p.src)} 800w, ${esc(p.src2x)} 1200w"
+          sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 92vw"
+          alt="${esc(alt)}"${dims} loading="lazy" decoding="async" referrerpolicy="no-referrer"
+          class="w-full h-auto rounded-md bg-navy-900/5" />
+        ${p.description ? `<p class="mt-2.5 text-[0.92rem] text-navy-800 leading-snug">${esc(p.description)}</p>` : ''}
+      </li>`;
+  }).join('');
+}
+
+/** Rewrites the live blocks on the page and reveals their sections. */
+export function injectProfile(response, { reviews = [], photos = [] }) {
+  const rw = new HTMLRewriter();
+  if (reviews.length) {
+    rw.on('[data-live-reviews]', {
       element(el) {
         const limit = Number(el.getAttribute('data-limit')) || 6;
         el.setInnerContent(renderReviews(reviews, limit), { html: true });
       },
-    })
-    .on('[data-live-reviews-section]', {
+    }).on('[data-live-reviews-section]', {
       element(el) { el.removeAttribute('hidden'); },
-    })
-    .transform(response);
+    });
+  }
+  if (photos.length) {
+    rw.on('[data-gbp-photos]', {
+      element(el) { el.setInnerContent(renderPhotos(photos), { html: true }); },
+    }).on('[data-gbp-photos-section]', {
+      element(el) { el.removeAttribute('hidden'); },
+    });
+  }
+  return rw.transform(response);
 }

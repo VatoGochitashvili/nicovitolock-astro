@@ -15,10 +15,11 @@
  */
 
 import { handleContact } from './contact.js';
-import { getReviews, injectReviews } from './reviews.js';
+import { getProfile, injectProfile } from './gbp.js';
 
-// Pages that carry a [data-live-reviews] block (src/components/Reviews.astro).
-const REVIEW_PAGES = new Set(['/', '/reviews/']);
+// Pages carrying live Google Business Profile blocks: reviews
+// (src/components/Reviews.astro) and profile photos (/our-work/).
+const PROFILE_PAGES = new Set(['/', '/reviews/', '/our-work/']);
 
 const CANONICAL_HOST = 'nicovitolocksmith.com';
 
@@ -54,15 +55,16 @@ export default {
 
     const response = await env.ASSETS.fetch(request);
 
-    // Live Google reviews, written into the HTML before it leaves the edge so
-    // crawlers see them. Any failure leaves the static page untouched.
-    if (request.method === 'GET' && REVIEW_PAGES.has(pathname) && response.ok &&
+    // Live Google reviews and profile photos, written into the HTML before it
+    // leaves the edge so crawlers see them. Any failure leaves the static page
+    // untouched.
+    if (request.method === 'GET' && PROFILE_PAGES.has(pathname) && response.ok &&
         (response.headers.get('content-type') || '').includes('text/html')) {
       try {
-        const reviews = await getReviews(env, ctx);
-        if (reviews?.length) return injectReviews(response, reviews);
+        const profile = await getProfile(env, ctx);
+        if (profile) return injectProfile(response, profile);
       } catch (e) {
-        console.error('reviews inject failed', e.message);
+        console.error('profile inject failed', e.message);
       }
     }
     return response;

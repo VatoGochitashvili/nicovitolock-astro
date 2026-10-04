@@ -2,7 +2,6 @@
 import { business } from '@/data/business';
 import { services } from '@/data/services';
 import Icon from './Icon.astro';
-import Skyline from './Skyline.astro';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 // hrefs carry a trailing slash, so compare on a normalised path.
@@ -114,9 +113,6 @@ const nav = [
     </div>
   </div>
 
-  <!-- The same Brooklyn roofline that closes the hero, as a hairline under
-       the nav so the motif reads as the brand rather than a one-off. -->
-  <Skyline height="26px" class="opacity-90" color="#1a3341" opacity={0.5} />
 
   <!-- Mobile drawer -->
   <div id="mobile-nav" class="lg:hidden hidden border-t border-line-cool bg-white">
