@@ -10,6 +10,7 @@ import Skyline from '@/components/Skyline.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import GoogleReviews from '@/components/GoogleReviews.astro';
 import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
+import Reviews from '@/components/Reviews.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
@@ -124,6 +125,9 @@ const description =
   </section>
 
   <GoogleReviewBand />
+
+  <!-- Live Google reviews: hidden until the Worker has real ones to show. -->
+  <Reviews limit={6} optional />
 
   <!-- ══════════════ 02 · HOURS HONESTY ══════════════ -->
   <section class="bg-white border-b border-line-cool">

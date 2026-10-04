@@ -7,19 +7,23 @@
  * equivalent of the functions/ directory that Cloudflare Pages picks up
  * automatically.
  *
- * wrangler.jsonc sets `run_worker_first: ["/api/*"]`, so requests to /api/
- * reach this script before the asset router. Without that, the asset layer's
+ * wrangler.jsonc sets `run_worker_first: true`, so every request reaches this
+ * script before the asset router. Without that, the asset layer's
  * trailing-slash normalisation answers POST /api/contact with a 301 to
  * /api/contact/ — and a redirected POST is replayed as a GET with no body,
  * which is exactly how the endpoint appeared to "404" in production.
  */
 
 import { handleContact } from './contact.js';
+import { getReviews, injectReviews } from './reviews.js';
+
+// Pages that carry a [data-live-reviews] block (src/components/Reviews.astro).
+const REVIEW_PAGES = new Set(['/', '/reviews/']);
 
 const CANONICAL_HOST = 'nicovitolocksmith.com';
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
     // One host, one copy of the site.
@@ -48,6 +52,19 @@ export default {
       return handleContact(request, env);
     }
 
-    return env.ASSETS.fetch(request);
+    const response = await env.ASSETS.fetch(request);
+
+    // Live Google reviews, written into the HTML before it leaves the edge so
+    // crawlers see them. Any failure leaves the static page untouched.
+    if (request.method === 'GET' && REVIEW_PAGES.has(pathname) && response.ok &&
+        (response.headers.get('content-type') || '').includes('text/html')) {
+      try {
+        const reviews = await getReviews(env, ctx);
+        if (reviews?.length) return injectReviews(response, reviews);
+      } catch (e) {
+        console.error('reviews inject failed', e.message);
+      }
+    }
+    return response;
   },
 };

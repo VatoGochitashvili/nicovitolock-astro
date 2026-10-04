@@ -22,6 +22,7 @@ import ContactForm from '@/components/ContactForm.astro';
 import CoverageMap from '@/components/CoverageMap.astro';
 import { boroughs } from '@/data/boroughs';
 import { serviceAreas } from '@/data/locations';
+import { guides, districts, districtAreas, type District } from '@/data/guides';
 import { services } from '@/data/services';
 import { business } from '@/data/business';
 import { breadcrumbSchema, faqSchema, clampDescription } from '@/lib/seo';
@@ -122,6 +123,34 @@ const schema = [
           </li>
         ))}
       </ul>
+
+      {b.slug === 'brooklyn' && (
+        <div class="mt-12 grid lg:grid-cols-2 gap-10">
+          {(['south', 'downtown'] as District[]).map((d) => (
+            <div>
+              <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mb-2 border-b-2 border-navy-900">
+                Locksmith in {districts[d].name}
+              </h2>
+              <p class="text-muted mb-4">{districts[d].blurb}</p>
+              <ul class="grid gap-0">
+                {districtAreas(d).map((slug) => {
+                  const a = serviceAreas.find((x) => x.slug === slug)!;
+                  return (
+                    <li class="border-b border-line">
+                      <a href={`/service-areas/${slug}/`} class="group block py-3">
+                        <span class="font-display font-bold text-navy-900 group-hover:text-brass-600 transition-colors">
+                          {a.name}
+                        </span>
+                        <span class="block text-[0.88rem] text-muted">{guides[slug].heading}</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
 
       <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
         Every {b.name} neighborhood we cover

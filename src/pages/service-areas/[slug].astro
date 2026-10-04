@@ -11,6 +11,7 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
 import { workPhotos, ownPhotos } from '@/data/work';
+import { guideFor, districtAreas, districts } from '@/data/guides';
 import { serviceAreas, nearbyAreas } from '@/data/locations';
 import { services } from '@/data/services';
 import { business } from '@/data/business';
@@ -52,7 +53,16 @@ const crumbs = [
   { name: area.name, url: `/service-areas/${area.slug}/` },
 ];
 
-const faqs = areaFaqs(area);
+// Hand-written guide for the priority districts (South and Downtown
+// Brooklyn). Its FAQs lead the page's FAQ block and its FAQPage schema.
+const guide = guideFor(area.slug);
+const faqs = [...(guide?.faqs ?? []), ...areaFaqs(area)];
+const districtLinks = guide
+  ? districtAreas(guide.district)
+      .filter((s) => s !== area.slug)
+      .map((s) => serviceAreas.find((a) => a.slug === s)!)
+      .filter(Boolean)
+  : [];
 
 // Paragraphs about what this neighborhood is actually built from — one per
 // trait, so a rowhouse-and-commercial area reads nothing like a waterfront
@@ -180,6 +190,21 @@ const schema = [
         <p>{copy.trust}{copy.coverage ? ` ${copy.coverage}` : ''}</p>
       </div>
 
+      {guide && (
+        <>
+          <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
+            {guide.heading}
+          </h2>
+          <div class="max-w-3xl prose-local text-[1.06rem] grid gap-5">
+            {guide.paragraphs.map((p) => <p>{p}</p>)}
+            <p class="flex gap-3 items-start text-navy-800">
+              <Icon name="pin" size={18} class="text-brass-500 mt-1 shrink-0" />
+              <span><strong class="text-navy-900">Getting to you:</strong> {guide.route}</span>
+            </p>
+          </div>
+        </>
+      )}
+
       <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-6 border-b-2 border-navy-900">
         What the buildings in {area.name} need
       </h2>
@@ -256,6 +281,28 @@ const schema = [
                 >
                   <Icon name="pin" size={13} class="text-brass-500" />
                   {n.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {guide && districtLinks.length > 0 && (
+        <>
+          <h2 class="display text-navy-900 text-xl md:text-2xl pb-3 mt-12 mb-2 border-b-2 border-navy-900">
+            More of {districts[guide.district].name}
+          </h2>
+          <p class="text-muted mb-5 max-w-2xl">{districts[guide.district].blurb}</p>
+          <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6">
+            {districtLinks.map((n) => (
+              <li class="border-b border-line">
+                <a
+                  href={`/service-areas/${n.slug}/`}
+                  class="flex items-center gap-2 py-2.5 text-[0.93rem] text-navy-800 font-semibold hover:text-brass-600 transition-colors"
+                >
+                  <Icon name="pin" size={13} class="text-brass-500 shrink-0" />
+                  Locksmith in {n.name}
                 </a>
               </li>
             ))}
