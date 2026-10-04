@@ -61,6 +61,22 @@ if (!tok.refresh_token) { console.error('No refresh token returned:', tok); proc
 const H = { authorization: `Bearer ${tok.access_token}` };
 
 const accts = await (await fetch('https://mybusinessaccountmanagement.googleapis.com/v1/accounts', { headers: H })).json();
+if (accts.error?.code === 429 || accts.error?.status === 'RESOURCE_EXHAUSTED') {
+  // Before Google approves Business Profile API access, every project's quota
+  // for these APIs is 0 requests/minute, so the very first call "exceeds" it.
+  const proj = (accts.error.message.match(/project_number:(\d+)/) || [])[1];
+  console.error(`
+Google has not approved Business Profile API access for this project yet.
+Sign-in worked; the API itself is still at its default quota of 0.
+
+  1. Make sure the access request form was sent with project number ${proj ?? '(see Cloud console)'}:
+     https://support.google.com/business/contact/api_default
+  2. Wait for Google's approval email. To check: Cloud console > APIs & Services >
+     My Business Account Management API > Quotas. 0 = waiting, 300 = approved.
+  3. Then run this script again.
+`);
+  process.exit(1);
+}
 if (!accts.accounts?.length) { console.error('No Business Profile accounts visible to this Google user:', accts); process.exit(1); }
 
 const found = [];
