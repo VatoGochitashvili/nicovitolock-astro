@@ -2,6 +2,7 @@
 import { business } from '@/data/business';
 import { services } from '@/data/services';
 import Icon from './Icon.astro';
+import SocialLinks from './SocialLinks.astro';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 // hrefs carry a trailing slash, so compare on a normalised path.
@@ -25,10 +26,13 @@ const nav = [
       <Icon name="clock" size={14} class="text-brass-400 shrink-0" />
       Open every day <strong class="text-white font-semibold">7 AM – 11 PM</strong>
     </p>
-    <p class="flex items-center gap-2">
-      <Icon name="pin" size={14} class="text-brass-400 shrink-0" />
-      Bay Ridge, Brooklyn · Serving Brooklyn &amp; Staten Island
-    </p>
+    <div class="flex items-center gap-4">
+      <p class="flex items-center gap-2">
+        <Icon name="pin" size={14} class="text-brass-400 shrink-0" />
+        Bay Ridge, Brooklyn · Serving Brooklyn &amp; Staten Island
+      </p>
+      <SocialLinks tone="dark" size="sm" />
+    </div>
   </div>
 </div>
 
@@ -158,6 +162,10 @@ const nav = [
           <Icon name="mail" size={16} class="text-brass-500" />
           Email us
         </a>
+      </div>
+      <div class="flex items-center gap-3 pb-5">
+        <span class="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-muted">Follow</span>
+        <SocialLinks tone="light" />
       </div>
     </nav>
   </div>

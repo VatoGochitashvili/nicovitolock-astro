@@ -4,6 +4,7 @@ import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
 import { vehicles } from '@/data/vehicles';
 import Icon from './Icon.astro';
+import SocialLinks from './SocialLinks.astro';
 
 const year = new Date().getFullYear();
 const brooklyn = serviceAreas.filter((a) => a.region === 'Brooklyn');
@@ -58,6 +59,11 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
               <span class="text-navy-300 text-sm">Not a 24-hour service — real hours, real answers</span>
             </span>
           </p>
+        </div>
+
+        <div class="mt-6">
+          <p class="text-[0.72rem] font-bold uppercase tracking-[0.18em] text-brass-400 mb-2.5">Follow our work</p>
+          <SocialLinks tone="dark" google />
         </div>
       </div>
 
