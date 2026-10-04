@@ -1,0 +1,109 @@
+---
+/**
+ * A slow, continuous strip of the owner's job photos under the homepage hero.
+ *
+ * Replaces the hero slideshow, which put photographs behind the headline —
+ * the owner found it busy, and it broke the site's own rule that photography
+ * appears as hard-edged blocks, never behind text.
+ *
+ * - Every photo is shown whole: each tile takes its photo's own aspect ratio
+ *   at a fixed height, so nothing is cropped.
+ * - Captions sit UNDER the photo, never on it.
+ * - The track holds the set twice so the loop is seamless; the second copy
+ *   is aria-hidden with empty alts, so screen readers and Google read each
+ *   photo once.
+ * - Pauses on hover and focus. With prefers-reduced-motion it does not move
+ *   and becomes a normal swipeable row.
+ */
+import { photoBySlug, photoDims } from '@/data/work';
+
+interface Props {
+  photos: string[];
+  /** seconds for one full loop */
+  duration?: number;
+}
+const { photos, duration = 70 } = Astro.props;
+const items = photos.map((slug) => {
+  const p = photoBySlug(slug);
+  if (!p || p.stock || p.aiGenerated) throw new Error(`JobsStrip: "${slug}" is not an own photo`);
+  const [w, h] = photoDims(slug);
+  return { p, w, h };
+});
+---
+<section class="jobs-strip bg-navy-950 py-7 md:py-9 border-t border-white/10" aria-labelledby="jobs-strip-title">
+  <div class="container-x flex items-baseline justify-between gap-4 mb-5">
+    <h2 id="jobs-strip-title" class="font-display text-[0.72rem] font-bold uppercase tracking-[0.24em] text-brass-400">
+      Recent jobs across Brooklyn &amp; Staten Island
+    </h2>
+    <p class="hidden sm:block text-navy-300 text-[0.85rem]">Our own photos — no stock</p>
+  </div>
+
+  <div class="jobs-viewport">
+    <ul class="jobs-track" style={`--loop:${duration}s`}>
+      {[0, 1].map((copy) =>
+        items.map(({ p, w, h }) => (
+          <li class="jobs-tile" aria-hidden={copy === 1 ? 'true' : undefined}>
+            <figure>
+              <img
+                src={`/work/${p.slug}-800.webp`}
+                srcset={`/work/${p.slug}-800.webp 800w, /work/${p.slug}.webp 1200w`}
+                sizes="260px"
+                alt={copy === 0 ? p.alt : ''}
+                width={w}
+                height={h}
+                style={`aspect-ratio:${w}/${h}`}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{p.caption}</figcaption>
+            </figure>
+          </li>
+        ))
+      )}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .jobs-viewport {
+    overflow: hidden;
+    /* soft fade at both edges so the strip slides in and out, no hard cut */
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+  .jobs-track {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    padding-inline: 1rem;
+    animation: jobs-loop var(--loop) linear infinite;
+  }
+  .jobs-viewport:hover .jobs-track,
+  .jobs-viewport:focus-within .jobs-track { animation-play-state: paused; }
+  @keyframes jobs-loop {
+    to { transform: translateX(calc(-50% - 0.5rem)); }
+  }
+  .jobs-tile figure { margin: 0; width: max-content; }
+  .jobs-tile img {
+    display: block;
+    height: 15rem;
+    width: auto;
+    border-radius: 0.375rem;
+    background: rgb(255 255 255 / 0.04);
+  }
+  .jobs-tile figcaption {
+    max-width: 11.25rem;
+    margin-top: 0.6rem;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    color: var(--color-navy-200, #c9d3db);
+  }
+  @media (min-width: 768px) {
+    .jobs-tile img { height: 17rem; }
+    .jobs-tile figcaption { max-width: 12.75rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .jobs-viewport { overflow-x: auto; mask-image: none; }
+    .jobs-track { animation: none; }
+    .jobs-tile[aria-hidden='true'] { display: none; }
+  }
+</style>

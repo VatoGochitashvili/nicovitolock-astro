@@ -4,7 +4,7 @@ import Icon from '@/components/Icon.astro';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
-import HeroSlideshow from '@/components/HeroSlideshow.astro';
+import JobsStrip from '@/components/JobsStrip.astro';
 import CoverageMap from '@/components/CoverageMap.astro';
 import Skyline from '@/components/Skyline.astro';
 import ContactForm from '@/components/ContactForm.astro';
@@ -63,7 +63,6 @@ const description =
        Flat navy plate, no photograph behind the type. The form is the only
        light object in the band, which makes it the focal point. -->
   <section class="relative bg-navy-900 overflow-hidden">
-    <HeroSlideshow photos={homeHeroPhotos} layout="beside-form" strength={50} hold={5} />
     <Scene variant="bayridge" class="h-[52%] lg:h-[62%]" opacity={0.13} />
     <div class="absolute inset-x-0 top-0 h-1 bg-brass-400 z-[1]" aria-hidden="true"></div>
     <span
@@ -123,6 +122,9 @@ const description =
     <!-- The roofline the whole business works under, closing the hero. -->
     <Skyline height="72px" class="absolute inset-x-0 bottom-0" color="#f7d693" opacity={0.19} />
   </section>
+
+  <!-- Own job photos, shown whole, under the hero rather than behind it. -->
+  <JobsStrip photos={homeHeroPhotos} />
 
   <GoogleReviewBand />
 
