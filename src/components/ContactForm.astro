@@ -83,7 +83,7 @@ const step = short ? 'mt-3' : 'mt-3.5';
   <div class="p-5" data-qf-body>
     {!compact && !short && (
       <>
-        <h2 class="display text-navy-900 text-2xl">Request a quote or callback</h2>
+        <h2 class="display text-navy-900 text-2xl">Request a callback</h2>
         <p class="mt-2 text-muted text-[0.95rem]">
           Locked out right now? <a href={`tel:${business.phoneHref}`} class="link-brass">Call {business.phoneDisplay}</a> —
           a phone call is always faster than a form.
@@ -94,8 +94,8 @@ const step = short ? 'mt-3' : 'mt-3.5';
     {short && (
       <div class="flex items-start justify-between gap-4">
         <div>
-          <h2 class="display text-navy-900 text-[1.3rem] leading-tight">Get a price in 2 minutes</h2>
-          <p class="mt-0.5 text-muted text-[0.86rem]">No obligation. We call you straight back.</p>
+          <h2 class="display text-navy-900 text-[1.3rem] leading-tight">Get help fast</h2>
+          <p class="mt-0.5 text-muted text-[0.86rem]">Tell us what you need. We call you straight back.</p>
         </div>
         <!-- Static markup is the always-true statement of the hours. JS
              upgrades it to a live status in New York time; if JS never runs
@@ -194,7 +194,7 @@ const step = short ? 'mt-3' : 'mt-3.5';
           <label for={`qf-message-${uid}`} class="sr-only">Details</label>
           <textarea
             id={`qf-message-${uid}`} name="message" rows="4" class:list={[field, 'mt-3 resize-y']}
-            placeholder="Tell us about the door, the lock, or the car — the more detail, the more accurate the price."
+            placeholder="Tell us about the door, the lock, or the car — the more detail, the better we can help."
           ></textarea>
         </>
       )}
@@ -207,7 +207,7 @@ const step = short ? 'mt-3' : 'mt-3.5';
     </div>
 
     <button type="submit" class="btn btn-brass w-full mt-4 !py-2.5 text-[1rem]" data-qf-submit>
-      {short ? 'Get my price' : 'Send request'}
+      {short ? 'Call me back' : 'Send request'}
       <Icon name="arrow" size={18} />
     </button>
 
