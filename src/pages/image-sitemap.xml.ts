@@ -3,8 +3,8 @@ import { workPhotos } from '@/data/work';
 import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import {
-  photosForService, photosForMake, photoBySlug,
-  homeHeroPhotos, carKeysHubPhotos, serviceHeroPhotos,
+  photosForService, photosForMake, neutralCarPhotos, photoBySlug,
+  homeHeroPhotos, carKeysHubPhotos, serviceHeroPhotos, ownPhotos,
 } from '@/data/work';
 import { SITE } from '@/lib/seo';
 
@@ -33,10 +33,13 @@ export const GET: APIRoute = () => {
     if (imgs.length) entries.push({ page: `/services/${s.slug}/`, imgs });
   }
   for (const v of vehicles) {
-    const imgs = photosForMake(v.slug);
+    // Mirrors the make page: its own make's photos, else the badge-free set.
+    const own = photosForMake(v.slug);
+    const imgs = own.length ? own : neutralCarPhotos();
     if (imgs.length) entries.push({ page: `/car-keys/${v.slug}/`, imgs });
   }
   entries.push({ page: '/car-keys/', imgs: bySlug(carKeysHubPhotos) });
+  entries.push({ page: '/our-work/', imgs: ownPhotos });
   entries.push({ page: '/', imgs: bySlug(homeHeroPhotos) });
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

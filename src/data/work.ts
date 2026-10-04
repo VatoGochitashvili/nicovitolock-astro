@@ -60,9 +60,11 @@ export const workPhotos: WorkPhoto[] = [
   },
   {
     slug: 'van-laptop-programming',
-    alt: 'A key programming tablet set up on the dashboard of a customer vehicle during a car key job',
-    caption: 'Programming gear set up in the customer’s vehicle',
+    alt: 'A key programming laptop set up on the dashboard of a Chevrolet SUV, with the Chevrolet badge on the steering wheel',
+    caption: 'Chevrolet key programmed from the driver’s seat',
     services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    // The bowtie on the wheel was missed when this was first tagged.
+    makes: ['chevrolet'],
     orientation: 'portrait',
   },
 
@@ -77,9 +79,11 @@ export const workPhotos: WorkPhoto[] = [
   },
   {
     slug: 'car-key-programming-column',
-    alt: 'A key programming tablet connected to a car steering column during a car key replacement',
-    caption: 'Pairing a new transponder key to the immobiliser',
+    alt: 'An Autel key programmer wired into the steering column of a Dodge, with the Dodge badge on the steering wheel',
+    caption: 'Dodge transponder key paired to the immobiliser',
     services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    // DODGE is spelled out on the airbag cover; it was missed first time.
+    makes: ['dodge'],
     orientation: 'portrait',
   },
   {
@@ -307,18 +311,25 @@ export const ownPhotosForService = (serviceSlug: string) =>
   workPhotos.filter((p) => p.services.includes(serviceSlug) && !p.stock && !p.aiGenerated);
 
 /**
- * Photos showing a given car make, most specific first.
+ * Photos of THIS make only — the badge in the picture is this make's badge.
  *
- * A photo listing ['jeep', 'chrysler', 'dodge'] is a Jeep photo that also
- * suits the platform siblings; one listing ['chrysler', 'dodge', 'jeep'] is a
- * Chrysler photo. Ranking by where the make sits in that list means the Jeep
- * page leads with an actual Jeep rather than whichever entry happens to come
- * first in the array.
+ * `makes[0]` is the vehicle actually photographed; later entries are platform
+ * siblings that share the key (a Jeep fob also fits some Chrysler, Dodge and
+ * Ram models). Siblings used to count, which put a Chrysler fob at the top of
+ * the Dodge and Ram pages, a Hyundai badge on Kia and a Nissan badge on
+ * Infiniti. Owners read the badge, not the key platform, so a page shows only
+ * its own make — or no brand photo at all.
  */
 export const photosForMake = (makeSlug: string) =>
-  workPhotos
-    .filter((p) => p.makes?.includes(makeSlug))
-    .sort((a, b) => (a.makes!.indexOf(makeSlug)) - (b.makes!.indexOf(makeSlug)));
+  workPhotos.filter((p) => p.makes?.[0] === makeSlug && !p.stock && !p.aiGenerated);
+
+/**
+ * Car key work with no badge in frame, for make pages that have no photo of
+ * their own make yet. Honest for any make because no make is shown.
+ */
+export const neutralCarPhotos = (): WorkPhoto[] =>
+  ['car-key-programming-dashboard', 'luxury-car-key-fob', 'ignition-cylinder-removed']
+    .map((slug) => photoBySlug(slug)!);
 
 export const storefront = workPhotos.find((p) => p.slug === 'storefront-5th-avenue')!;
 
