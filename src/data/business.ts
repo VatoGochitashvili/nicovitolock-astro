@@ -82,7 +82,7 @@ export const business = {
   social: {
     google: 'https://maps.google.com/?cid=15903496105070705769',
     facebook: 'https://www.facebook.com/nicovitolocksmith',
-    instagram: '',
+    instagram: 'https://www.instagram.com/nicovitolocksmith/',
     yelp: '',
   },
 
