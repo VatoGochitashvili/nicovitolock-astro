@@ -162,7 +162,11 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
     </div>
 
     <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-navy-300">
-      <p>© {year} {business.legalName}. All rights reserved.</p>
+      <p>
+        © {year} {business.legalName}. All rights reserved.
+        <a href="/privacy/" class="ml-3 hover:text-white transition-colors">Privacy</a>
+        <a href="/terms/" class="ml-3 hover:text-white transition-colors">Terms</a>
+      </p>
       <p>{business.licenseNote} · Brooklyn &amp; Staten Island, NY</p>
     </div>
   </div>

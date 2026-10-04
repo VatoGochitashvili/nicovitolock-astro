@@ -1,0 +1,31 @@
+---
+/** Shared shell for /privacy/ and /terms/: plain navy header, readable column. */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import { breadcrumbSchema } from '@/lib/seo';
+
+interface Props { title: string; description: string; path: string; updated: string }
+const { title, description, path, updated } = Astro.props;
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: title, url: `/${path}/` },
+];
+---
+<BaseLayout title={`${title} | Nico & Vito Locksmith`} description={description} canonical={`/${path}`} schema={[breadcrumbSchema(crumbs)]}>
+  <PageHero title={title} subtitle={`Last updated ${updated}`} crumbs={crumbs} cta={false} />
+  <section class="py-12 md:py-16 bg-cream">
+    <div class="container-narrow legal">
+      <slot />
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .legal { color: var(--color-navy-800); line-height: 1.7; font-size: 1.02rem; }
+  .legal h2 { font-family: var(--font-display, inherit); font-weight: 800; color: var(--color-navy-900); font-size: 1.3rem; margin: 2.2rem 0 0.7rem; }
+  .legal h2:first-child { margin-top: 0; }
+  .legal p { margin: 0 0 1rem; }
+  .legal ul { list-style: disc; padding-left: 1.3rem; margin: 0 0 1rem; }
+  .legal li { margin-bottom: 0.4rem; }
+  .legal a { color: var(--color-brass-600); text-decoration: underline; }
+</style>

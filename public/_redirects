@@ -75,3 +75,11 @@
 /gallery                   /our-work/                  301
 /gallery/                  /our-work/                  301
 /photos                    /our-work/                  301
+
+# Legal pages
+/privacy                   /privacy/                   301
+/privacy-policy            /privacy/                   301
+/privacy-policy/           /privacy/                   301
+/terms                     /terms/                     301
+/terms-of-service          /terms/                     301
+/terms-of-service/         /terms/                     301

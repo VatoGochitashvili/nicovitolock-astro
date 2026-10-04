@@ -1,0 +1,71 @@
+---
+/** Terms of service for using the website. Not a contract for locksmith work —
+ *  that is agreed with the customer before each job. */
+import LegalPage from '@/components/LegalPage.astro';
+import { business } from '@/data/business';
+const updated = 'October 4, 2026';
+---
+<LegalPage title="Terms of Service" path="terms" updated={updated}
+  description="The terms for using the Nico & Vito Locksmith website and requesting a quote through it.">
+
+  <h2>About these terms</h2>
+  <p>
+    These terms cover your use of nicovitolocksmith.com, run by {business.legalName} ("Nico &amp; Vito",
+    "we", "us"). By using the site you agree to them. If you do not agree, please do not use the site.
+  </p>
+
+  <h2>Information on this site</h2>
+  <p>
+    The site gives general information about our locksmith services. Prices, arrival times and
+    descriptions are guides, not guarantees: every job is different, and the price for your job is the
+    one we agree with you before the work starts.
+  </p>
+
+  <h2>Requesting service</h2>
+  <p>
+    Sending the quote form, calling or texting us is a request for a quote. It does not create a contract.
+    Any work is agreed directly between you and us. Before opening a lock or making a key, we may ask for
+    identification and proof that you live at the address or own the vehicle.
+  </p>
+  <p>Please give accurate details and only request work on property you are entitled to have opened or changed.</p>
+
+  <h2>Using the site</h2>
+  <p>
+    Do not misuse the site: no false or abusive submissions, no attempts to interfere with how it works,
+    and no automated collection of its content.
+  </p>
+
+  <h2>Our content</h2>
+  <p>
+    The text, photographs and logo on this site belong to us and may not be copied or reused without our
+    permission. Reviews and photos shown from our Google Business Profile come from Google and are shown
+    as published there.
+  </p>
+
+  <h2>Links to other sites</h2>
+  <p>The site links to services such as Google Maps. We are not responsible for the content or practices of those sites.</p>
+
+  <h2>No warranty for the website</h2>
+  <p>
+    The website is provided "as is". We work to keep it accurate and available, but we do not promise it
+    will always be error-free or online.
+  </p>
+
+  <h2>Limitation of liability</h2>
+  <p>
+    To the extent the law allows, we are not liable for losses arising from your use of the website
+    itself. This does not limit any rights you have for work we carry out, which are governed by what we
+    agree with you for that job and by applicable law.
+  </p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of the State of New York.</p>
+
+  <h2>Changes</h2>
+  <p>We may update these terms. The date at the top shows when they last changed.</p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions? Email <a href={`mailto:${business.email}`}>{business.email}</a> or call {business.phoneDisplay}.
+  </p>
+</LegalPage>

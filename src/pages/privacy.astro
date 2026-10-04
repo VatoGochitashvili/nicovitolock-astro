@@ -1,0 +1,100 @@
+---
+/**
+ * Privacy policy. Written to match what the site actually does — see
+ * worker/contact.js (form delivery), worker/gbp.js (Google Business Profile)
+ * and CoverageMap (OpenStreetMap tiles). If any of those change, update this.
+ * The Google API section is required for the OAuth consent screen.
+ */
+import LegalPage from '@/components/LegalPage.astro';
+import { business } from '@/data/business';
+const updated = 'October 4, 2026';
+---
+<LegalPage title="Privacy Policy" path="privacy" updated={updated}
+  description="How Nico & Vito Locksmith handles the information you give us through this website, by phone or by text.">
+
+  <h2>Who we are</h2>
+  <p>
+    This website, nicovitolocksmith.com, is run by {business.legalName} ("Nico &amp; Vito", "we", "us"),
+    a mobile locksmith serving Brooklyn and Staten Island, New York. If you have a question about this
+    policy, email <a href={`mailto:${business.email}`}>{business.email}</a> or call {business.phoneDisplay}.
+  </p>
+
+  <h2>What we collect</h2>
+  <p><strong>When you send the quote form</strong>, we receive what you type in:</p>
+  <ul>
+    <li>your name and phone number;</li>
+    <li>the service you need and your neighborhood;</li>
+    <li>on the full form, optionally your email address and a description of the job.</li>
+  </ul>
+  <p>
+    <strong>When you call, text or email us</strong>, we receive your phone number or email address and
+    whatever you tell us about the job.
+  </p>
+  <p>
+    <strong>When you visit the site</strong>, our hosting provider, Cloudflare, records standard technical
+    information such as your IP address, browser type and the pages requested, to keep the site running
+    and secure.
+  </p>
+  <p>
+    This site does <strong>not</strong> use advertising trackers or analytics cookies, and it does not
+    set cookies to follow you around the web.
+  </p>
+
+  <h2>How we use it</h2>
+  <ul>
+    <li>to call or text you back with a price and to arrange the job;</li>
+    <li>to carry out the work and keep a record of it;</li>
+    <li>to follow up about that job, if needed;</li>
+    <li>to keep the website working and protect it from abuse.</li>
+  </ul>
+  <p>We do not sell your information, and we do not put you on a marketing list.</p>
+
+  <h2>Who we share it with</h2>
+  <p>Only with the services that make the website work, and only as much as they need:</p>
+  <ul>
+    <li><strong>Cloudflare</strong> hosts the website.</li>
+    <li><strong>Resend</strong> delivers quote-form submissions to our email inbox, and <strong>Twilio</strong> may deliver them to our phone by text message.</li>
+    <li>
+      <strong>OpenStreetMap</strong>: pages with our coverage map load map images directly from
+      OpenStreetMap's servers, which receive your IP address in the process.
+    </li>
+    <li>
+      <strong>Google</strong>: reviews and photos from our Google Business Profile, and links to Google Maps,
+      come from Google. Photos load from Google's servers, which receive your IP address.
+    </li>
+  </ul>
+  <p>We may also disclose information if the law requires it.</p>
+
+  <h2>Google API services</h2>
+  <p>
+    We use the Google Business Profile APIs only to read our own business's public reviews and photos so
+    we can show them on this website. We do not access, collect or store any visitor's Google account
+    data. Our use of information received from Google APIs adheres to the
+    <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener" target="_blank">Google API Services User Data Policy</a>,
+    including the Limited Use requirements.
+  </p>
+
+  <h2>How long we keep it</h2>
+  <p>
+    We keep quote requests and job details for as long as we need them to do the work and keep normal
+    business records. You can ask us to delete your information at any time.
+  </p>
+
+  <h2>Your choices</h2>
+  <p>
+    You can ask to see, correct or delete the information we hold about you by emailing
+    <a href={`mailto:${business.email}`}>{business.email}</a> or calling {business.phoneDisplay}.
+  </p>
+
+  <h2>Children</h2>
+  <p>This website is not directed at children under 13, and we do not knowingly collect their information.</p>
+
+  <h2>Security</h2>
+  <p>
+    The site is served only over HTTPS, and form submissions go straight to us through the providers
+    above. No method of transmission is perfectly secure, but we take reasonable care with what you send.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>If we change this policy, we will update it here and change the date at the top.</p>
+</LegalPage>
