@@ -90,6 +90,12 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
               Google Business Profile
             </a>
           </li>
+          {business.social.facebook && (
+            <li><a href={business.social.facebook} target="_blank" rel="noopener" class="text-navy-200 hover:text-white transition-colors">Facebook</a></li>
+          )}
+          {business.social.instagram && (
+            <li><a href={business.social.instagram} target="_blank" rel="noopener" class="text-navy-200 hover:text-white transition-colors">Instagram</a></li>
+          )}
           <li><a href="/contact/" class="text-navy-200 hover:text-white transition-colors">Contact</a></li>
           <li><a href="/service-areas/brooklyn/" class="text-navy-200 hover:text-white transition-colors">Brooklyn Locksmith</a></li>
           <li><a href="/service-areas/staten-island/" class="text-navy-200 hover:text-white transition-colors">Staten Island Locksmith</a></li>

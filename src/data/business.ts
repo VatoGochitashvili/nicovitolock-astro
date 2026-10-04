@@ -81,7 +81,7 @@ export const business = {
   // a redirect service staying up.
   social: {
     google: 'https://maps.google.com/?cid=15903496105070705769',
-    facebook: '',
+    facebook: 'https://www.facebook.com/nicovitolocksmith',
     instagram: '',
     yelp: '',
   },
