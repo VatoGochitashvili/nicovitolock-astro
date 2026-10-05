@@ -42,6 +42,9 @@ export default {
     // visitor typing www. lands exactly where they meant to, one hop earlier.
     if (url.hostname === `www.${CANONICAL_HOST}`) {
       url.hostname = CANONICAL_HOST;
+      // Every page URL ends in a slash (trailingSlash: 'always'). Adding it here
+      // makes www/about one hop to /about/ instead of two.
+      if (!url.pathname.endsWith('/') && !/\.[a-z0-9]+$/i.test(url.pathname)) url.pathname += '/';
       return Response.redirect(url.toString(), 301);
     }
 
