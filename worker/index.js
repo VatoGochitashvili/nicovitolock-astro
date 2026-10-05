@@ -23,6 +23,19 @@ const PROFILE_PAGES = new Set(['/', '/reviews/', '/our-work/']);
 
 const CANONICAL_HOST = 'nicovitolocksmith.com';
 
+// Old URL shapes from listings and guesses. These were wildcard rules in
+// _redirects, which land on a slashless URL that the asset router then
+// redirects again; the single-segment rules meant to fix that never matched,
+// because Cloudflare applies the wildcard first. Here the new prefix and the
+// trailing slash go on in the same hop.
+const LEGACY_PREFIXES = [
+  ['/locations/', '/service-areas/'],
+  ['/areas/', '/service-areas/'],
+  ['/service-area/', '/service-areas/'],
+  ['/neighborhoods/', '/service-areas/'],
+  ['/service/', '/services/'],
+];
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -40,10 +53,15 @@ export default {
     // 301 rather than 302: this is permanent, and only a permanent redirect
     // consolidates signals onto the apex. Path and query are preserved, so a
     // visitor typing www. lands exactly where they meant to, one hop earlier.
-    if (url.hostname === `www.${CANONICAL_HOST}`) {
+    //
+    // The host, a legacy prefix and the trailing slash every page URL ends in
+    // (trailingSlash: 'always') are all fixed in one redirect, so
+    // www.…/locations/bay-ridge is one hop, not three.
+    // "/locations", "/locations/" and "/locations/bay-ridge" all match.
+    const legacy = LEGACY_PREFIXES.find(([from]) => url.pathname.startsWith(from) || url.pathname === from.slice(0, -1));
+    if (url.hostname === `www.${CANONICAL_HOST}` || legacy) {
       url.hostname = CANONICAL_HOST;
-      // Every page URL ends in a slash (trailingSlash: 'always'). Adding it here
-      // makes www/about one hop to /about/ instead of two.
+      if (legacy) url.pathname = legacy[1] + url.pathname.slice(legacy[0].length);
       if (!url.pathname.endsWith('/') && !/\.[a-z0-9]+$/i.test(url.pathname)) url.pathname += '/';
       return Response.redirect(url.toString(), 301);
     }

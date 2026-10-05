@@ -7,24 +7,9 @@
 /services.html            /services/                     301
 /contact.html             /contact/                      301
 /about-us                 /about/                        301
-# The single-segment rules come first and carry the trailing slash: a bare
-# :splat lands on /service-areas/bay-ridge, which the asset router then sends
-# to /service-areas/bay-ridge/ — two hops for one move. The splat rules stay
-# behind them for anything deeper or already slashed.
-/locations                /service-areas/                301
-/locations/:area          /service-areas/:area/          301
-/locations/*              /service-areas/:splat          301
-/areas                    /service-areas/                301
-/areas/:area              /service-areas/:area/          301
-/areas/*                  /service-areas/:splat          301
-/service-area/:area       /service-areas/:area/          301
-/service-area/*           /service-areas/:splat          301
-/neighborhoods            /service-areas/                301
-/neighborhoods/:area      /service-areas/:area/          301
-/neighborhoods/*          /service-areas/:splat          301
-/service/:service/:area   /services/:service/:area/      301
-/service/:service         /services/:service/            301
-/service/*                /services/:splat               301
+# /locations, /areas, /service-area, /neighborhoods and /service (and
+# everything under them) are redirected by worker/index.js (LEGACY_PREFIXES),
+# in one hop with the trailing slash. As wildcard rules here they took two.
 /pricing                  /contact/                      301
 /prices                   /contact/                      301
 /price                    /contact/                      301
