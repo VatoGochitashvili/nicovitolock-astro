@@ -41,6 +41,12 @@ if (p && (p.stock || p.aiGenerated)) {
 if (!p && !texture) throw new Error('PhotoFrame: pass a photo or a texture');
 
 const [w, h] = p ? photoDims(p.slug) : [0, 0];
+// Intrinsic sizes for the backdrop layer. It is absolutely positioned, so it
+// cannot shift layout, but an <img> without dimensions still fails the CLS
+// audit on every page that carries one. The fills are the photo at 120px wide.
+const fillH = p ? Math.round((120 * h) / w) : 0;
+const TEXTURE_DIMS = { vanblur: [1600, 900], 'storefront-blur': [1600, 900] } as const;
+const [tw, th] = texture ? TEXTURE_DIMS[texture] : [0, 0];
 const area =
   layout === 'beside-form'
     ? 'inset-x-0 top-0 h-[min(78vh,640px)] lg:h-auto lg:inset-y-0 lg:right-[41%]'
@@ -57,6 +63,8 @@ const loading = eager ? 'eager' : 'lazy';
       src={`/brand/fill/${p.slug}.webp`}
       alt=""
       aria-hidden="true"
+      width={120}
+      height={fillH}
       class="absolute inset-0 w-full h-full object-cover scale-110"
       loading={loading}
       decoding="async"
@@ -66,6 +74,8 @@ const loading = eager ? 'eager' : 'lazy';
       src={`/brand/bg-${texture}.webp`}
       alt=""
       aria-hidden="true"
+      width={tw}
+      height={th}
       class="absolute inset-0 w-full h-full object-cover"
       loading={loading}
       fetchpriority={eager ? 'high' : 'auto'}
