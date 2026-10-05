@@ -9,12 +9,12 @@ import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos } from '@/data/work';
+import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos, photoBySlug } from '@/data/work';
 import { services } from '@/data/services';
 import { tier1Areas, nearbyAreas } from '@/data/locations';
 import { business } from '@/data/business';
 import { localCopy, traitNote, localLists, seededHash, pickManyPublic } from '@/lib/localize';
-import { breadcrumbSchema, serviceSchema, faqSchema, pickTitle, localBusinessSchema} from '@/lib/seo';
+import { breadcrumbSchema, serviceSchema, faqSchema, pickTitle, localBusinessSchema, ogPhoto} from '@/lib/seo';
 
 export function getStaticPaths() {
   return services.flatMap((service) =>
@@ -86,6 +86,7 @@ const schema = [
   breadcrumbSchema(crumbs),
   serviceSchema({
     name: `${service.name} in ${area.name}`,
+    serviceType: service.name,
     description: copy.metaDescription,
     url: `/services/${service.slug}/${area.slug}/`,
     areaName: area.name,
@@ -107,6 +108,8 @@ const facts = [
   description={copy.metaDescription}
   canonical={`/services/${service.slug}/${area.slug}`}
   schema={schema}
+  ogImage={ogPhoto(serviceCardPhoto[service.slug])}
+  ogImageAlt={photoBySlug(serviceCardPhoto[service.slug])?.alt}
 >
   <!-- Header plate -->
   <section class="relative bg-navy-900 overflow-hidden">

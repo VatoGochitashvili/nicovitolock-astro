@@ -333,6 +333,11 @@ export const neutralCarPhotos = (): WorkPhoto[] =>
 
 export const storefront = workPhotos.find((p) => p.slug === 'storefront-5th-avenue')!;
 
+/** The first photo fit to be a link's share card. Never a van shot: the van is
+ *  still lettered with the retired 347 number. */
+export const shareablePhoto = (photos: WorkPhoto[]) =>
+  photos.find((p) => !p.slug.startsWith('van-'));
+
 
 /**
  * One representative photo per service, for the homepage service cards.

@@ -7,12 +7,12 @@ import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos } from '@/data/work';
+import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos, photoBySlug } from '@/data/work';
 import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import { serviceAreas, tier1Areas } from '@/data/locations';
 import { business } from '@/data/business';
-import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle, localBusinessSchema} from '@/lib/seo';
+import { breadcrumbSchema, serviceSchema, faqSchema, pickDescription, pickTitle, localBusinessSchema, ogPhoto} from '@/lib/seo';
 
 export function getStaticPaths() {
   return services.map((service) => ({
@@ -53,9 +53,14 @@ const crumbs = [
   { name: service.name, url: `/services/${service.slug}/` },
 ];
 
-const description = clampDescription(
-  `${service.name} in Brooklyn & Staten Island. ${service.summary} Licensed Bay Ridge locksmith, open daily 7AM–11PM. Call ${business.phone}.`
-);
+// Opens on what the service does for you, not on the title's own words.
+const description = pickDescription([
+  `${service.summary} Licensed Bay Ridge locksmith for Brooklyn & Staten Island, open daily 7AM–11PM. Call ${business.phone}.`,
+  `${service.summary} Brooklyn & Staten Island, open daily 7AM–11PM. Call ${business.phone}.`,
+  `${service.summary} Brooklyn & Staten Island. Call ${business.phone}.`,
+  `${service.summary} Call ${business.phone}.`,
+  `${service.name} across Brooklyn & Staten Island from a licensed Bay Ridge locksmith. Call ${business.phone}.`,
+]);
 
 const title = pickTitle([
   `${service.name} in Brooklyn & Staten Island | Nico & Vito`,
@@ -83,6 +88,8 @@ const schema = [
   description={description}
   canonical={`/services/${service.slug}`}
   schema={schema}
+  ogImage={ogPhoto(serviceCardPhoto[service.slug])}
+  ogImageAlt={photoBySlug(serviceCardPhoto[service.slug])?.alt}
 >
   <PageHero
     eyebrow={service.category}

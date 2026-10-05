@@ -18,7 +18,7 @@ import { business } from '@/data/business';
 import { areaCopy, areaFaqs, areaTraitNote, seededHash } from '@/lib/localize';
 import { areaTraitParagraphs, TRAIT_SERVICE_PRIORITY } from '@/data/areaknowledge';
 import { serviceBySlug } from '@/data/services';
-import { breadcrumbSchema, faqSchema, clampDescription, pickTitle, localBusinessSchema} from '@/lib/seo';
+import { breadcrumbSchema, faqSchema, pickDescription, pickTitle, quickEta, localBusinessSchema} from '@/lib/seo';
 
 export function getStaticPaths() {
   return serviceAreas.map((area) => ({
@@ -95,9 +95,21 @@ const title = pickTitle([
   `${area.name} Locksmith | Nico & Vito`,
 ]);
 
-const description = clampDescription(
-  `Locksmith in ${area.name}, ${area.region} ${area.zip}. Lockouts, rekeys, car keys, intercoms & cameras. ${area.eta} from Bay Ridge, open daily 7AM–11PM. Call ${business.phone}.`
-);
+// The drive time goes in only when it is short: "about 55 minutes from Bay
+// Ridge" in a snippet loses the call. The page itself still gives it.
+const nearEta = quickEta(area.eta);
+const arrival = area.name === business.base.neighborhood
+  ? 'Based right here in Bay Ridge.'
+  : nearEta
+    ? `${nearEta.charAt(0).toUpperCase()}${nearEta.slice(1)} from our Bay Ridge base.`
+    : 'No trip charge from Bay Ridge.';
+const description = pickDescription([
+  `Lockouts, rekeys, lock changes, car keys, intercoms & cameras in ${area.name}, ${area.region} ${area.zip}. ${arrival} Open daily 7AM–11PM. Call ${business.phone}.`,
+  `Lockouts, rekeys, car keys, intercoms & cameras in ${area.name}, ${area.region} ${area.zip}. ${arrival} Open daily 7AM–11PM. Call ${business.phone}.`,
+  `Lockouts, rekeys, car keys, intercoms & cameras in ${area.name}, ${area.region}. ${arrival} Open daily 7AM–11PM. Call ${business.phone}.`,
+  `Lockouts, rekeys, car keys, intercoms & cameras in ${area.name}, ${area.region}. ${arrival} Call ${business.phone}.`,
+  `Lockouts, rekeys and car keys in ${area.name}, ${area.region}. Call ${business.phone}.`,
+]);
 
 const schema = [
   localBusinessSchema(),

@@ -16,6 +16,7 @@ export interface BoroughPage {
   /** Title tag. Under 60 characters. */
   title: string;
   h1: string;
+  /** Used as-is: keep it to 158 characters, or Google cuts it off. */
   metaDescription: string;
   lead: string;
   /** Substantial, borough-specific body copy. */
@@ -30,7 +31,7 @@ export const boroughs: BoroughPage[] = [
     title: 'Brooklyn Locksmith | Nico & Vito, Bay Ridge',
     h1: 'Brooklyn Locksmith',
     metaDescription:
-      'Licensed Brooklyn locksmith based in Bay Ridge. Lockouts, rekeys, car keys, intercoms and cameras across all 50 neighborhoods. Open daily 7AM–11PM. Call (718) 618-6002.',
+      'Licensed Brooklyn locksmith based in Bay Ridge. Lockouts, rekeys, car keys, intercoms and cameras in all 50 neighborhoods, daily 7AM–11PM. (718) 618-6002.',
     lead:
       'We are a Brooklyn locksmith in the literal sense: we live here, the van is parked here, and the number you call reaches the person who turns up. Bay Ridge is home base, and the whole borough is on the daily route — every day, 7 AM to 11 PM.',
     sections: [
@@ -83,7 +84,7 @@ export const boroughs: BoroughPage[] = [
     title: 'Staten Island Locksmith | Nico & Vito Locksmith',
     h1: 'Staten Island Locksmith',
     metaDescription:
-      'Licensed Staten Island locksmith covering all 55 neighborhoods, from St. George to Tottenville. Lockouts, rekeys, car keys and access control. Daily 7AM–11PM. (718) 618-6002.',
+      'All 55 Staten Island neighborhoods, St. George to Tottenville: lockouts, rekeys, car keys and access control, daily 7AM–11PM. (718) 618-6002.',
     lead:
       'We cross the Verrazzano daily. Our base in Bay Ridge sits at the foot of the bridge, which makes the North Shore closer to us than much of Brooklyn is — and we run the whole island, down to Tottenville, every day from 7 AM to 11 PM.',
     sections: [

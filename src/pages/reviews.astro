@@ -6,7 +6,7 @@ import Reviews from '@/components/Reviews.astro';
 import GoogleReviews from '@/components/GoogleReviews.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
-import { hasReviews, aggregateRatingSchema } from '@/data/reviews';
+import { hasReviews } from '@/data/reviews';
 import { business } from '@/data/business';
 import { breadcrumbSchema, localBusinessSchema } from '@/lib/seo';
 
@@ -15,10 +15,10 @@ const crumbs = [
   { name: 'Reviews', url: '/reviews/' },
 ];
 
-// Rating schema is emitted ONLY when there are genuine reviews behind it.
-const rating = aggregateRatingSchema();
-const businessNode: any = localBusinessSchema();
-if (rating) businessNode.aggregateRating = rating;
+// No AggregateRating, even once reviews.ts is filled: a business marking up
+// reviews of itself is "self-serving" to Google, which shows no stars for it
+// on LocalBusiness and can treat it as spam. The reviews render as text.
+const businessNode = localBusinessSchema();
 ---
 
 <BaseLayout

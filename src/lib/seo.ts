@@ -7,6 +7,9 @@ export const SITE = 'https://nicovitolocksmith.com';
 
 export const abs = (path = '/') => new URL(path, SITE).toString();
 
+/** The 1200x630 share card that scripts/og-images.mjs cuts from a /work photo. */
+export const ogPhoto = (slug: string) => `/og/${slug}.jpg`;
+
 /** Cloudflare Pages serves directory URLs with a trailing slash. Canonical,
  *  og:url and the sitemap must all agree on that form or Google sees
  *  canonical -> redirect -> different URL. */
@@ -53,7 +56,22 @@ export function localBusinessSchema() {
     email: business.email,
     // Not the van: it still carries the retired 347 number.
     image: [abs('/brand/og-card.jpg'), abs('/work/brass-deadbolt-and-knob.webp')],
-    logo: abs('/brand/logo-512.png'),
+    // One entity for the business. A separate Organization node with the
+    // same name and logo read as a second company; Locksmith already is an
+    // Organization, so its logo and contact point live here.
+    logo: {
+      '@type': 'ImageObject',
+      url: abs('/brand/logo-512.png'),
+      width: 512,
+      height: 512,
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: business.phoneHref,
+      contactType: 'customer service',
+      areaServed: ['US-NY'],
+      availableLanguage: ['English'],
+    },
     // Google surfaces priceRange on local results. It is a band, not a price:
     // the site quotes every job individually and publishes no price list.
     priceRange: '$$',
@@ -124,35 +142,15 @@ export function webSiteSchema() {
   };
 }
 
-export function organizationSchema() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    '@id': `${SITE}/#organization`,
-    name: business.name,
-    url: SITE,
-    logo: {
-      '@type': 'ImageObject',
-      url: abs('/brand/logo-512.png'),
-      width: 512,
-      height: 512,
-    },
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: business.phoneHref,
-      contactType: 'customer service',
-      areaServed: ['US-NY'],
-      availableLanguage: ['English'],
-    },
-  };
-}
-
 export function serviceSchema(opts: {
   name: string;
   description: string;
   url: string;
   areaName?: string;
   areaRegion?: string;
+  /** The service itself ("Lock Rekeying") when `name` carries a place or a
+   *  make ("Lock Rekeying in Bath Beach"). */
+  serviceType?: string;
   /** Work-photo slugs illustrating this service */
   images?: string[];
 }) {
@@ -165,7 +163,7 @@ export function serviceSchema(opts: {
     ...(opts.images?.length
       ? { image: opts.images.map((slug) => abs(`/work/${slug}.webp`)) }
       : {}),
-    serviceType: opts.name,
+    serviceType: opts.serviceType ?? opts.name,
     areaServed: opts.areaName
       ? { '@type': 'Place', name: `${opts.areaName}, ${opts.areaRegion ?? 'Brooklyn'}, NY` }
       : [
@@ -206,11 +204,27 @@ export function faqSchema(faqs: { q: string; a: string }[]) {
   };
 }
 
-/** Truncate a meta description to a safe SERP length on a word boundary. */
-export function clampDescription(text: string, max = 158): string {
-  if (text.length <= max) return text;
-  const cut = text.slice(0, max);
-  return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,.;:]$/, '') + '…';
+/**
+ * Pick the first meta description candidate that fits Google's snippet width
+ * (~158 characters). The description counterpart of pickTitle: candidates go
+ * from fullest to shortest, so nothing is ever cut mid-sentence. Truncating
+ * on a word boundary put "…Call…" on 137 pages, losing the phone number,
+ * which is the one part of the snippet that gets a locksmith called.
+ */
+export function pickDescription(candidates: string[], max = 158): string {
+  for (const c of candidates) {
+    if (c.length <= max) return c;
+  }
+  return candidates.reduce((a, b) => (b.length < a.length ? b : a));
+}
+
+/**
+ * A neighborhood's drive time, only when it is short enough to sell the call
+ * (25 minutes or less). Takes the `eta` strings from locations.ts.
+ */
+export function quickEta(eta: string): string | null {
+  const minutes = Number(eta.match(/\d+/)?.[0]);
+  return minutes && minutes <= 25 ? eta : null;
 }
 
 /**

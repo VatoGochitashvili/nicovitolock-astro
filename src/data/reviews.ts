@@ -8,10 +8,14 @@
 // penalty — it can get the whole site's rich results pulled.
 //
 // The site handles both states automatically:
-//   • empty  → the reviews section shows a "leave us a review" prompt and NO
-//              rating schema is emitted (correct, penalty-free).
-//   • filled → reviews render, and AggregateRating schema is calculated from
-//              the real numbers below.
+//   • empty  → the reviews section shows a "leave us a review" prompt and the
+//              homepage reviews section stays hidden.
+//   • filled → reviews render on /reviews/ and the homepage. Still NO rating
+//              schema: Google treats a business marking up its own reviews as
+//              self-serving and shows no stars for it.
+//
+// Do not show the review COUNT anywhere — the owner asked for it off the site
+// (see googleReviewCount in business.ts).
 //
 // To add one, copy this shape:
 //   { author: 'Maria D.', rating: 5, date: '2026-07-14',
@@ -37,15 +41,3 @@ export const hasReviews = reviews.length > 0;
 export const averageRating = hasReviews
   ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
   : null;
-
-/** Only emit rating schema when there is genuine data behind it. */
-export function aggregateRatingSchema() {
-  if (!hasReviews || averageRating === null) return null;
-  return {
-    '@type': 'AggregateRating',
-    ratingValue: String(averageRating),
-    reviewCount: String(reviews.length),
-    bestRating: '5',
-    worstRating: '1',
-  };
-}

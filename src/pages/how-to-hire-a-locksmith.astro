@@ -23,7 +23,7 @@ import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import { business } from '@/data/business';
-import { breadcrumbSchema, faqSchema, localBusinessSchema, clampDescription, SITE } from '@/lib/seo';
+import { breadcrumbSchema, faqSchema, localBusinessSchema, SITE } from '@/lib/seo';
 
 const crumbs = [
   { name: 'Home', url: '/' },
@@ -103,7 +103,7 @@ const faqs = [
 
 const title = 'How to Hire a Locksmith in NYC Without Getting Scammed';
 const description =
-  'Six checks before you let anyone touch your door: the DCWP licence, pricing for the job rather than the visit, who is actually coming, and when drilling is justified. From a licensed Brooklyn locksmith.';
+  'Six checks before anyone touches your door: the DCWP licence, a price for the job not the visit, who is actually coming, and when drilling is justified.';
 
 const schema = [
   localBusinessSchema(),
@@ -128,7 +128,7 @@ const schema = [
 
 <BaseLayout
   title="How to Hire a Locksmith in NYC | Nico & Vito"
-  description={clampDescription(description)}
+  description={description}
   canonical="/how-to-hire-a-locksmith/"
   schema={schema}
 >

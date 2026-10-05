@@ -7,14 +7,14 @@ import GoogleReviewBand from '@/components/GoogleReviewBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
-import { photosForMake, neutralCarPhotos } from '@/data/work';
+import { photosForMake, neutralCarPhotos, shareablePhoto } from '@/data/work';
 import Backdrop from '@/components/Backdrop.astro';
 import Scene from '@/components/Scene.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
 import { vehicles } from '@/data/vehicles';
 import { tier1Areas } from '@/data/locations';
 import { business } from '@/data/business';
-import { breadcrumbSchema, serviceSchema, faqSchema, clampDescription, pickTitle, localBusinessSchema} from '@/lib/seo';
+import { breadcrumbSchema, serviceSchema, faqSchema, pickDescription, pickTitle, localBusinessSchema, ogPhoto} from '@/lib/seo';
 import { vehicleCopy, pickManyPublic, seededHash } from '@/lib/localize';
 
 export function getStaticPaths() {
@@ -30,6 +30,7 @@ const makePhotos = photosForMake(vehicle.slug);
 // flat navy plate with the make's name set large behind the title.
 const heroPhoto = makePhotos[0];
 const photos = makePhotos.length ? makePhotos : neutralCarPhotos();
+const shareCard = shareablePhoto(photos) ?? neutralCarPhotos()[0];
 import { MAKE_OWNER_NOTES } from '@/data/vehiclenotes';
 const ownerNote = MAKE_OWNER_NOTES[vehicle.slug];
 // Seeded rather than the first eight, so the cross-link block differs page to
@@ -56,9 +57,12 @@ const title = pickTitle([
   `${vehicle.make} Car Key Replacement | Brooklyn`,
 ]);
 
-const description = clampDescription(
-  `${vehicle.make} car keys and fobs cut and programmed at your vehicle across Brooklyn & Staten Island. ${vehicle.system}. Open daily 7AM–11PM. Call ${business.phone}.`
-);
+const description = pickDescription([
+  `${vehicle.make} keys and fobs cut and programmed at your car, anywhere in Brooklyn & Staten Island. ${vehicle.system}. No tow. Call ${business.phone}.`,
+  `${vehicle.make} keys and fobs cut and programmed at your car in Brooklyn & Staten Island. ${vehicle.system}. Call ${business.phone}.`,
+  `${vehicle.make} keys and fobs cut and programmed at your car in Brooklyn & Staten Island. No tow, no dealer wait. Call ${business.phone}.`,
+  `${vehicle.make} keys cut and programmed at your car in Brooklyn & Staten Island. Call ${business.phone}.`,
+]);
 
 const faqs = [
   {
@@ -90,6 +94,7 @@ const schema = [
   breadcrumbSchema(crumbs),
   serviceSchema({
     name: `${vehicle.make} car key replacement`,
+    serviceType: 'Car Key Replacement',
     description,
     url: `/car-keys/${vehicle.slug}/`,
     images: photos.map((p) => p.slug),
@@ -97,7 +102,7 @@ const schema = [
   faqSchema(faqs),
 ];
 ---
-<BaseLayout title={title} description={description} canonical={`/car-keys/${vehicle.slug}`} schema={schema}>
+<BaseLayout title={title} description={description} canonical={`/car-keys/${vehicle.slug}`} schema={schema} ogImage={ogPhoto(shareCard.slug)} ogImageAlt={shareCard.alt}>
   <section class="relative bg-navy-900 overflow-hidden">
     {heroPhoto && <PhotoBg photo={heroPhoto.slug} strength={46} eager />}
     <Scene variant="automotive" class="h-[58%]" opacity={0.11} />

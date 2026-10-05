@@ -24,10 +24,11 @@ Re-run the checks after any content change.
 | canonical == `og:url` == sitemap URL | all 785 indexable |
 | Median words / page | ~877 |
 
-**Structured data**: `Locksmith` (the anchor node), `WebSite`, `Organization`,
+**Structured data**: `Locksmith` (the anchor node, carrying the logo and
+contact point — there is no separate `Organization`), `WebSite`,
 `BreadcrumbList` on every deep page, `Service` per service and per
 service × neighborhood, `FAQPage` wherever FAQs render. `AggregateRating` is
-deliberately **absent** until real reviews exist — see §5.
+deliberately **absent**, permanently — see §5c.
 
 ---
 
@@ -179,11 +180,12 @@ primary back to the 347 number. Mixed primaries across listings is a real
 ranking drag.
 
 ### 5c. Reviews
-`src/data/reviews.ts` ships empty on purpose, and no `AggregateRating` schema is
-emitted until it isn't. **Never paste in invented reviews** — fake review markup
-is a common cause of a manual penalty that pulls rich results for the whole
-domain. Ask every real customer; add them as they arrive and the rating schema
-turns itself on.
+`src/data/reviews.ts` ships empty on purpose. **Never paste in invented
+reviews.** Paste real ones from the Google Business Profile as they arrive and
+they render on `/reviews/` and the homepage. No `AggregateRating` schema is
+emitted even then: Google treats a business marking up its own reviews as
+self-serving, shows no stars for it on LocalBusiness, and fake or self-serving
+review markup is a common cause of a manual action.
 
 ---
 

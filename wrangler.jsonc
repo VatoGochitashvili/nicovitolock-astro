@@ -27,7 +27,13 @@
     //
     // Everything that is not handled explicitly falls through to
     // env.ASSETS.fetch(), which still applies _redirects and _headers.
-    "run_worker_first": true
+    "run_worker_first": true,
+
+    // Without this an unknown URL gets a 404 with an empty body: dist/404.html
+    // exists but the asset router never serves it. "404-page" returns that
+    // page with a 404 status, so a mistyped or stale link lands somewhere
+    // with a phone number and a way back in, and Google still sees a 404.
+    "not_found_handling": "404-page"
   },
 
   "observability": { "enabled": true }

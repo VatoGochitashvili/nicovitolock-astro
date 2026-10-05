@@ -14,9 +14,9 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import CtaBand from '@/components/CtaBand.astro';
-import { ownPhotos, photoDims, type WorkPhoto } from '@/data/work';
+import { ownPhotos, photoDims, shareablePhoto, type WorkPhoto } from '@/data/work';
 import { services } from '@/data/services';
-import { breadcrumbSchema, localBusinessSchema, clampDescription } from '@/lib/seo';
+import { breadcrumbSchema, localBusinessSchema, pickDescription, ogPhoto } from '@/lib/seo';
 
 const GROUPS: { id: string; title: string; intro: string; match: string[] }[] = [
   {
@@ -59,12 +59,14 @@ const crumbs = [
   { name: 'Home', url: '/' },
   { name: 'Our Work', url: '/our-work/' },
 ];
-const title = 'Our Work: Real Locksmith Job Photos, Brooklyn & Staten Island | Nico & Vito';
-const description = clampDescription(
-  `${ownPhotos.length} photos from real Nico & Vito jobs: car keys and fobs cut at the car, lockouts, home locks and commercial door hardware across Brooklyn and Staten Island. No stock.`
-);
+const title = 'Locksmith Job Photos, Brooklyn & Staten Island | Nico & Vito';
+const shareCard = shareablePhoto(ownPhotos)!;
+const description = pickDescription([
+  `${ownPhotos.length} photos from real Nico & Vito jobs: car keys cut at the car, lockouts, home locks and commercial door hardware across Brooklyn and Staten Island.`,
+  `${ownPhotos.length} photos from real Nico & Vito jobs: car keys, lockouts, home locks and commercial hardware across Brooklyn and Staten Island. No stock.`,
+]);
 ---
-<BaseLayout title={title} description={description} canonical="/our-work" schema={[breadcrumbSchema(crumbs), localBusinessSchema()]}>
+<BaseLayout title={title} description={description} canonical="/our-work" schema={[breadcrumbSchema(crumbs), localBusinessSchema()]} ogImage={ogPhoto(shareCard.slug)} ogImageAlt={shareCard.alt}>
   <PageHero
     eyebrow={`${ownPhotos.length} photos · no stock`}
     title="Our work"

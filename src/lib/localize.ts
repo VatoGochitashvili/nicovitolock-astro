@@ -13,6 +13,7 @@ import { business } from '@/data/business';
 import { traitServiceNote } from '@/data/localknowledge';
 import { SERVICE_LOCAL_FAQS, TRAIT_FAQS, fillFaq } from '@/data/localfaqs';
 import { fieldNotesFor } from '@/data/fieldnotes';
+import { pickDescription, quickEta } from '@/lib/seo';
 
 /** FNV-1a — stable unsigned 32-bit hash from a seed string. */
 export function seededHash(str: string): number {
@@ -96,9 +97,23 @@ function thinCity(text: string, city: string, seed: number, salt: number): strin
   // sentences, so "A %CITY% house" and "a %CITY% house" both occur and a
   // case-sensitive pattern silently missed every capitalised one — which is
   // how "A the neighborhood single-family" got rendered on 77 pages.
+  //
+  // The name used as a modifier — "Most %CITY% apartment doors", "gated
+  // %CITY% properties" — cannot take a noun phrase: that is how "Most the
+  // neighborhood apartment doors" got rendered 150 times on 138 pages. A
+  // modifier becomes "local", or goes entirely after a possessive. The words
+  // below are every noun and adjective that follows %CITY% in the copy pools.
+  // An explicit list, because verbs follow it too, and "Workspaces in %CITY%
+  // need…" must not become "in local need". A new pool entry with a new noun
+  // after %CITY% belongs here.
+  const modifier = String.raw`(?=\s+(?:door|doors|building|buildings|building-key|property|properties|house|houses|home|apartment|apartments|row|storefront|storefronts|prewar|towers|retail|work|suite|single-family|multi-door|exterior|commercial|gated|customer|customers|business|businesses|address|addresses|yard|workspace|workspaces|street|sites|place|opening|lock|lobby|jobs|installations|hardware|gate|front|entrance|blocks|winter|mistake)\b)`;
   const cases: [RegExp, (m: string, a: string) => string][] = [
     [new RegExp(`\\b(the) ${C}\\b`, 'i'), (_m, a) => `${keepCase(a, 'the')} neighborhood`],
     [new RegExp(`\\b(an?) ${C}\\b`, 'i'), (_m, a) => `${keepCase(a, 'a')} local`],
+    [new RegExp(`\\b(my|your|our|their) ${C}${modifier}`, 'i'), (_m, a) => a],
+    // Ahead of the preposition rule, which would turn "in %CITY% apartment
+    // blocks" into "around here apartment blocks".
+    [new RegExp(`\\b${C}${modifier}`), () => 'local'],
     // The whole phrase goes, preposition included — each stand-in already
     // carries its own ("here", "on these blocks"), so keeping the original
     // preposition produced "in here" on 55 pages.
@@ -378,15 +393,26 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     `We cover ${city} end to end, from ${markLine} outward.`,
   ];
 
+  // A drive time sells only when it is short. "About 52 minutes away" in a
+  // search snippet costs the click the page itself would have earned; the
+  // honest figure stays on the page, where it sits next to everything else.
+  const near = quickEta(eta);
+  const away = isHome ? 'based right here' : near ? `${near} away` : 'no trip charge';
+
+  // None opens with the title's own words: the snippet sits directly under
+  // the title, and repeating it spends the first line saying nothing.
   const metaVariants = [
-    `${s} in ${city}, ${region}. Licensed Bay Ridge locksmith, ${eta} away, open every day 7AM–11PM. Call ${phone}.`,
+    `Need ${sLower} in ${city}, ${region}? Licensed Bay Ridge locksmith, ${away}, open every day 7AM–11PM. Call ${phone}.`,
     `Need ${sLower} in ${city}? Local Bay Ridge locksmith covering ${city} ${zip} daily 7AM–11PM. Upfront pricing. ${phone}.`,
-    `${city} ${sShort}: licensed, insured, and ${eta} from Bay Ridge. Open 7 days, 7AM–11PM. Call Nico & Vito at ${phone}.`,
-    `${s} for ${city} homes and businesses. Bay Ridge based, no trip surcharge, open daily 7AM–11PM. ${phone}.`,
-    `Local ${sShort} in ${city} ${zip}. Licensed, insured, ${eta} from Bay Ridge. Open every day 7AM–11PM. Call ${phone}.`,
-    `${s} in ${city}? Bay Ridge locksmith, upfront pricing, no trip fee, open 7 days 7AM–11PM. ${phone}.`,
-    `Need ${sLower} in ${city}, ${region}? Licensed local locksmith ${eta} away. Daily 7AM–11PM. ${phone}.`,
+    `${city} ${sShort}: licensed, insured, ${away}. Open 7 days, 7AM–11PM. Call Nico & Vito at ${phone}.`,
+    `For ${city} homes and businesses: ${sLower} from a Bay Ridge locksmith, no trip surcharge, open daily 7AM–11PM. ${phone}.`,
+    `Local ${sShort} in ${city} ${zip}. Licensed, insured, ${away}. Open every day 7AM–11PM. Call ${phone}.`,
+    `Upfront pricing on ${sLower} in ${city}, from a Bay Ridge locksmith with no trip fee. Open 7 days, 7AM–11PM. ${phone}.`,
+    `Quoted before we leave Bay Ridge: ${sLower} in ${city}, ${region}, by a licensed local locksmith. Daily 7AM–11PM. ${phone}.`,
   ];
+  // The seeded variant first, then the others in turn, so a long service or
+  // neighborhood name falls through to one that fits instead of being cut.
+  const metaStart = pick(metaVariants.map((_, i) => i), seed, 12);
 
   return {
     lead: pick(leads, seed, 1),
@@ -406,7 +432,7 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     quoteBlurb: pick(quoteBlurbs, seed, 31),
     ctaBody: pick(ctaBodies, seed, 33),
     galleryIntro: pick(galleryIntros, seed, 41),
-    metaDescription: pick(metaVariants, seed, 12).slice(0, 158),
+    metaDescription: pickDescription([...metaVariants.slice(metaStart), ...metaVariants.slice(0, metaStart)]),
   };
 }
 

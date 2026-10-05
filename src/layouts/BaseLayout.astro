@@ -11,6 +11,8 @@ interface Props {
   canonical?: string;
   schema?: object | object[];
   ogImage?: string;
+  /** What the share image shows. Defaults to the brand card's description. */
+  ogImageAlt?: string;
   /** Set true on thin/utility pages that shouldn't be indexed. */
   noindex?: boolean;
 }
@@ -23,6 +25,7 @@ const {
   // Purpose-built 1200x630 card. Never point this at a van photo: the
   // vehicle is still lettered with the retired 347 number.
   ogImage = '/brand/og-card.jpg',
+  ogImageAlt = `${business.name} — ${business.tagline}`,
   noindex = false,
 } = Astro.props;
 
@@ -78,7 +81,9 @@ const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={ogURL} />
-    <meta property="og:image:alt" content={`${business.name} — ${business.tagline}`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->

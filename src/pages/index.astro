@@ -15,7 +15,7 @@ import { services } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
 import { serviceCardPhoto, homeHeroPhotos } from '@/data/work';
 import { vehicles } from '@/data/vehicles';
-import { localBusinessSchema, webSiteSchema, organizationSchema, faqSchema } from '@/lib/seo';
+import { localBusinessSchema, webSiteSchema, faqSchema } from '@/lib/seo';
 
 const brooklynAreas = serviceAreas.filter((a) => a.region === 'Brooklyn');
 const siAreas = serviceAreas.filter((a) => a.region === 'Staten Island');
@@ -47,7 +47,7 @@ const homeFaqs = [
   },
 ];
 
-const schema = [localBusinessSchema(), webSiteSchema(), organizationSchema(), faqSchema(homeFaqs)];
+const schema = [localBusinessSchema(), webSiteSchema(), faqSchema(homeFaqs)];
 
 const title = 'Locksmith Brooklyn & Staten Island | Nico & Vito';
 const description =
