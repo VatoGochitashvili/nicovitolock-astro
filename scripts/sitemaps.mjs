@@ -60,6 +60,10 @@ const PRIORITY = {
   core: 0.9, services: 0.9, 'car-keys': 0.8, areas: 0.7, local: 0.6,
 };
 
+// Within core the homepage leads and the legal pages trail; the segment value
+// alone put /privacy/ level with the homepage.
+const PATH_PRIORITY = { '/': 1.0, '/privacy': 0.3, '/terms': 0.3 };
+
 const prev = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, 'utf8')) : {};
 const today = new Date().toISOString().slice(0, 10);
 const next = {};
@@ -77,7 +81,7 @@ for (const file of walk(DIST)) {
   const seg = SEGMENTS.find((s) => s.test(path));
   if (!seg) continue;
   const loc = `${SITE}${path === '/' ? '/' : path + '/'}`;
-  bySegment.get(seg.name).push({ loc, lastmod, priority: PRIORITY[seg.name] });
+  bySegment.get(seg.name).push({ loc, lastmod, priority: PATH_PRIORITY[path] ?? PRIORITY[seg.name] });
 }
 
 const xmlEscape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
