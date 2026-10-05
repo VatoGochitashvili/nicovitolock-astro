@@ -5,4 +5,8 @@ dist/
 .env
 .env.production
 npm-debug.log*
+
+# wrangler dev local secrets — never commit
+.dev.vars
+.dev.vars.*
 .wrangler/

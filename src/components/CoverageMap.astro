@@ -242,7 +242,9 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
           var marker = L.circleMarker([p.c[0], p.c[1]], base).addTo(map);
 
           // Name on hover, so the map is readable without clicking 105 pins.
-          marker.bindTooltip(p.n, {
+          marker.bindTooltip(
+            '<strong>' + esc(p.n) + '</strong>' + (home ? ' · our base' : '') +
+            '<br><span style="font-weight:400;opacity:.75">' + esc(p.e) + ' away · click to open</span>', {
             direction: 'top',
             offset: [0, -4],
             opacity: 1,
@@ -276,18 +278,9 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
             tween(base.radius);
           });
 
-          marker.bindPopup(
-            '<div style="font:600 14px system-ui;color:#102330;margin-bottom:2px">' +
-              esc(p.n) + (home ? ' · our base' : '') +
-            '</div>' +
-            '<div style="font:13px system-ui;color:#5d6f78;margin-bottom:8px">' +
-              esc(p.r) + ' · ' + esc(p.e) + ' away' +
-            '</div>' +
-            '<a href="/service-areas/' + esc(p.s) + '/" style="font:600 13px system-ui;color:#b8791a">' +
-              'Locksmith in ' + esc(p.n) + ' &rarr;</a>' +
-            '<div style="margin-top:8px"><a href="tel:' + esc(phoneHref) +
-              '" style="font:600 13px system-ui;color:#102330">' + esc(phone) + '</a></div>'
-          );
+          // One click goes straight to the neighbourhood's page. A popup with a
+          // link inside it was a two-step detour that read as broken.
+          marker.on('click', function () { window.location.href = '/service-areas/' + p.s + '/'; });
           bounds.push([p.c[0], p.c[1]]);
         });
 

@@ -49,6 +49,29 @@ const homeFaqs = [
 
 const schema = [localBusinessSchema(), webSiteSchema(), faqSchema(homeFaqs)];
 
+// ── Hero coverage map: every neighbourhood as a dot, in its real position ──
+// Equirectangular projection with longitude scaled by cos(latitude), which is
+// accurate to within a few pixels over an area this small.
+const MAP_W = 1000;
+const lats = serviceAreas.map((a) => a.coords[0]);
+const lngs = serviceAreas.map((a) => a.coords[1]);
+const pad = 0.012;
+const minLat = Math.min(...lats) - pad, maxLat = Math.max(...lats) + pad;
+const minLng = Math.min(...lngs) - pad, maxLng = Math.max(...lngs) + pad;
+const kx = Math.cos((((minLat + maxLat) / 2) * Math.PI) / 180);
+const spanX = (maxLng - minLng) * kx, spanY = maxLat - minLat;
+const MAP_H = Math.round((MAP_W * spanY) / spanX);
+const project = ([lat, lng]: [number, number]) => ({
+  x: +(((lng - minLng) * kx) / spanX * MAP_W).toFixed(1),
+  y: +(((maxLat - lat) / spanY) * MAP_H).toFixed(1),
+});
+const mapPins = serviceAreas.map((a) => ({ slug: a.slug, name: a.name, region: a.region, eta: a.eta, ...project(a.coords) }));
+const base = mapPins.find((p) => p.slug === 'bay-ridge')!;
+// Neighbourhoods the ambient "dispatch" animation cycles through.
+const dispatchSlugs = ['sunset-park', 'brighton-beach', 'park-slope', 'st-george', 'canarsie', 'brooklyn-heights', 'great-kills', 'bensonhurst'];
+const dispatches = dispatchSlugs.map((s) => mapPins.find((p) => p.slug === s)).filter(Boolean) as typeof mapPins;
+const DISPATCH_EVERY = 3.2; // seconds between routes
+
 const title = 'Locksmith Brooklyn & Staten Island | Nico & Vito';
 const description =
   `Licensed Bay Ridge locksmith covering all of Brooklyn & Staten Island. Lockouts, rekeys, car keys, intercoms, cameras. Open daily 7AM–11PM. ${business.phoneDisplay}.`;
@@ -67,6 +90,8 @@ const description =
       <span class="orb orb-b"></span>
       <span class="orb orb-c"></span>
     </div>
+
+    <div class="hero-spot" aria-hidden="true"></div>
 
     <div class="container-x relative py-12 md:py-16 lg:py-20">
       <div class="grid gap-10 lg:grid-cols-12 lg:gap-x-14 lg:items-center">
@@ -94,12 +119,28 @@ const description =
               <Icon name="phone" size={20} />
               {business.phoneDisplay}
             </a>
-            <a href="/our-work/" class="text-white/85 hover:text-white text-[0.95rem] font-semibold inline-flex items-center gap-1.5">
-              See our work <Icon name="arrow" size={16} />
+            <a href={business.smsHref} class="hero-ghost" data-cta="sms">
+              <Icon name="message" size={18} /> Text us
             </a>
           </div>
 
-          <ul class="mt-10 flex flex-wrap gap-2.5 text-[0.86rem]">
+          <!-- Arrival picker: real drive times from locations.ts; lights the
+               neighbourhood up on the map and draws the route from Bay Ridge. -->
+          <div class="hero-eta mt-7">
+            <label for="hero-eta" class="hero-eta-label"><Icon name="bolt" size={15} /> How far are we?</label>
+            <select id="hero-eta" class="hero-eta-select">
+              <option value="">Pick your neighborhood</option>
+              <optgroup label="Brooklyn">
+                {mapPins.filter((p) => p.region === 'Brooklyn').map((p) => <option value={p.slug} data-eta={p.eta} data-name={p.name}>{p.name}</option>)}
+              </optgroup>
+              <optgroup label="Staten Island">
+                {mapPins.filter((p) => p.region === 'Staten Island').map((p) => <option value={p.slug} data-eta={p.eta} data-name={p.name}>{p.name}</option>)}
+              </optgroup>
+            </select>
+            <p class="hero-eta-out" data-hero-eta-out aria-live="polite"></p>
+          </div>
+
+          <ul class="mt-7 flex flex-wrap gap-2.5 text-[0.86rem]">
             <li class="hero-chip"><Icon name="badge" size={15} class="text-brass-400" /> Licensed &amp; insured</li>
             <li class="hero-chip"><Icon name="bolt" size={15} class="text-brass-400" /> 20–30 min across Brooklyn</li>
             <li class="hero-chip"><Icon name="star" size={15} class="text-brass-400" /> {business.googleRating} on Google</li>
@@ -109,6 +150,33 @@ const description =
         <div class="lg:col-span-5 w-full max-w-md lg:max-w-none mx-auto relative hero-form">
           <div class="hero-glow" aria-hidden="true"></div>
           <ContactForm variant="short" tone="dark" hideContactRow />
+          <!-- Coverage map: every neighbourhood we serve, in its real position, with
+               routes drawing out from the Bay Ridge base. Every pin is a link to
+               its neighbourhood page; hover or focus shows the drive time. -->
+          <div class="hero-map" role="group" aria-label="Coverage map — choose a neighborhood to open its page">
+            <div class="hm-tip" data-hm-tip hidden></div>
+            <p class="hero-map-cap" aria-hidden="true"><span class="hm-cap-dot"></span> {serviceAreas.length} neighborhoods · dispatched from Bay Ridge</p>
+            <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} preserveAspectRatio="xMidYMid meet">
+              {dispatches.map((d, i) => (
+                <path class="hm-route" pathLength="1" d={`M${base.x} ${base.y} Q ${(base.x + d.x) / 2 + (d.y - base.y) * 0.18} ${(base.y + d.y) / 2 - (d.x - base.x) * 0.18} ${d.x} ${d.y}`}
+                  style={`animation-delay:${(i * DISPATCH_EVERY).toFixed(1)}s; animation-duration:${(dispatches.length * DISPATCH_EVERY).toFixed(1)}s`} />
+              ))}
+              <path class="hm-route hm-route--picked" pathLength="1" d="" data-hm-pick-route />
+              {mapPins.map((p) => (
+                <a href={`/service-areas/${p.slug}/`} class="hm-link" data-hm-name={p.name} data-hm-eta={p.eta} aria-label={`Locksmith in ${p.name} — ${p.eta} away`}>
+                  <circle class="hm-hit" cx={p.x} cy={p.y} r="30" />
+                  <circle class="hm-pin" cx={p.x} cy={p.y} r="7" data-hm-slug={p.slug} />
+                </a>
+              ))}
+              {dispatches.map((d, i) => (
+                <circle class="hm-ping" cx={d.x} cy={d.y} r="7"
+                  style={`animation-delay:${(i * DISPATCH_EVERY + 1.1).toFixed(1)}s; animation-duration:${(dispatches.length * DISPATCH_EVERY).toFixed(1)}s`} />
+              ))}
+              <circle class="hm-base-ring" cx={base.x} cy={base.y} r="14" />
+              <circle class="hm-base" cx={base.x} cy={base.y} r="12" />
+              <text class="hm-base-label" x={base.x + 22} y={base.y + 10}>Bay Ridge</text>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -473,5 +541,185 @@ const description =
     }
     paint();
     setInterval(paint, 60000);
+  })();
+</script>
+
+<style>
+  /* ── Hero coverage map ─────────────────────────────────────────────── */
+  .hero-map { position: relative; margin-top: 1.1rem; height: 19rem; }
+  .hm-route, .hm-ping, .hm-base, .hm-base-ring, .hm-base-label { pointer-events: none; }
+  .hm-link { cursor: pointer; outline: none; }
+  .hm-hit { fill: transparent; }
+  .hm-link:hover .hm-pin, .hm-link:focus-visible .hm-pin { fill: #fff; transform: scale(2.2); }
+  .hm-link:focus-visible .hm-hit { stroke: #f2ae39; stroke-width: 3; }
+  .hm-tip {
+    position: absolute; z-index: 2; pointer-events: none; transform: translate(-50%, calc(-100% - 12px));
+    padding: 0.4rem 0.7rem; border-radius: 0.6rem; white-space: nowrap;
+    background: #fff; color: #102330; font-size: 0.82rem; font-weight: 700;
+    box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.6);
+  }
+  .hm-tip :global(span) { display: block; font-weight: 500; color: #5d6f78; font-size: 0.76rem; }
+  .hm-tip::after { content: ''; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: #fff; transform: translateX(-50%) rotate(45deg); }
+  .hero-map svg { width: 100%; height: 100%; overflow: visible; }
+  .hero-map-cap {
+    position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; display: inline-flex; align-items: center; gap: 0.45rem;
+    font-size: 0.78rem; font-weight: 600; color: rgb(255 255 255 / 0.7);
+  }
+  .hm-cap-dot { width: 0.45rem; height: 0.45rem; border-radius: 999px; background: #f2ae39; box-shadow: 0 0 0 4px rgb(242 174 57 / 0.2); }
+  @media (max-width: 1023px) { .hero-map { height: 17rem; } }
+  .hm-pin { fill: rgb(190 212 220 / 0.5); transform-box: fill-box; transform-origin: center; transition: fill .3s, transform .3s; }
+  .hm-pin.is-picked { fill: #f2ae39; transform: scale(2.1); }
+  .hm-base { fill: #f2ae39; }
+  .hm-base-ring { fill: none; stroke: #f2ae39; stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: hm-ring 2.6s ease-out infinite; }
+  .hm-base-label { fill: rgb(255 255 255 / 0.75); font: 700 30px var(--font-display, sans-serif); letter-spacing: 0.02em; }
+  .hm-route {
+    fill: none; stroke: #f2ae39; stroke-width: 3.6; stroke-linecap: round;
+    stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0;
+    animation: hm-route 25.6s ease-in-out infinite;
+  }
+  .hm-ping { fill: none; stroke: #f2ae39; stroke-width: 3; opacity: 0; transform-box: fill-box; transform-origin: center; animation: hm-ping 25.6s ease-out infinite; }
+  .hm-route--picked { animation: none; stroke: #fff; stroke-width: 4.2; }
+  .hm-route--picked.is-drawing { opacity: 1; animation: hm-draw 1.1s ease-out forwards; }
+  @keyframes hm-route {
+    0%   { stroke-dashoffset: 1; opacity: 0; }
+    2%   { opacity: 0.9; }
+    10%  { stroke-dashoffset: 0; opacity: 0.9; }
+    22%  { stroke-dashoffset: 0; opacity: 0.35; }
+    30%, 100% { stroke-dashoffset: 0; opacity: 0; }
+  }
+  @keyframes hm-ping {
+    0%   { opacity: 0; transform: scale(1); }
+    1%   { opacity: 0.95; transform: scale(1); }
+    9%   { opacity: 0; transform: scale(4.5); }
+    100% { opacity: 0; transform: scale(4.5); }
+  }
+  @keyframes hm-ring { 0% { transform: scale(1); opacity: 0.9; } 100% { transform: scale(3.2); opacity: 0; } }
+  @keyframes hm-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  /* Soft spotlight that follows the pointer (desktop) */
+  .hero-spot {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .5s;
+    background: radial-gradient(460px circle at var(--mx, 70%) var(--my, 45%), rgb(242 174 57 / 0.11), transparent 62%);
+  }
+  .hero:hover .hero-spot { opacity: 1; }
+
+  /* Text us */
+  .hero-ghost {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.95rem 1.3rem; border-radius: 0.75rem;
+    font-weight: 700; color: #fff; background: rgb(255 255 255 / 0.07); border: 1px solid rgb(255 255 255 / 0.2);
+    transition: background .2s, border-color .2s;
+  }
+  .hero-ghost:hover { background: rgb(255 255 255 / 0.13); border-color: rgb(255 255 255 / 0.35); }
+
+  /* Arrival picker */
+  .hero-eta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.9rem; }
+  .hero-eta-label { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #f2ae39; }
+  .hero-eta-select {
+    appearance: none; -webkit-appearance: none; cursor: pointer;
+    padding: 0.6rem 2.2rem 0.6rem 0.9rem; border-radius: 0.7rem; font-weight: 600; font-size: 0.95rem; color: #fff;
+    background: rgb(255 255 255 / 0.07) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23f2ae39' stroke-width='3'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.8rem center;
+    border: 1px solid rgb(255 255 255 / 0.2); outline: none;
+  }
+  .hero-eta-select:focus { border-color: #f2ae39; }
+  .hero-eta-select option, .hero-eta-select optgroup { color: #102330; }
+  .hero-eta-out { flex-basis: 100%; min-height: 1.4rem; font-size: 0.98rem; color: #dfeaee; }
+  .hero-eta-out a { color: #f2ae39; text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hm-route, .hm-ping, .hm-base-ring { animation: none; }
+    .hm-route { opacity: 0; }
+    .hero-spot { display: none; }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var hero = document.querySelector('section.hero');
+    if (!hero) return;
+
+    // Pointer spotlight (skipped for touch and reduced motion).
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && window.matchMedia('(pointer: fine)').matches) {
+      var raf = 0;
+      hero.addEventListener('pointermove', function (e) {
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          raf = 0;
+          var r = hero.getBoundingClientRect();
+          hero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+          hero.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        });
+      });
+    }
+
+    // Map pins: hover or keyboard focus shows name + drive time and draws the
+    // route from Bay Ridge; clicking is a normal link to the area page.
+    var mapBox = hero.querySelector('.hero-map');
+    var tip = hero.querySelector('[data-hm-tip]');
+    var routeEl = hero.querySelector('[data-hm-pick-route]');
+    var baseDot = hero.querySelector('.hm-base');
+    function drawRoute(pin) {
+      if (!routeEl || !baseDot || !pin) return;
+      var bx = +baseDot.getAttribute('cx'), by = +baseDot.getAttribute('cy');
+      var px = +pin.getAttribute('cx'), py = +pin.getAttribute('cy');
+      var cx = (bx + px) / 2 + (py - by) * 0.18, cy = (by + py) / 2 - (px - bx) * 0.18;
+      routeEl.setAttribute('d', 'M' + bx + ' ' + by + ' Q ' + cx + ' ' + cy + ' ' + px + ' ' + py);
+      routeEl.classList.remove('is-drawing'); void routeEl.getBoundingClientRect(); routeEl.classList.add('is-drawing');
+    }
+    function showTip(link) {
+      if (!tip || !mapBox) return;
+      var pin = link.querySelector('.hm-pin');
+      var r = pin.getBoundingClientRect(), m = mapBox.getBoundingClientRect();
+      tip.innerHTML = '';
+      tip.appendChild(document.createTextNode(link.getAttribute('data-hm-name')));
+      var sub = document.createElement('span');
+      sub.textContent = link.getAttribute('data-hm-eta') + ' from Bay Ridge · click to open';
+      tip.appendChild(sub);
+      tip.style.left = (r.left + r.width / 2 - m.left) + 'px';
+      tip.style.top = (r.top - m.top) + 'px';
+      tip.hidden = false;
+      drawRoute(pin);
+    }
+    function hideTip() {
+      if (tip) tip.hidden = true;
+      var picked = hero.querySelector('.hm-pin.is-picked');
+      if (picked) drawRoute(picked); else if (routeEl) routeEl.classList.remove('is-drawing');
+    }
+    hero.querySelectorAll('.hm-link').forEach(function (link) {
+      link.addEventListener('mouseenter', function () { showTip(link); });
+      link.addEventListener('focus', function () { showTip(link); });
+      link.addEventListener('mouseleave', hideTip);
+      link.addEventListener('blur', hideTip);
+    });
+
+    // Arrival picker: drive time + light the neighbourhood up on the map.
+    var sel = document.getElementById('hero-eta');
+    var out = hero.querySelector('[data-hero-eta-out]');
+    var route = hero.querySelector('[data-hm-pick-route]');
+    var baseEl = hero.querySelector('.hm-base');
+    if (!sel || !out) return;
+    sel.addEventListener('change', function () {
+      hero.querySelectorAll('.hm-pin.is-picked').forEach(function (p) { p.classList.remove('is-picked'); });
+      var opt = sel.options[sel.selectedIndex];
+      if (!sel.value) { out.textContent = ''; if (route) route.classList.remove('is-drawing'); return; }
+      var name = opt.getAttribute('data-name'), eta = opt.getAttribute('data-eta');
+      out.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = name + ' — ' + eta + ' from our Bay Ridge base. ';
+      var a = document.createElement('a');
+      a.href = '/service-areas/' + sel.value + '/';
+      a.textContent = 'See ' + name + ' →';
+      out.appendChild(t); out.appendChild(a);
+
+      var pin = hero.querySelector('.hm-pin[data-hm-slug="' + sel.value + '"]');
+      if (pin && route && baseEl) {
+        pin.classList.add('is-picked');
+        var bx = +baseEl.getAttribute('cx'), by = +baseEl.getAttribute('cy');
+        var px = +pin.getAttribute('cx'), py = +pin.getAttribute('cy');
+        var cx = (bx + px) / 2 + (py - by) * 0.18, cy = (by + py) / 2 - (px - bx) * 0.18;
+        route.setAttribute('d', 'M' + bx + ' ' + by + ' Q ' + cx + ' ' + cy + ' ' + px + ' ' + py);
+        route.classList.remove('is-drawing'); void route.getBoundingClientRect(); route.classList.add('is-drawing');
+      }
+    });
   })();
 </script>
