@@ -14,6 +14,9 @@ export interface BoroughPage {
   slug: string;
   name: 'Brooklyn' | 'Staten Island';
   /** Title tag. Under 60 characters. */
+  /** The borough hub is the neighborhood directory; the homepage holds the
+   *  bare head term ("locksmith Brooklyn"). Titles saying the same thing
+   *  made the two compete for one query, so the hub leads with coverage. */
   title: string;
   h1: string;
   /** Used as-is: keep it to 158 characters, or Google cuts it off. */
@@ -28,8 +31,8 @@ export const boroughs: BoroughPage[] = [
   {
     slug: 'brooklyn',
     name: 'Brooklyn',
-    title: 'Brooklyn Locksmith | Nico & Vito, Bay Ridge',
-    h1: 'Brooklyn Locksmith',
+    title: 'Brooklyn Locksmith in All 50 Neighborhoods | Nico & Vito',
+    h1: 'Brooklyn locksmith, neighborhood by neighborhood',
     metaDescription:
       'Licensed Brooklyn locksmith based in Bay Ridge. Lockouts, rekeys, car keys, intercoms and cameras in all 50 neighborhoods, daily 7AM–11PM. (718) 618-6002.',
     lead:
@@ -81,8 +84,8 @@ export const boroughs: BoroughPage[] = [
   {
     slug: 'staten-island',
     name: 'Staten Island',
-    title: 'Staten Island Locksmith | Nico & Vito Locksmith',
-    h1: 'Staten Island Locksmith',
+    title: 'Staten Island Locksmith, All 55 Neighborhoods | Nico & Vito',
+    h1: 'Staten Island locksmith, neighborhood by neighborhood',
     metaDescription:
       'All 55 Staten Island neighborhoods, St. George to Tottenville: lockouts, rekeys, car keys and access control, daily 7AM–11PM. (718) 618-6002.',
     lead:
