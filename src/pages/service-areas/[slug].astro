@@ -19,6 +19,7 @@ import { areaCopy, areaFaqs, areaTraitNote, seededHash } from '@/lib/localize';
 import { areaTraitParagraphs, TRAIT_SERVICE_PRIORITY } from '@/data/areaknowledge';
 import { serviceBySlug } from '@/data/services';
 import { breadcrumbSchema, faqSchema, pickDescription, pickTitle, quickEta, localBusinessSchema} from '@/lib/seo';
+import { boroughs } from '@/data/boroughs';
 
 export function getStaticPaths() {
   return serviceAreas.map((area) => ({
@@ -86,6 +87,9 @@ const focusSeed = seededHash(`focus::${area.slug}`);
 focus.sort((x, y) =>
   ((seededHash(x.slug + area.slug) % 97) - (seededHash(y.slug + area.slug) % 97)));
 focus.length = Math.min(focus.length, 3 + (focusSeed % 2));
+
+const borough = boroughs.find((b) => b.name === area.region)!;
+const boroughCount = serviceAreas.filter((a) => a.region === area.region).length;
 
 const title = pickTitle([
   `Locksmith in ${area.name}, ${area.region} | Nico & Vito Locksmith`,
@@ -321,6 +325,15 @@ const schema = [
           </ul>
         </>
       )}
+
+      <p class="mt-8">
+        <a
+          href={`/service-areas/${borough.slug}/`}
+          class="font-display text-sm font-bold uppercase tracking-[0.14em] inline-flex items-center gap-2 text-navy-900 hover:text-brass-600 transition-colors"
+        >
+          Locksmith service in all {boroughCount} {area.region} neighborhoods <span aria-hidden="true">→</span>
+        </a>
+      </p>
     </div>
   </section>
 

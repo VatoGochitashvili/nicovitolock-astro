@@ -28,6 +28,8 @@ const shown = photos.slice(0, limit);
 if (!shown.length) return null;
 
 const dark = tone === 'dark';
+// /our-work/ is otherwise reachable only from the menu and footer.
+const linkAll = Astro.url.pathname !== '/our-work/';
 ---
 <section class:list={['py-14 md:py-18', dark ? 'bg-navy-900' : 'bg-cream-deep', className]}>
   <div class="container-x">
@@ -79,5 +81,19 @@ const dark = tone === 'dark';
         </li>
       ))}
     </ul>
+
+    {linkAll && (
+      <p class="mt-7">
+        <a
+          href="/our-work/"
+          class:list={[
+            'font-display text-sm font-bold uppercase tracking-[0.14em] inline-flex items-center gap-2 transition-colors',
+            dark ? 'text-brass-400 hover:text-white' : 'text-navy-900 hover:text-brass-600',
+          ]}
+        >
+          See all our job photos <span aria-hidden="true">→</span>
+        </a>
+      </p>
+    )}
   </div>
 </section>
