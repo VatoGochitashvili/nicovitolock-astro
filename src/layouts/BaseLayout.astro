@@ -50,20 +50,19 @@ const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
         : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
     />
 
-    <!-- Favicons render on tab strips of every colour, so these are the
-         WHITE-SQUARE variants. The transparent logo is for the page chrome. -->
-    <!-- Favicon is the "N&V + key" mark, NOT the full logo: at 16px the
-         logo's rim lettering vanishes and the figures turn to mush. Sizes are
-         multiples of 48 because Google documents that requirement — 16/32
-         alone do not qualify. Regenerate with brand-source/make-favicon.py. -->
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=3" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png?v=3" />
-    <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144x144.png?v=3" />
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=3" />
-    <link rel="icon" href="/favicon.ico?v=3" sizes="any" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+    <!-- Favicon is the two brothers cut from inside the logo, without the rim
+         lettering (unreadable at 16px), on a white disc with a brass ring so it
+         holds up on light and dark tab strips. Sizes are multiples of 48
+         because Google documents that requirement — 16/32 alone do not
+         qualify. Regenerate with brand-source/make-favicon.py. -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=4" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png?v=4" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144x144.png?v=4" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=4" />
+    <link rel="icon" href="/favicon.ico?v=4" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=4" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#22414f" />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
@@ -194,15 +193,16 @@ const schemaBlocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
                 if (!e.isIntersecting) return;
                 var el = e.target;
                 io.unobserve(el);
-                var target = parseInt(el.getAttribute('data-count'), 10);
+                var target = parseFloat(el.getAttribute('data-count'));
                 if (!isFinite(target)) return;
                 var suffix = el.getAttribute('data-count-suffix') || '';
+                var dp = parseInt(el.getAttribute('data-count-decimals') || '0', 10);
                 var start = performance.now();
-                var dur = 900;
+                var dur = 1400;
                 (function step(now) {
                   var t = Math.min(1, (now - start) / dur);
                   var eased = 1 - Math.pow(1 - t, 3);
-                  el.textContent = Math.round(target * eased) + suffix;
+                  el.textContent = (dp ? (target * eased).toFixed(dp) : Math.round(target * eased)) + suffix;
                   if (t < 1) requestAnimationFrame(step);
                 })(start);
               });

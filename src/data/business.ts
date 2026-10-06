@@ -54,7 +54,6 @@ export const business = {
   },
 
   responseTimePromise: 'Most Brooklyn calls reached in 20–30 minutes',
-  yearsInBusiness: 15,
   licenseNote: 'Licensed & insured New York locksmith',
 
   /**
