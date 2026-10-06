@@ -21,7 +21,7 @@ OWNED
   logo*.png / logo*.webp    The Nico & Vito Locksmith logo.
   van-2.jpg, van-open.jpg   The service van.
   bg-van.*                  The van, duotoned. Unused: the van still carries
-                            the OLD phone number (347-613-0218).
+                            the retired phone number.
   bg-vanblur.*              Inside the van, heavily blurred. Texture only, at
                             the owner's request; never shown sharp.
   bg-storefront-blur.*      The owner's AI-generated storefront, blurred past
