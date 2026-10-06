@@ -1,0 +1,316 @@
+---
+/**
+ * The homepage request form, built as a dispatch ticket.
+ *
+ * Location first: FROM our Bay Ridge base TO the customer's neighbourhood,
+ * with the real drive time from locations.ts, a mini map that draws the
+ * route, and "Near me", which finds the closest covered neighbourhood from
+ * the browser's location. The position never leaves the browser — only the
+ * neighbourhood name is submitted, exactly like the old form.
+ *
+ * Posts the same fields to /api/contact as ContactForm (name, phone,
+ * service, area, honeypot), so delivery and the email are unchanged.
+ */
+import Icon from './Icon.astro';
+import { business } from '@/data/business';
+import { services } from '@/data/services';
+import { serviceAreas } from '@/data/locations';
+
+// ── mini map projection (equirectangular, longitude scaled by cos(lat)) ──
+const W = 1000;
+const lats = serviceAreas.map((a) => a.coords[0]);
+const lngs = serviceAreas.map((a) => a.coords[1]);
+const pad = 0.012;
+const minLat = Math.min(...lats) - pad, maxLat = Math.max(...lats) + pad;
+const minLng = Math.min(...lngs) - pad, maxLng = Math.max(...lngs) + pad;
+const kx = Math.cos((((minLat + maxLat) / 2) * Math.PI) / 180);
+const spanX = (maxLng - minLng) * kx, spanY = maxLat - minLat;
+const H = Math.round((W * spanY) / spanX);
+const pt = ([lat, lng]: [number, number]) => ({
+  x: +(((lng - minLng) * kx) / spanX * W).toFixed(1),
+  y: +(((maxLat - lat) / spanY) * H).toFixed(1),
+});
+const pins = serviceAreas.map((a) => ({ ...a, ...pt(a.coords), value: `${a.name}, ${a.region}` }));
+const base = pins.find((p) => p.slug === 'bay-ridge')!;
+const brooklyn = pins.filter((p) => p.region === 'Brooklyn');
+const statenIsland = pins.filter((p) => p.region === 'Staten Island');
+
+const jobs = [
+  'emergency-lockout-service', 'car-key-replacement', 'lock-rekeying',
+  'lock-replacement-and-repair', 'key-fob-and-remote-programming', 'security-camera-installation',
+].map((slug) => services.find((s) => s.slug === slug)!).filter(Boolean);
+
+// For "Near me": every covered neighbourhood's centre, client-side only.
+const geo = pins.map((p) => ({ v: p.value, s: p.slug, c: p.coords }));
+---
+<form class="tk" method="POST" action="/api/contact" novalidate data-ticket>
+  <div class="tk-head">
+    <span class="tk-title"><Icon name="lockout" size={15} /> Service ticket</span>
+    <span class="tk-open" data-tk-hours><i></i><span data-tk-hours-text>7 AM – 11 PM daily</span></span>
+  </div>
+
+  <div class="tk-body" data-tk-body>
+    <!-- ROUTE -->
+    <div class="tk-route">
+      <div class="tk-legs">
+        <div class="tk-row">
+          <span class="tk-k">From</span>
+          <span class="tk-v"><b class="tk-dot tk-dot--base"></b> Bay Ridge base</span>
+        </div>
+        <div class="tk-row tk-row--to">
+          <label class="tk-k" for="tk-area">To</label>
+          <div class="tk-to">
+            <select id="tk-area" name="area" class="tk-select" data-tk-area>
+              <option value="">Your neighborhood</option>
+              <optgroup label="Brooklyn">{brooklyn.map((p) => <option value={p.value} data-slug={p.slug} data-eta={p.eta}>{p.name}</option>)}</optgroup>
+              <optgroup label="Staten Island">{statenIsland.map((p) => <option value={p.value} data-slug={p.slug} data-eta={p.eta}>{p.name}</option>)}</optgroup>
+            </select>
+            <button type="button" class="tk-near" data-tk-near title="Find the nearest neighborhood we cover">
+              <Icon name="pin" size={13} /> Use my location
+            </button>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="tk-k">ETA</span>
+          <span class="tk-v tk-eta" data-tk-eta aria-live="polite">Pick a neighborhood</span>
+        </div>
+      </div>
+
+      <div class="tk-map" aria-hidden="true">
+        <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet">
+          <path class="tk-route-line" pathLength="1" d="" data-tk-route />
+          {pins.map((p) => <circle class="tk-pin" cx={p.x} cy={p.y} r="11" data-tk-pin={p.slug} />)}
+          <circle class="tk-base-ring" cx={base.x} cy={base.y} r="20" />
+          <circle class="tk-base" cx={base.x} cy={base.y} r="17" data-tk-base />
+        </svg>
+      </div>
+    </div>
+
+    <div class="tk-perf" aria-hidden="true"></div>
+
+    <!-- JOB -->
+    <fieldset class="tk-job">
+      <legend class="tk-k">Job</legend>
+      <div class="tk-chips" role="group" aria-label="What happened?">
+        {jobs.map((s) => (
+          <button type="button" class="tk-chip" data-tk-chip={s.name} aria-pressed="false">
+            <Icon name={s.icon} size={14} /> {s.short}
+          </button>
+        ))}
+      </div>
+      <input type="hidden" name="service" value="" data-tk-service />
+    </fieldset>
+
+    <div class="tk-who">
+      <label class="sr-only" for="tk-name">Your name</label>
+      <input id="tk-name" name="name" type="text" autocomplete="name" placeholder="Your name" required class="tk-input" />
+      <label class="sr-only" for="tk-phone">Phone number</label>
+      <input id="tk-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone for the call-back" required class="tk-input" />
+    </div>
+
+    <div class="hidden" aria-hidden="true">
+      <label for="tk-company">Company</label>
+      <input id="tk-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <button type="submit" class="tk-go" data-tk-submit>
+      Dispatch a locksmith <Icon name="arrow" size={18} />
+    </button>
+    <p class="tk-note">We call you straight back to confirm. Nothing is booked until we talk.</p>
+    <div class="tk-status" data-tk-status role="status" aria-live="polite" hidden></div>
+  </div>
+</form>
+
+<script is:inline define:vars={{ geo, phone: business.phoneDisplay, phoneHref: business.phoneHref, email: business.email }}>
+  (function () {
+    var form = document.querySelector('form[data-ticket]');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var area = form.querySelector('[data-tk-area]');
+    var eta = form.querySelector('[data-tk-eta]');
+    var route = form.querySelector('[data-tk-route]');
+    var baseDot = form.querySelector('[data-tk-base]');
+    var service = form.querySelector('[data-tk-service]');
+    var status = form.querySelector('[data-tk-status]');
+    var submit = form.querySelector('[data-tk-submit]');
+
+    // Live open/closed in New York time.
+    (function hours() {
+      var box = form.querySelector('[data-tk-hours]'), t = form.querySelector('[data-tk-hours-text]');
+      try {
+        var p = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', hourCycle: 'h23' })
+          .formatToParts(new Date()).find(function (x) { return x.type === 'hour'; });
+        var h = Number(p.value) % 24, open = h >= 7 && h < 23;
+        box.classList.toggle('is-open', open);
+        t.textContent = open ? 'Open now' : 'Opens 7 AM';
+      } catch (e) {}
+    })();
+
+    // Destination → ETA + route on the mini map.
+    function draw(slug) {
+      form.querySelectorAll('.tk-pin.is-on').forEach(function (p) { p.classList.remove('is-on'); });
+      var pin = slug && form.querySelector('[data-tk-pin="' + slug + '"]');
+      if (!pin) { route.classList.remove('is-drawing'); return; }
+      pin.classList.add('is-on');
+      var bx = +baseDot.getAttribute('cx'), by = +baseDot.getAttribute('cy');
+      var px = +pin.getAttribute('cx'), py = +pin.getAttribute('cy');
+      var cx = (bx + px) / 2 + (py - by) * 0.2, cy = (by + py) / 2 - (px - bx) * 0.2;
+      route.setAttribute('d', 'M' + bx + ' ' + by + ' Q ' + cx + ' ' + cy + ' ' + px + ' ' + py);
+      route.classList.remove('is-drawing'); void route.getBoundingClientRect(); route.classList.add('is-drawing');
+    }
+    function syncArea() {
+      var opt = area.options[area.selectedIndex];
+      var slug = opt && opt.getAttribute('data-slug');
+      if (!slug) { eta.textContent = 'Pick a neighborhood'; eta.classList.remove('is-set'); draw(null); return; }
+      eta.innerHTML = '';
+      var b = document.createElement('b'); b.textContent = opt.getAttribute('data-eta');
+      eta.appendChild(b);
+      eta.appendChild(document.createTextNode(' from Bay Ridge'));
+      eta.classList.add('is-set');
+      draw(slug);
+    }
+    area.addEventListener('change', syncArea);
+
+    // Near me: nearest covered neighbourhood, computed in the browser only.
+    var near = form.querySelector('[data-tk-near]');
+    if (!('geolocation' in navigator)) near.hidden = true;
+    near.addEventListener('click', function () {
+      near.disabled = true; near.lastChild.textContent = ' Locating…';
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        var la = pos.coords.latitude, lo = pos.coords.longitude, best = null, bd = Infinity;
+        geo.forEach(function (g) {
+          var dy = (g.c[0] - la) * 111, dx = (g.c[1] - lo) * 111 * Math.cos(la * Math.PI / 180);
+          var d = Math.sqrt(dx * dx + dy * dy);
+          if (d < bd) { bd = d; best = g; }
+        });
+        near.disabled = false; near.lastChild.textContent = ' Use my location';
+        if (!best || bd > 6) { eta.textContent = 'You look outside our area — call us and we will tell you.'; return; }
+        area.value = best.v; syncArea();
+      }, function () {
+        near.disabled = false; near.lastChild.textContent = ' Use my location';
+        eta.textContent = 'Location is off — pick your neighborhood instead.';
+      }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
+    });
+
+    // Job chips set the submitted service value.
+    form.querySelectorAll('[data-tk-chip]').forEach(function (c) {
+      c.addEventListener('click', function () {
+        var v = c.getAttribute('data-tk-chip');
+        service.value = service.value === v ? '' : v;
+        form.querySelectorAll('[data-tk-chip]').forEach(function (x) {
+          var on = x.getAttribute('data-tk-chip') === service.value;
+          x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on));
+        });
+      });
+    });
+
+    function say(kind, html) { status.className = 'tk-status tk-status--' + kind; status.innerHTML = html; status.hidden = false; }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (form.company.value) return; // honeypot
+      var name = form.name.value.trim(), tel = form.phone.value.trim();
+      if (!name || !tel) { say('warn', 'Add your name and a phone number so we can call you back.'); return; }
+      submit.disabled = true; var label = submit.innerHTML; submit.textContent = 'Dispatching…';
+      fetch(form.action, { method: 'POST', body: new FormData(form) })
+        .then(function (r) { return r.ok ? r.json().catch(function () { return {}; }) : Promise.reject(r); })
+        .then(function () {
+          var first = name.split(' ')[0];
+          var where = area.value ? area.value.split(',')[0] : '';
+          form.querySelector('[data-tk-body]').innerHTML =
+            '<div class="tk-done">' +
+              '<div class="tk-done-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>' +
+              '<p class="tk-k">Ticket sent</p>' +
+              '<h2>Thanks, ' + first.replace(/[<>&"]/g, '') + '.</h2>' +
+              '<p>We will call you back shortly to confirm' + (where ? ' the job in ' + where.replace(/[<>&"]/g, '') : '') + '. We answer 7 AM – 11 PM, every day.</p>' +
+              '<a class="tk-go" href="tel:' + phoneHref + '">Call ' + phone + '</a>' +
+            '</div>';
+        })
+        .catch(function () {
+          var body = encodeURIComponent('Name: ' + name + '\nPhone: ' + tel + '\nService: ' + (service.value || '—') + '\nArea: ' + (area.value || '—'));
+          say('warn', "That didn't send. Please call <a href='tel:" + phoneHref + "'>" + phone + "</a> or <a href='mailto:" + email +
+            '?subject=' + encodeURIComponent('Locksmith request from ' + name) + '&body=' + body + "'>email us</a> — your details are filled in.");
+          submit.disabled = false; submit.innerHTML = label;
+        });
+    });
+  })();
+</script>
+
+<style>
+  .tk { position: relative; border-radius: 1.25rem; background: #fff; box-shadow: 0 34px 70px -30px rgb(0 0 0 / 0.7); overflow: hidden; color: #102330; }
+  .tk-head { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 1.1rem; background: #f2ae39; color: #102330; }
+  .tk-title { display: inline-flex; align-items: center; gap: 0.45rem; font: 800 0.78rem var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; }
+  .tk-open { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 999px; background: rgb(16 35 48 / 0.12); }
+  .tk-open i { width: 0.45rem; height: 0.45rem; border-radius: 999px; background: #102330; }
+  .tk-open.is-open i { background: #16a34a; box-shadow: 0 0 0 3px rgb(22 163 74 / 0.25); }
+  .tk-body { padding: 1rem 1.1rem 1.1rem; }
+
+  .tk-route { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+  @media (min-width: 480px) { .tk-route { grid-template-columns: minmax(0, 1fr) 8.2rem; align-items: center; } }
+  .tk-legs { display: grid; gap: 0.5rem; }
+  .tk-row { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); align-items: center; gap: 0.5rem; }
+  .tk-row--to { align-items: start; }
+  .tk-row--to .tk-k { padding-top: 0.6rem; }
+  .tk-k { font: 800 0.66rem var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; color: #8a9aa3; }
+  .tk-v { font-size: 0.92rem; font-weight: 600; }
+  .tk-dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 999px; margin-right: 0.3rem; vertical-align: 0.05rem; }
+  .tk-dot--base { background: #f2ae39; box-shadow: 0 0 0 3px rgb(242 174 57 / 0.25); }
+  .tk-to { display: grid; gap: 0.25rem; min-width: 0; justify-items: start; }
+  .tk-select, .tk-input {
+    width: 100%; min-width: 0; border: 1.5px solid #dfe5e9; border-radius: 0.65rem; background: #fff; color: #102330;
+    padding: 0.55rem 0.7rem; font-size: 0.92rem; outline: none;
+  }
+  .tk-select:focus, .tk-input:focus { border-color: #f2ae39; }
+  .tk-near {
+    display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.1rem 0; background: none;
+    color: #b8761a; font-size: 0.78rem; font-weight: 700; white-space: nowrap;
+  }
+  .tk-near:hover { text-decoration: underline; text-underline-offset: 2px; }
+  .tk-near:disabled { opacity: 0.7; }
+  .tk-eta { color: #5d6f78; font-weight: 500; }
+  .tk-eta.is-set { color: #102330; }
+  .tk-eta :global(b) { color: #b8761a; }
+
+  .tk-map { height: 8.2rem; border-radius: 0.8rem; background: #102330; padding: 0.4rem; }
+  .tk-map svg { width: 100%; height: 100%; }
+  .tk-pin { fill: rgb(190 212 220 / 0.45); transform-box: fill-box; transform-origin: center; transition: fill .25s, transform .25s; }
+  .tk-pin.is-on { fill: #fff; transform: scale(2.4); }
+  .tk-base { fill: #f2ae39; }
+  .tk-base-ring { fill: none; stroke: #f2ae39; stroke-width: 4; transform-box: fill-box; transform-origin: center; animation: tk-ring 2.4s ease-out infinite; }
+  .tk-route-line { fill: none; stroke: #f2ae39; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
+  .tk-route-line.is-drawing { opacity: 1; animation: tk-draw 0.9s ease-out forwards; }
+  @keyframes tk-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes tk-ring { 0% { transform: scale(1); opacity: 0.9; } 100% { transform: scale(2.8); opacity: 0; } }
+
+  /* tear line with notches, like a real ticket */
+  .tk-perf { position: relative; height: 1px; margin: 0.8rem -1.1rem; border-top: 2px dashed #dfe5e9; }
+  .tk-perf::before, .tk-perf::after { content: ''; position: absolute; top: -0.65rem; width: 1.2rem; height: 1.2rem; border-radius: 999px; background: var(--color-navy-900); }
+  .tk-perf::before { left: -0.6rem; } .tk-perf::after { right: -0.6rem; }
+
+  .tk-job { border: 0; padding: 0; margin: 0; }
+  .tk-job legend { margin-bottom: 0.45rem; }
+  .tk-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tk-chip {
+    display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.38rem 0.7rem; border-radius: 999px;
+    border: 1.5px solid #dfe5e9; font-size: 0.82rem; font-weight: 700; color: #22414f; background: #fff; transition: all .15s;
+  }
+  .tk-chip:hover { border-color: #90b3c0; }
+  .tk-chip.is-on { background: #102330; border-color: #102330; color: #fff; }
+  .tk-who { display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin-top: 0.8rem; }
+  @media (min-width: 480px) { .tk-who { grid-template-columns: 1fr 1fr; } }
+  .tk-body :global(.tk-go) {
+    margin-top: 0.8rem; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.8rem 1rem; border-radius: 0.8rem; background: #102330; color: #fff; font-weight: 800; font-size: 1rem;
+    transition: transform .15s, background .2s;
+  }
+  .tk-body :global(.tk-go:hover) { background: #22414f; transform: translateY(-1px); }
+  .tk-note { margin-top: 0.5rem; text-align: center; font-size: 0.76rem; color: #8a9aa3; }
+  .tk-status { margin-top: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 0.6rem; font-size: 0.85rem; }
+  .tk-status--warn { background: #fffbeb; border: 1px solid #fde68a; color: #78350f; }
+  .tk-status :global(a) { text-decoration: underline; font-weight: 700; }
+  .tk-body :global(.tk-done) { text-align: center; padding: 1.2rem 0.4rem 0.4rem; }
+  .tk-body :global(.tk-done-icon) { margin: 0 auto 0.6rem; width: 3.2rem; height: 3.2rem; border-radius: 999px; display: grid; place-items: center; background: #dcfce7; border: 1px solid #86efac; }
+  .tk-body :global(.tk-done h2) { font: 800 1.35rem var(--font-display); margin-top: 0.2rem; }
+  .tk-body :global(.tk-done p:not(.tk-k)) { margin-top: 0.4rem; color: #5d6f78; font-size: 0.92rem; }
+  @media (prefers-reduced-motion: reduce) { .tk-base-ring { animation: none; } .tk-route-line.is-drawing { animation: none; stroke-dashoffset: 0; } }
+</style>

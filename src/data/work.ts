@@ -103,6 +103,14 @@ export const workPhotos: WorkPhoto[] = [
     orientation: 'portrait',
   },
   {
+    slug: 'nissan-intelligent-keys-steering-wheel',
+    alt: 'Two Nissan Intelligent Keys — a five-button smart key and the newer-style Nissan fob — held in front of the Nissan badge on the steering wheel',
+    caption: 'Nissan Intelligent Key programmed alongside the original',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['nissan'],
+    orientation: 'portrait',
+  },
+  {
     slug: 'nissan-key-cut',
     alt: 'Two newly cut Nissan transponder keys held at the open driver window of a Nissan Altima',
     caption: 'Nissan keys originated at the car',
@@ -148,6 +156,22 @@ export const workPhotos: WorkPhoto[] = [
     caption: 'Ford Super Duty key cut and coded at the truck',
     services: ['car-key-replacement', 'key-fob-and-remote-programming'],
     makes: ['ford'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'ford-ranger-transponder-key',
+    alt: 'A Ford metal door key and a black-head Ford transponder key held in front of the Ford badge on a white Ford Ranger pickup',
+    caption: 'Ford Ranger transponder key and door key cut at the truck',
+    services: ['car-key-replacement'],
+    makes: ['ford'],
+    orientation: 'portrait',
+  },
+  {
+    // No badge in frame, so this is deliberately NOT tagged to a make page.
+    slug: 'ignition-cylinder-flip-keys',
+    alt: 'A steering column opened up to expose the ignition lock cylinder, with two four-button flip keys held below it',
+    caption: 'Ignition cylinder exposed and two flip keys matched to it',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
     orientation: 'portrait',
   },
   {
@@ -204,6 +228,20 @@ export const workPhotos: WorkPhoto[] = [
     alt: 'A polished brass mortise lock set with escutcheon plate newly fitted to a painted wooden apartment door',
     caption: 'Brass mortise set fitted to a prewar apartment door',
     services: ['lock-replacement-and-repair', 'deadbolt-installation', 'lock-rekeying'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'antique-rim-lock-wooden-door',
+    alt: 'An antique black box rim lock with a brass knob mounted on the inside of an old painted wooden front door',
+    caption: 'Antique rim lock serviced on an original wooden door',
+    services: ['lock-replacement-and-repair', 'lock-rekeying'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'baldwin-deadbolt-historic-door',
+    alt: 'A Baldwin deadbolt installed on a black panelled historic front door, below the original brass keyhole escutcheon and knob',
+    caption: 'Baldwin deadbolt added to a historic door, original hardware kept',
+    services: ['deadbolt-installation', 'high-security-locks', 'lock-replacement-and-repair'],
     orientation: 'portrait',
   },
   {
