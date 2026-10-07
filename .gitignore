@@ -10,3 +10,6 @@ npm-debug.log*
 .dev.vars
 .dev.vars.*
 .wrangler/
+
+# Google OAuth client file — never commit
+client_secret*.json

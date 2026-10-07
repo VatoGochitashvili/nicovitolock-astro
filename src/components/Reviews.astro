@@ -8,10 +8,12 @@ interface Props {
   /** Hide the whole section until there are real reviews to show (homepage).
    *  The Worker reveals it when it injects live Google reviews. */
   optional?: boolean;
+  /** Live reviews roll sideways in a strip instead of a grid (homepage). */
+  marquee?: boolean;
 }
-const { limit = 6, optional = false } = Astro.props;
+const { limit = 6, optional = false, marquee = false } = Astro.props;
 // Everything inside [data-live-reviews] is the static fallback. When the
-// Google Business Profile connection is configured, worker/reviews.js
+// Google Business Profile connection is configured, worker/gbp.js
 // replaces it at the edge with every live review, server-side.
 const shown = reviews.slice(0, limit);
 const fmt = (d: string) =>
@@ -26,39 +28,73 @@ const fmt = (d: string) =>
       </h2>
     </div>
 
-    <div data-live-reviews data-limit={limit}>
+    <div data-live-reviews data-limit={limit} data-style={marquee ? 'marquee' : 'grid'}>
       {hasReviews && averageRating !== null && (
         <p class="mt-3 flex items-center gap-2 text-muted">
           <span class="flex text-brass-400" aria-hidden="true">
             {[1, 2, 3, 4, 5].map(() => <Icon name="star" size={18} class="fill-current" />)}
           </span>
           <strong class="text-navy-900">{averageRating}</strong>
-            out of 5
+            out of 5 on Google
         </p>
       )}
 
     {hasReviews ? (
-      <>
+      marquee && shown.length >= 3 ? (
+        <>
+        {/* Same markup worker/gbp.js writes for live reviews; CSS in global.css.
+            The second copy makes the loop seamless and is hidden from readers. */}
+        <div class="rv-marquee" style={`--rv-dur:${shown.length * 9}s`}>
+          <ul class="rv-track" aria-label="Google reviews">
+            {[false, true].map((copy) => shown.map((r) => (
+              <li aria-hidden={copy ? 'true' : undefined} inert={copy}>
+                <figure class="card p-6 flex flex-col">
+                  <div class="flex text-brass-400" role="img" aria-label={`${r.rating} out of 5 stars`}>
+                    {Array.from({ length: r.rating }).map(() => <Icon name="star" size={17} class="fill-current" />)}
+                  </div>
+                  <blockquote class="mt-3 text-navy-800 leading-relaxed grow rv-clamp">“{r.text}”</blockquote>
+                  {r.photo && (
+                    <a href={r.photo.full} class="rv-photo" target="_blank" rel="noopener" tabindex={copy ? -1 : undefined}>
+                      <img src={r.photo.thumb} alt={r.photo.alt} width="300" height="400" loading="lazy" decoding="async" />
+                    </a>
+                  )}
+                  <figcaption class="mt-4 pt-4 border-t border-line text-sm">
+                    <span class="font-bold text-navy-900">{r.author}</span>
+                    <span class="block text-muted">Google review · {fmt(r.date)}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            )))}
+          </ul>
+        </div>
+        <div class="mt-8"><a href="/reviews/" class="btn btn-outline">Read every review</a></div>
+        </>
+      ) : (
       <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {shown.map((r, i) => (
+        {shown.map((r) => (
           <figure class="card p-6 flex flex-col">
             <div class="flex text-brass-400" aria-label={`${r.rating} out of 5 stars`}>
               {Array.from({ length: r.rating }).map(() => (
                 <Icon name="star" size={17} class="fill-current" />
               ))}
             </div>
-            <blockquote class="mt-3 text-navy-800 leading-relaxed grow">"{r.text}"</blockquote>
+            <blockquote class="mt-3 text-navy-800 leading-relaxed grow">“{r.text}”</blockquote>
+            {r.photo && (
+              <a href={r.photo.full} class="rv-photo" target="_blank" rel="noopener">
+                <img src={r.photo.thumb} alt={r.photo.alt} width="300" height="400" loading="lazy" decoding="async" />
+              </a>
+            )}
             <figcaption class="mt-4 pt-4 border-t border-line text-sm">
               <span class="font-bold text-navy-900">{r.author}</span>
               <span class="block text-muted">
-                {[r.service, r.area].filter(Boolean).join(' · ')}
+                {[r.service, r.area].filter(Boolean).concat('Google review').join(' · ')}
                 {r.date && ` · ${fmt(r.date)}`}
               </span>
             </figcaption>
           </figure>
         ))}
       </div>
-      </>
+      )
     ) : (
       <div class="mt-9 card p-8 md:p-10 text-center max-w-2xl mx-auto">
         <span class="inline-grid place-items-center w-14 h-14 rounded-full bg-brass-50 text-brass-500 mb-4">

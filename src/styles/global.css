@@ -730,3 +730,52 @@ details[open] > summary { background: rgb(242 174 57 / 0.05); }
   .svc-card:hover { transform: none; }
   .svc-card:hover img { transform: scale(1.02); }
 }
+
+/* ── Rolling Google reviews (homepage) ────────────────────────────────────
+   Markup is written by worker/gbp.js at the edge. The track holds every card
+   twice and slides left by exactly half its width, so the loop is seamless.
+   Hover or keyboard focus pauses it; reduced motion turns it into a plain
+   swipeable row. */
+.rv-marquee {
+  margin-top: 2.25rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.rv-track {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+  padding: 0.25rem 0 0.75rem;
+  animation: rv-roll var(--rv-dur, 60s) linear infinite;
+}
+.rv-marquee:hover .rv-track,
+.rv-marquee:focus-within .rv-track { animation-play-state: paused; }
+.rv-track > li { flex: none; width: min(22rem, 82vw); display: flex; }
+.rv-track > li > figure { width: 100%; }
+.rv-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@keyframes rv-roll { to { transform: translateX(calc(-50% - 0.625rem)); } }
+@media (prefers-reduced-motion: reduce) {
+  .rv-track { animation: none; }
+  .rv-marquee { overflow-x: auto; scroll-snap-type: x mandatory; }
+  .rv-track > li { scroll-snap-align: start; }
+  .rv-track > li[aria-hidden] { display: none; }
+}
+
+/* Photo a reviewer attached on Google: a small thumb that opens full size. */
+.rv-photo {
+  display: block;
+  width: 4.5rem;
+  margin-top: 0.9rem;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  border: 1px solid var(--color-line, #dfe5e8);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.rv-photo img { display: block; width: 100%; height: auto; }
+.rv-photo:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -10px rgb(16 35 48 / 0.5); }

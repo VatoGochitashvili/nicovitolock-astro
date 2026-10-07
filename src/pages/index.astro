@@ -172,7 +172,6 @@ const description =
                 ))}
                 <circle class="hm-base-ring" cx={base.x} cy={base.y} r="14" />
                 <circle class="hm-base" cx={base.x} cy={base.y} r="12" />
-                <text class="hm-base-label" x={base.x + 22} y={base.y + 10}>Bay Ridge</text>
               </svg>
               <ul class="hm-legend" aria-hidden="true">
                 <li><i class="hm-key hm-key--near"></i>Under 15 min</li>
@@ -196,7 +195,7 @@ const description =
   <GoogleReviewBand />
 
   <!-- Live Google reviews: hidden until the Worker has real ones to show. -->
-  <Reviews limit={6} optional />
+  <Reviews limit={20} optional marquee />
 
   <!-- ══════════════ 02 · HOURS HONESTY ══════════════ -->
   <section class="bg-white border-b border-line-cool">
@@ -596,9 +595,9 @@ const description =
     .hero-map { height: 30rem; }
     .hero-center .hero-map svg { position: absolute; top: 47%; left: 50%; width: 124%; height: 92%; transform: translate(-50%, -50%); }
   }
-  .hm-route, .hm-base, .hm-base-ring, .hm-base-label,
+  .hm-route, .hm-base, .hm-base-ring,
   .hm-boro, .hm-bridge, .hm-bridge-label { pointer-events: none; }
-  .hm-boro { fill: rgb(255 255 255 / 0.2); font: 800 52px var(--font-display, sans-serif); letter-spacing: 0.18em; }
+  .hm-boro { fill: rgb(255 255 255 / 0.2); font: 800 34px var(--font-display, sans-serif); letter-spacing: 0.2em; }
   .hm-bridge { stroke: #f2ae39; stroke-width: 5; stroke-dasharray: 2 12; stroke-linecap: round; opacity: 0.8; }
   .hm-bridge-label { fill: rgb(242 174 57 / 0.75); font: 600 italic 34px var(--font-sans, sans-serif); }
   .hm-pin--near { fill: #f2ae39; }
@@ -628,7 +627,6 @@ const description =
   .hm-pin.is-picked { fill: #f2ae39; transform: scale(2.1); }
   .hm-base { fill: #f2ae39; }
   .hm-base-ring { fill: none; stroke: #f2ae39; stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: hm-ring 2.6s ease-out infinite; }
-  .hm-base-label { fill: rgb(255 255 255 / 0.75); font: 700 44px var(--font-display, sans-serif); letter-spacing: 0.02em; }
   .hm-route {
     fill: none; stroke: #f2ae39; stroke-width: 3.6; stroke-linecap: round;
     stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0;

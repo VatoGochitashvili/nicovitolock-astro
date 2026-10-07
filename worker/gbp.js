@@ -168,29 +168,51 @@ const star =
 const month = (iso) =>
   iso ? new Date(iso).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/New_York' }) : '';
 
-export function renderReviews(reviews, limit) {
-  const shown = reviews.slice(0, limit);
-  const avg = Math.round((reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) * 10) / 10;
-  const cards = shown.map((r) => `
+function reviewCard(r, clamp = false) {
+  return `
       <figure class="card p-6 flex flex-col">
         <div class="flex text-brass-400" role="img" aria-label="${r.rating} out of 5 stars">${star.repeat(r.rating)}</div>
         ${r.text
-          ? `<blockquote class="mt-3 text-navy-800 leading-relaxed grow">“${esc(r.text)}”</blockquote>`
+          ? `<blockquote class="mt-3 text-navy-800 leading-relaxed grow${clamp ? ' rv-clamp' : ''}">“${esc(r.text)}”</blockquote>`
           : `<p class="mt-3 text-muted grow">Left a ${r.rating}-star rating.</p>`}
-        ${r.reply ? `<p class="mt-4 pt-4 border-t border-line text-sm text-muted"><span class="font-bold text-navy-900">Reply from Nico &amp; Vito:</span> ${esc(r.reply)}</p>` : ''}
+        ${r.reply && !clamp ? `<p class="mt-4 pt-4 border-t border-line text-sm text-muted"><span class="font-bold text-navy-900">Reply from Nico &amp; Vito:</span> ${esc(r.reply)}</p>` : ''}
         <figcaption class="mt-4 pt-4 border-t border-line text-sm">
           <span class="font-bold text-navy-900">${esc(r.author)}</span>
           <span class="block text-muted">Google review · ${month(r.date)}</span>
         </figcaption>
-      </figure>`).join('');
-  const more = reviews.length > shown.length
-    ? `<div class="mt-8"><a href="/reviews/" class="btn btn-outline">Read every review</a></div>` : '';
-  return `
+      </figure>`;
+}
+
+// Below this many reviews a rolling strip looks empty, so it stays a grid.
+const MARQUEE_MIN = 3;
+
+/**
+ * style "grid" (the /reviews/ page) or "marquee" (the homepage): a strip of
+ * cards rolling sideways. The marquee repeats its cards once so the loop is
+ * seamless; the copy is aria-hidden so screen readers hear each review once.
+ * Its CSS (.rv-*) lives in src/styles/global.css.
+ */
+export function renderReviews(reviews, limit, style = 'grid') {
+  const shown = reviews.slice(0, limit);
+  const avg = Math.round((reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) * 10) / 10;
+  const rating = `
     <p class="mt-3 flex items-center gap-2 text-muted">
       <span class="flex text-brass-400" aria-hidden="true">${star.repeat(5)}</span>
       <strong class="text-navy-900">${avg}</strong> out of 5 on Google
-    </p>
-    <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">${cards}</div>${more}`;
+    </p>`;
+  const more = reviews.length > shown.length || style === 'marquee'
+    ? `<div class="mt-8"><a href="/reviews/" class="btn btn-outline">Read every review</a></div>` : '';
+
+  if (style === 'marquee' && shown.length >= MARQUEE_MIN) {
+    const items = shown.map((r) => `<li>${reviewCard(r, true)}</li>`).join('');
+    const copy = shown.map((r) => `<li aria-hidden="true" inert>${reviewCard(r, true)}</li>`).join('');
+    return `${rating}
+    <div class="rv-marquee" style="--rv-dur:${shown.length * 9}s">
+      <ul class="rv-track" aria-label="Google reviews">${items}${copy}</ul>
+    </div>${more}`;
+  }
+  return `${rating}
+    <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">${shown.map((r) => reviewCard(r)).join('')}</div>${more}`;
 }
 
 export function renderPhotos(photos) {
@@ -215,7 +237,8 @@ export function injectProfile(response, { reviews = [], photos = [] }) {
     rw.on('[data-live-reviews]', {
       element(el) {
         const limit = Number(el.getAttribute('data-limit')) || 6;
-        el.setInnerContent(renderReviews(reviews, limit), { html: true });
+        const style = el.getAttribute('data-style') || 'grid';
+        el.setInnerContent(renderReviews(reviews, limit, style), { html: true });
       },
     }).on('[data-live-reviews-section]', {
       element(el) { el.removeAttribute('hidden'); },

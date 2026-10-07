@@ -78,9 +78,10 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
     position: relative;
     z-index: 0;
   }
-  /* Popups and tooltips are appended inside the container, so they are
-     contained too — but cap them so they cannot fight the map's own controls. */
-  .leaflet-container .leaflet-pane { z-index: auto; }
+  /* Leaflet's own pane z-indices (tiles 200 < pins 400 < tooltips 650) must
+     stay: flattening them to auto put the pin canvas on top of the tooltip
+     pane, so hover labels were created but never visible. `isolation` above
+     already keeps all of them inside the map. */
   .leaflet-container .leaflet-top,
   .leaflet-container .leaflet-bottom { z-index: 2; }
 
@@ -213,6 +214,11 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
           // Canvas rather than one SVG node per pin: 105 markers with hover
           // states are noticeably smoother to pan and zoom this way.
           preferCanvas: true,
+          // Canvas hit-testing is the drawn radius only (5–6px), so a hover
+          // just beside a pin did nothing and the map read as broken. The
+          // tolerance widens every pin's hover/click target without
+          // changing how it looks.
+          renderer: L.canvas({ tolerance: 9 }),
           zoomSnap: 0.25,
           zoomDelta: 0.5,
           wheelPxPerZoomLevel: 120,
