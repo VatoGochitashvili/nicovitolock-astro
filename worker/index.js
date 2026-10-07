@@ -59,7 +59,13 @@ export default {
     // www.…/locations/bay-ridge is one hop, not three.
     // "/locations", "/locations/" and "/locations/bay-ridge" all match.
     const legacy = LEGACY_PREFIXES.find(([from]) => url.pathname.startsWith(from) || url.pathname === from.slice(0, -1));
-    if (url.hostname === `www.${CANONICAL_HOST}` || legacy) {
+    // http is included so http://…/bay-ridge is one hop too. That only takes
+    // effect when Cloudflare's own "Always Use HTTPS" is off (it redirects at
+    // the edge before this Worker runs, path untouched, and the slash then
+    // costs a second hop).
+    const insecure = url.protocol === 'http:';
+    if (insecure || url.hostname === `www.${CANONICAL_HOST}` || legacy) {
+      url.protocol = 'https:';
       url.hostname = CANONICAL_HOST;
       if (legacy) url.pathname = legacy[1] + url.pathname.slice(legacy[0].length);
       if (!url.pathname.endsWith('/') && !/\.[a-z0-9]+$/i.test(url.pathname)) url.pathname += '/';
