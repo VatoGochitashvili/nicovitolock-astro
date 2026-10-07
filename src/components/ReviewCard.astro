@@ -1,0 +1,43 @@
+---
+// One review card: initial avatar, name and stars on top, the review, an
+// attached photo if there is one, then "Google review · Month Year".
+// worker/gbp.js writes the same markup for live reviews — keep the two in step
+// (avatarColor/initial there must match these). Styles: .rv-* in global.css.
+import Icon from './Icon.astro';
+import type { Review } from '@/data/reviews';
+
+interface Props {
+  review: Review;
+  /** Cut long text to a few lines (the rolling strip). */
+  clamp?: boolean;
+  /** Second copy in the rolling strip: not focusable. */
+  copy?: boolean;
+}
+const { review: r, clamp = false, copy = false } = Astro.props;
+
+// Muted brand-side tones; the same name always gets the same colour.
+const COLORS = ['#22414f', '#b8791a', '#3d6b7d', '#7a5c3e', '#4f6d5a', '#8a4b5c'];
+const hash = [...r.author].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+const color = COLORS[hash % COLORS.length];
+const initial = r.author.trim().charAt(0).toUpperCase();
+const month = new Date(r.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+---
+<figure class="card rv-card">
+  <div class="rv-head">
+    <span class="rv-avatar" style={`--rv-c:${color}`} aria-hidden="true">{initial}</span>
+    <div>
+      <span class="rv-name">{r.author}</span>
+      <span class="rv-stars" role="img" aria-label={`${r.rating} out of 5 stars`}>
+        {Array.from({ length: r.rating }).map(() => <Icon name="star" size={14} class="fill-current" />)}
+      </span>
+    </div>
+    {r.photo && (
+      <a href={r.photo.full} class="rv-photo" target="_blank" rel="noopener" tabindex={copy ? -1 : undefined}
+        title="Photo from this review">
+        <img src={r.photo.thumb} alt={r.photo.alt} width="300" height="400" loading="lazy" decoding="async" />
+      </a>
+    )}
+  </div>
+  <blockquote class:list={['rv-text', { 'rv-clamp': clamp }]}>“{r.text}”</blockquote>
+  <figcaption class="rv-meta">Google review · {month}</figcaption>
+</figure>

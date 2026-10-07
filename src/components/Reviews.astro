@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import ReviewCard from './ReviewCard.astro';
 import { reviews, hasReviews, averageRating } from '@/data/reviews';
 import { business } from '@/data/business';
 
@@ -48,21 +49,7 @@ const fmt = (d: string) =>
           <ul class="rv-track" aria-label="Google reviews">
             {[false, true].map((copy) => shown.map((r) => (
               <li aria-hidden={copy ? 'true' : undefined} inert={copy}>
-                <figure class="card p-6 flex flex-col">
-                  <div class="flex text-brass-400" role="img" aria-label={`${r.rating} out of 5 stars`}>
-                    {Array.from({ length: r.rating }).map(() => <Icon name="star" size={17} class="fill-current" />)}
-                  </div>
-                  <blockquote class="mt-3 text-navy-800 leading-relaxed grow rv-clamp">“{r.text}”</blockquote>
-                  {r.photo && (
-                    <a href={r.photo.full} class="rv-photo" target="_blank" rel="noopener" tabindex={copy ? -1 : undefined}>
-                      <img src={r.photo.thumb} alt={r.photo.alt} width="300" height="400" loading="lazy" decoding="async" />
-                    </a>
-                  )}
-                  <figcaption class="mt-4 pt-4 border-t border-line text-sm">
-                    <span class="font-bold text-navy-900">{r.author}</span>
-                    <span class="block text-muted">Google review · {fmt(r.date)}</span>
-                  </figcaption>
-                </figure>
+                <ReviewCard review={r} clamp copy={copy} />
               </li>
             )))}
           </ul>
@@ -70,28 +57,9 @@ const fmt = (d: string) =>
         <div class="mt-8"><a href="/reviews/" class="btn btn-outline">Read every review</a></div>
         </>
       ) : (
-      <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {shown.map((r) => (
-          <figure class="card p-6 flex flex-col">
-            <div class="flex text-brass-400" aria-label={`${r.rating} out of 5 stars`}>
-              {Array.from({ length: r.rating }).map(() => (
-                <Icon name="star" size={17} class="fill-current" />
-              ))}
-            </div>
-            <blockquote class="mt-3 text-navy-800 leading-relaxed grow">“{r.text}”</blockquote>
-            {r.photo && (
-              <a href={r.photo.full} class="rv-photo" target="_blank" rel="noopener">
-                <img src={r.photo.thumb} alt={r.photo.alt} width="300" height="400" loading="lazy" decoding="async" />
-              </a>
-            )}
-            <figcaption class="mt-4 pt-4 border-t border-line text-sm">
-              <span class="font-bold text-navy-900">{r.author}</span>
-              <span class="block text-muted">
-                {[r.service, r.area].filter(Boolean).concat('Google review').join(' · ')}
-                {r.date && ` · ${fmt(r.date)}`}
-              </span>
-            </figcaption>
-          </figure>
+          <ReviewCard review={r} />
         ))}
       </div>
       )

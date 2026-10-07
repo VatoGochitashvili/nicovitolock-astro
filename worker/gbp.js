@@ -168,18 +168,27 @@ const star =
 const month = (iso) =>
   iso ? new Date(iso).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/New_York' }) : '';
 
+// Must match src/components/ReviewCard.astro (same colours, same hash).
+const AVATAR_COLORS = ['#22414f', '#b8791a', '#3d6b7d', '#7a5c3e', '#4f6d5a', '#8a4b5c'];
+const avatarColor = (name) =>
+  AVATAR_COLORS[[...name].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % AVATAR_COLORS.length];
+
 function reviewCard(r, clamp = false) {
+  const name = r.author || 'Google user';
+  const small = star.replace('width="17" height="17"', 'width="14" height="14"');
   return `
-      <figure class="card p-6 flex flex-col">
-        <div class="flex text-brass-400" role="img" aria-label="${r.rating} out of 5 stars">${star.repeat(r.rating)}</div>
+      <figure class="card rv-card">
+        <div class="rv-head">
+          <span class="rv-avatar" style="--rv-c:${avatarColor(name)}" aria-hidden="true">${esc(name.trim().charAt(0).toUpperCase())}</span>
+          <div>
+            <span class="rv-name">${esc(name)}</span>
+            <span class="rv-stars" role="img" aria-label="${r.rating} out of 5 stars">${small.repeat(r.rating)}</span>
+          </div>
+        </div>
         ${r.text
-          ? `<blockquote class="mt-3 text-navy-800 leading-relaxed grow${clamp ? ' rv-clamp' : ''}">“${esc(r.text)}”</blockquote>`
-          : `<p class="mt-3 text-muted grow">Left a ${r.rating}-star rating.</p>`}
-        ${r.reply && !clamp ? `<p class="mt-4 pt-4 border-t border-line text-sm text-muted"><span class="font-bold text-navy-900">Reply from Nico &amp; Vito:</span> ${esc(r.reply)}</p>` : ''}
-        <figcaption class="mt-4 pt-4 border-t border-line text-sm">
-          <span class="font-bold text-navy-900">${esc(r.author)}</span>
-          <span class="block text-muted">Google review · ${month(r.date)}</span>
-        </figcaption>
+          ? `<blockquote class="rv-text${clamp ? ' rv-clamp' : ''}">“${esc(r.text)}”</blockquote>`
+          : `<p class="rv-text">Left a ${r.rating}-star rating.</p>`}
+        <figcaption class="rv-meta">Google review · ${month(r.date)}</figcaption>
       </figure>`;
 }
 
@@ -212,7 +221,7 @@ export function renderReviews(reviews, limit, style = 'grid') {
     </div>${more}`;
   }
   return `${rating}
-    <div class="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">${shown.map((r) => reviewCard(r)).join('')}</div>${more}`;
+    <div class="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">${shown.map((r) => reviewCard(r)).join('')}</div>${more}`;
 }
 
 export function renderPhotos(photos) {
