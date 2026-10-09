@@ -1,6 +1,6 @@
 ---
 /**
- * Facebook / Instagram / Google profile icons. Each renders only when its
+ * Facebook / Instagram / Yelp / Nextdoor / Google profile icons. Each renders only when its
  * URL is set in business.social, so adding a profile there is all it takes.
  */
 import Icon from './Icon.astro';
@@ -17,6 +17,8 @@ const { tone = 'dark', size = 'md', google = false, class: cls = '' } = Astro.pr
 const links = [
   { href: business.social.facebook, icon: 'facebook', label: 'Nico & Vito Locksmith on Facebook' },
   { href: business.social.instagram, icon: 'instagram', label: 'Nico & Vito Locksmith on Instagram' },
+  { href: business.social.yelp, icon: 'yelp', label: 'Nico & Vito Locksmith on Yelp' },
+  { href: business.social.nextdoor, icon: 'nextdoor', label: 'Nico & Vito Locksmith on Nextdoor' },
   ...(google ? [{ href: business.social.google, icon: 'pin', label: 'Nico & Vito Locksmith on Google Maps' }] : []),
 ].filter((l) => l.href);
 const box = size === 'sm' ? 'w-7 h-7' : 'w-10 h-10';

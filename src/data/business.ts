@@ -82,7 +82,8 @@ export const business = {
     google: 'https://maps.google.com/?cid=15903496105070705769',
     facebook: 'https://www.facebook.com/nicovitolocksmith',
     instagram: 'https://www.instagram.com/nicovitolocksmith/',
-    yelp: '',
+    yelp: 'https://www.yelp.com/biz/nico-and-vito-locksmith-brooklyn',
+    nextdoor: 'https://nextdoor.com/page/nico-vito-locksmith/',
   },
 
   /** Deep link that opens the "write a review" dialog directly. */

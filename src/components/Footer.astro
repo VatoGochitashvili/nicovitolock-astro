@@ -102,6 +102,12 @@ const statenIsland = serviceAreas.filter((a) => a.region === 'Staten Island');
           {business.social.instagram && (
             <li><a href={business.social.instagram} target="_blank" rel="noopener" class="text-navy-200 hover:text-white transition-colors">Instagram</a></li>
           )}
+          {business.social.yelp && (
+            <li><a href={business.social.yelp} target="_blank" rel="noopener" class="text-navy-200 hover:text-white transition-colors">Yelp</a></li>
+          )}
+          {business.social.nextdoor && (
+            <li><a href={business.social.nextdoor} target="_blank" rel="noopener" class="text-navy-200 hover:text-white transition-colors">Nextdoor</a></li>
+          )}
           <li><a href="/contact/" class="text-navy-200 hover:text-white transition-colors">Contact</a></li>
           <li><a href="/service-areas/brooklyn/" class="text-navy-200 hover:text-white transition-colors">Brooklyn Locksmith</a></li>
           <li><a href="/service-areas/staten-island/" class="text-navy-200 hover:text-white transition-colors">Staten Island Locksmith</a></li>
