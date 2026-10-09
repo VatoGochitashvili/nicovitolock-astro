@@ -63,8 +63,8 @@ const geo = pins.map((p) => ({ v: p.value, s: p.slug, c: p.coords }));
           <div class="tk-to">
             <select id="tk-area" name="area" class="tk-select" data-tk-area>
               <option value="">Your neighborhood</option>
-              <optgroup label="Brooklyn">{brooklyn.map((p) => <option value={p.value} data-slug={p.slug} data-eta={p.eta}>{p.name}</option>)}</optgroup>
-              <optgroup label="Staten Island">{statenIsland.map((p) => <option value={p.value} data-slug={p.slug} data-eta={p.eta}>{p.name}</option>)}</optgroup>
+              <optgroup label="Brooklyn">{brooklyn.map((p) => <option value={p.value} data-slug={p.slug}>{p.name}</option>)}</optgroup>
+              <optgroup label="Staten Island">{statenIsland.map((p) => <option value={p.value} data-slug={p.slug}>{p.name}</option>)}</optgroup>
             </select>
             <button type="button" class="tk-near" data-tk-near title="Find the nearest neighborhood we cover">
               <Icon name="pin" size={13} /> Use my location
@@ -72,8 +72,8 @@ const geo = pins.map((p) => ({ v: p.value, s: p.slug, c: p.coords }));
           </div>
         </div>
         <div class="tk-row">
-          <span class="tk-k">ETA</span>
-          <span class="tk-v tk-eta" data-tk-eta aria-live="polite">Pick a neighborhood</span>
+          <span class="tk-k">WHEN</span>
+          <span class="tk-v tk-eta" data-tk-eta aria-live="polite">Arrival window given on the call</span>
         </div>
       </div>
 
@@ -145,11 +145,8 @@ const geo = pins.map((p) => ({ v: p.value, s: p.slug, c: p.coords }));
     function syncArea() {
       var opt = area.options[area.selectedIndex];
       var slug = opt && opt.getAttribute('data-slug');
-      if (!slug) { eta.textContent = 'Pick a neighborhood'; eta.classList.remove('is-set'); draw(null); return; }
-      eta.innerHTML = '';
-      var b = document.createElement('b'); b.textContent = opt.getAttribute('data-eta');
-      eta.appendChild(b);
-      eta.appendChild(document.createTextNode(' from Bay Ridge'));
+      if (!slug) { eta.textContent = 'Arrival window given on the call'; eta.classList.remove('is-set'); draw(null); return; }
+      eta.textContent = 'Covered. We give you an arrival window on the call.';
       eta.classList.add('is-set');
       draw(slug);
     }

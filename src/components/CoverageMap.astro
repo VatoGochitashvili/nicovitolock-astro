@@ -30,7 +30,7 @@ interface Props {
 }
 const {
   heading = 'Every neighborhood we cover',
-  intro = 'Brooklyn and Staten Island, plotted. Tap a pin for the drive time from Bay Ridge and the local page.',
+  intro = 'Brooklyn and Staten Island, plotted. Tap a pin for that neighborhood\'s page.',
   height = 'clamp(360px, 44vw, 600px)',
   region = 'all',
   class: className = '',
@@ -42,7 +42,6 @@ const points = areas.map((a) => ({
   n: a.name,
   s: a.slug,
   r: a.region,
-  e: a.eta,
   t: a.tier,
   c: a.coords,
 }));
@@ -250,7 +249,7 @@ const statenIsland = areas.filter((a) => a.region === 'Staten Island').length;
           // Name on hover, so the map is readable without clicking 105 pins.
           marker.bindTooltip(
             '<strong>' + esc(p.n) + '</strong>' + (home ? ' · our base' : '') +
-            '<br><span style="font-weight:400;opacity:.75">' + esc(p.e) + ' away · click to open</span>', {
+            '<br><span style="font-weight:400;opacity:.75">' + esc(p.r) + ' · click to open</span>', {
             direction: 'top',
             offset: [0, -4],
             opacity: 1,

@@ -13,7 +13,7 @@ import { business } from '@/data/business';
 import { traitServiceNote } from '@/data/localknowledge';
 import { SERVICE_LOCAL_FAQS, TRAIT_FAQS, fillFaq } from '@/data/localfaqs';
 import { fieldNotesFor } from '@/data/fieldnotes';
-import { pickDescription, quickEta } from '@/lib/seo';
+import { pickDescription } from '@/lib/seo';
 
 /** FNV-1a — stable unsigned 32-bit hash from a seed string. */
 export function seededHash(str: string): number {
@@ -176,19 +176,19 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
 
   // ------------------------------- leads -------------------------------
   const leads = [
-    `Need ${sLower} in ${city}? Nico & Vito Locksmith works out of Bay Ridge, ${eta} from here, and we cover ${city} (${zip}) every day from 7 AM to 11 PM.`,
-    `Nico & Vito Locksmith handles ${sLower} across ${city}, ${region}. Bay Ridge based, ${eta} away, and the number you ring reaches the person who turns up.`,
-    `Looking for ${sLower} in ${city}? We're licensed, insured, and based in Bay Ridge, which puts ${city} ${eta} from our door seven days a week.`,
-    `For ${sLower} anywhere in ${city} (${zip}), Nico & Vito Locksmith is the local call. Bay Ridge based, ${eta} out, open 7 AM to 11 PM every single day.`,
-    `${city} residents and business owners call us for ${sLower} because we're actually nearby — Bay Ridge, ${eta} from ${city}, with the parts already on the van.`,
-    `When ${city} needs ${sLower}, we're ${eta} away. Nico & Vito Locksmith runs out of Bay Ridge and covers all of ${region} daily, 7 AM to 11 PM.`,
-    `${cap(sShort)} in ${city}, handled by a Bay Ridge locksmith who is ${eta} out and open seven days a week, 7 AM to 11 PM.`,
+    `Need ${sLower} in ${city}? Nico & Vito Locksmith works out of Bay Ridge and we cover ${city} (${zip}) every day from 7 AM to 11 PM.`,
+    `Nico & Vito Locksmith handles ${sLower} across ${city}, ${region}. Bay Ridge based, and the number you ring reaches the person who turns up.`,
+    `Looking for ${sLower} in ${city}? We're licensed, insured, and based in Bay Ridge, covering ${city} seven days a week.`,
+    `For ${sLower} anywhere in ${city} (${zip}), Nico & Vito Locksmith is the local call. Bay Ridge based, open 7 AM to 11 PM every single day.`,
+    `${city} residents and business owners call us for ${sLower} because we're actually local — Bay Ridge based, with the parts already on the van.`,
+    `When ${city} needs ${sLower}, call a local. Nico & Vito Locksmith runs out of Bay Ridge and covers all of ${region} daily, 7 AM to 11 PM.`,
+    `${cap(sShort)} in ${city}, handled by a Bay Ridge locksmith who is open seven days a week, 7 AM to 11 PM.`,
     `We do ${sLower} throughout ${city} and the rest of ${region}. Local, licensed, insured, and reachable on ${phone} any day between 7 AM and 11 PM.`,
     `${city} (${zip}) is inside our everyday coverage. Call ${phone} for ${sLower} and you get a Bay Ridge technician, not a subcontractor bidding on your job.`,
-    `If you need ${sLower} in ${city}, you are ${eta} from a licensed local locksmith rather than a national dispatch number pretending to be one.`,
-    `Nico & Vito Locksmith covers ${city} for ${sLower} every day of the week. Bay Ridge based, ${eta} out, price agreed before we leave.`,
-    `${cap(sLower)} for ${city} homes and businesses — from a family-run Bay Ridge locksmith ${eta} down the road, open 7 AM to 11 PM daily.`,
-    `Need ${sLower} around ${city}? We are the local option: Bay Ridge based, ${eta} away, licensed and insured, and open every single day.`,
+    `If you need ${sLower} in ${city}, you can call a licensed local locksmith rather than a national dispatch number pretending to be one.`,
+    `Nico & Vito Locksmith covers ${city} for ${sLower} every day of the week. Bay Ridge based, price agreed before we leave.`,
+    `${cap(sLower)} for ${city} homes and businesses — from a family-run Bay Ridge locksmith, open 7 AM to 11 PM daily.`,
+    `Need ${sLower} around ${city}? We are the local option: Bay Ridge based, licensed and insured, and open every single day.`,
   ];
 
   // ------------------------------ angles -------------------------------
@@ -244,30 +244,30 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
   // ----------------------------- process -------------------------------
   const processes = [
     `Booking is one call. Ring ${phone}, describe the situation, and we give you a price for the ${sWork} work before we leave Bay Ridge. No trip surcharge for ${city}, and no number that changes once we're standing at your door.`,
-    `Here's how a ${city} job runs: you call ${phone}, we ask enough questions to quote it accurately, and a licensed tech is at your door in ${eta} with the right gear. You approve the price before any work starts.`,
-    `Call ${phone} and tell us what's going on. We quote the ${sWork} work up front, arrive in about the time we said, finish the job, and clean up. That's the whole process.`,
-    `We keep it simple for ${city}: one call to ${phone}, a straight price, a licensed technician ${eta} out, and the ${sWork} work done the same visit whenever it can be.`,
-    `Reach us at ${phone} any day between 7 AM and 11 PM. We confirm the price for the ${sWork} job first, then a tech heads to ${city} — usually ${eta} — with everything needed to finish.`,
+    `Here's how a ${city} job runs: you call ${phone}, we ask enough questions to quote it accurately, and we give you an arrival window before a licensed tech heads over with the right gear. You approve the price before any work starts.`,
+    `Call ${phone} and tell us what's going on. We quote the ${sWork} work up front, arrive in the window we gave you, finish the job, and clean up. That's the whole process.`,
+    `We keep it simple for ${city}: one call to ${phone}, a straight price, a licensed technician, and the ${sWork} work done the same visit whenever it can be.`,
+    `Reach us at ${phone} any day between 7 AM and 11 PM. We confirm the price for the ${sWork} job first, then a tech heads to ${city} with everything needed to finish.`,
     `One call to ${phone} starts it. We ask what the door or vehicle is doing, quote the ${sWork} job on the spot, and send a licensed tech to ${city} with the parts already aboard.`,
     `No forms, no waiting on a callback: ring ${phone}, get a real number for the ${sWork} work, and we head to ${city}. If the job turns out different on arrival, you hear about it before we touch anything.`,
-    `The ${city} routine is short. Call, describe it, agree the price, and a licensed technician handles the ${sWork} work ${eta} later — usually the same day you called.`,
+    `The ${city} routine is short. Call, describe it, agree the price, and a licensed technician handles the ${sWork} work at a time we agree on the call.`,
     `We answer the phone ourselves between 7 AM and 11 PM. Tell us about the ${sWork} job in ${city}, take the quote, and we schedule it around when actually suits you.`,
     `Book by calling ${phone}. You get a price for the ${sWork} work before we leave Bay Ridge, an arrival window we hold to, and a ${city} job finished the same visit where it can be.`,
-    `Straight process for ${city}: a phone call, an honest quote, a licensed tech ${eta} out, the ${sWork} work done, and the door tested before we go.`,
+    `Straight process for ${city}: a phone call, an honest quote, a licensed tech, the ${sWork} work done, and the door tested before we go.`,
   ];
 
   // ------------------------------ closes -------------------------------
   const closes = [
     `Whether you own a house in ${city}, rent an apartment, or run a business here, we handle the ${sShort} and stand behind the work.`,
-    `${city} is ${eta} from our door. That's why we can quote fairly, show up when we say, and still be the ones you call next time.`,
+    `${city} is part of our regular route. That's why we can quote fairly, show up when we say, and still be the ones you call next time.`,
     `From a single cylinder to a whole building, ${city} property owners get licensed, insured ${sWork} work at a price agreed before we start.`,
     `If you need ${sShort} in ${city} or anywhere else in ${region}, call ${phone}. We're open ${hours.toLowerCase()} — including weekends and holidays.`,
-    `We treat ${city} jobs like neighbors' jobs, because ${eta} away is what neighbors means in this borough.`,
+    `We treat ${city} jobs like neighbors' jobs, because that is what being the local locksmith means.`,
     `Good ${sWork} work in ${city} isn't complicated: the right parts, a licensed hand, an honest price. That's what you get when you call ${phone}.`,
-    `${city} does not need another national dispatch number. It needs a locksmith ${eta} away who answers the phone and quotes straight — call ${phone}.`,
+    `${city} does not need another national dispatch number. It needs a local locksmith who answers the phone and quotes straight — call ${phone}.`,
     `Whatever the ${sWork} job turns out to be, ${city} gets it done by a licensed technician at the price we agreed on the phone.`,
     `We would rather do one ${city} job properly than three of them twice. That is the whole reason people here call us back.`,
-    `For ${sWork} anywhere in ${city} — house, apartment, storefront, or vehicle — you have a local, licensed option ${eta} down the road.`,
+    `For ${sWork} anywhere in ${city} — house, apartment, storefront, or vehicle — you have a local, licensed option in Bay Ridge.`,
     `${city} is close enough that we treat it like our own block, because it more or less is. Call ${phone} and we will tell you honestly what the ${sWork} job needs.`,
     `Book the ${sWork} work in ${city} with a locksmith who is licensed, insured, local, and open every day from 7 AM to 11 PM.`,
   ];
@@ -276,11 +276,11 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
   const faqPool = [
     {
       q: `Do you charge extra to come out to ${city}?`,
-      a: `No. ${city} is inside our regular ${region} service area — about ${eta} from our Bay Ridge base — so there's no premium for the location. You pay for the ${sWork} work itself, quoted before we start.`,
+      a: `No. ${city} is inside our regular ${region} service area, so there's no premium for the location. You pay for the ${sWork} work itself, quoted before we start.`,
     },
     {
       q: `How fast can you get to ${city}?`,
-      a: `${city} is typically ${eta} from us. We're open every day from 7 AM to 11 PM, so call ${phone} and we'll give you a real arrival window rather than a vague "on our way."`,
+      a: `It depends on traffic and what we're already working on, so we won't promise a time here. We're open every day from 7 AM to 11 PM; call ${phone} and we'll give you an honest arrival window on the phone.`,
     },
     {
       q: `Are you licensed to do ${sWork} work in ${city}?`,
@@ -300,7 +300,7 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     },
     {
       q: `Are you a local ${city} locksmith or a national dispatch service?`,
-      a: `Local. Nico & Vito is based in Bay Ridge, ${eta} from ${city}, and the number you call reaches the people who show up. Nobody bids on your job and nobody subcontracts it.`,
+      a: `Local. Nico & Vito is based in Bay Ridge, and the number you call reaches the people who show up. Nobody bids on your job and nobody subcontracts it.`,
     },
     {
       q: `What payment do you take in ${city}?`,
@@ -315,14 +315,14 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
       a: `All of it, plus the blocks either side. ${city} sits in ${zip}, and we run the whole ${region} side of our route daily — there is no part of it we treat as too far.`,
     },
     {
-      q: `Can you come the same day in ${city}?`,
-      a: `Usually. ${city} is ${eta} from Bay Ridge and we carry common parts on the van, so most ${sWork} jobs here are done on the first visit the same day you call.`,
+      q: `Can you finish the ${sWork} job in one visit in ${city}?`,
+      a: `Usually. We carry common parts on the van, so most ${sWork} jobs here are done on the first visit. If a part has to be ordered, we tell you before we start.`,
     },
   ];
 
   const homeFaq = {
     q: `Are you actually based in ${city}?`,
-    a: `Yes. Bay Ridge is where we're based and where we live, so ${sWork} calls here are usually minutes away rather than a cross-borough dispatch.`,
+    a: `Yes. Bay Ridge is where we're based and where we live, so ${sWork} calls here are handled by neighbors rather than a cross-borough dispatch.`,
   };
 
   // FAQs are drawn service-first. The generic "do you charge extra to come
@@ -355,22 +355,22 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     : [];
 
   const quoteBlurbs = [
-    `Tell us the door, the lock, or the vehicle and we'll quote the ${sShort} work before we leave Bay Ridge — ${eta} from you.`,
+    `Tell us the door, the lock, or the vehicle and we'll quote the ${sShort} work before we leave Bay Ridge.`,
     `Describe what the ${sWork} job involves and we'll price it now, not after a technician is standing in ${city}.`,
     `Send us the details and you'll get a real number for the ${sWork} work, agreed before anyone leaves for ${city}.`,
-    `Tell us what happened. We quote the ${sWork} job on the phone, and ${city} is ${eta} away once you say go.`,
+    `Tell us what happened. We quote the ${sWork} job on the phone, and give you an arrival window once you say go.`,
     `Give us the door type and the problem. You get a price for the ${sShort} work up front, and no trip charge for ${city}.`,
-    `A short description is enough to quote most ${sWork} jobs. ${cap(city)} is ${eta} out and we carry the common parts.`,
+    `A short description is enough to quote most ${sWork} jobs. We carry the common parts on the van.`,
     `Tell us where in ${city} and what the ${sWork} problem is — we'll price it before the van moves.`,
   ];
 
   const ctaBodies = [
-    `We're ${eta} away, open every day 7 AM to 11 PM. Call for a price before we roll out.`,
-    `${cap(city)} is ${eta} from Bay Ridge. Phones are answered 7 AM to 11 PM, every day of the year.`,
-    `Licensed, insured, and ${eta} out. Call and you'll have a price for the ${sWork} work before we leave.`,
+    `Open every day 7 AM to 11 PM. Call for a price before we roll out.`,
+    `Bay Ridge based. Phones are answered 7 AM to 11 PM, every day of the year.`,
+    `Licensed, insured and local. Call and you'll have a price for the ${sWork} work before we leave.`,
     `Open seven days, 7 AM to 11 PM. Tell us about the ${sWork} job and we'll quote it on the call.`,
-    `${eta} from you, every day of the week. No trip surcharge for ${city}, and the price is agreed first.`,
-    `One call reaches the people who turn up. ${cap(city)} is ${eta} away, 7 AM to 11 PM daily.`,
+    `Every day of the week. No trip surcharge for ${city}, and the price is agreed first.`,
+    `One call reaches the people who turn up. Open 7 AM to 11 PM daily.`,
     `We'll tell you what the ${sWork} job needs and what it costs before a van leaves Bay Ridge.`,
   ];
 
@@ -393,11 +393,9 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     `We cover ${city} end to end, from ${markLine} outward.`,
   ];
 
-  // A drive time sells only when it is short. "About 52 minutes away" in a
-  // search snippet costs the click the page itself would have earned; the
-  // honest figure stays on the page, where it sits next to everything else.
-  const near = quickEta(eta);
-  const away = isHome ? 'based right here' : near ? `${near} away` : 'no trip charge';
+  // No drive times anywhere: Google Ads verification rejects response-time
+  // claims on the site, and a search snippet is no place for one either.
+  const away = isHome ? 'based right here' : 'no trip charge';
 
   // None opens with the title's own words: the snippet sits directly under
   // the title, and repeating it spends the first line saying nothing.
@@ -463,18 +461,18 @@ export function areaCopy(area: ServiceArea): AreaCopy {
   const nearby = area.nearby.length ? area.nearby.join(', ') : '';
 
   const leads = [
-    `Nico & Vito Locksmith covers every block of ${city}, ${region} — ${eta} from our Bay Ridge base, every day between 7 AM and 11 PM.`,
-    `We're a Bay Ridge locksmith serving ${city} daily. Lockouts, lock changes, car keys, intercoms, and cameras, ${eta} from our door.`,
-    `${city} is part of our regular ${region} coverage. One licensed local outfit, open seven days a week, ${eta} away.`,
-    `Locksmith service throughout ${city} (${zip}) — residential, automotive, and commercial — from a Bay Ridge locksmith that's ${eta} out.`,
-    `Need a locksmith in ${city}? We're ${eta} down the road in Bay Ridge, licensed and insured, and open 7 AM to 11 PM every day of the week.`,
+    `Nico & Vito Locksmith covers every block of ${city}, ${region} from our Bay Ridge base, every day between 7 AM and 11 PM.`,
+    `We're a Bay Ridge locksmith serving ${city} daily. Lockouts, lock changes, car keys, intercoms, and cameras.`,
+    `${city} is part of our regular ${region} coverage. One licensed local outfit, open seven days a week.`,
+    `Locksmith service throughout ${city} (${zip}) — residential, automotive, and commercial — from a Bay Ridge locksmith.`,
+    `Need a locksmith in ${city}? We're based in Bay Ridge, licensed and insured, and open 7 AM to 11 PM every day of the week.`,
     `${city} sits well inside our daily route. Call ${business.phone} and you get a Bay Ridge technician rather than a national dispatch number.`,
-    `From lockouts to camera systems, ${city} gets the full range from one local crew — ${eta} away, open every day including weekends.`,
+    `From lockouts to camera systems, ${city} gets the full range from one local crew, open every day including weekends.`,
     `Our ${city} coverage is not an afterthought: ${zip} is on the route every day, 7 AM to 11 PM, at the same prices we charge at home in Bay Ridge.`,
-    `A licensed locksmith for ${city}, ${region}. Bay Ridge based, ${eta} out, and on these streets every day of the week.`,
-    `${city} homes, apartments, storefronts, and vehicles — all covered, every day, by a family-run Bay Ridge locksmith ${eta} away.`,
+    `A licensed locksmith for ${city}, ${region}. Bay Ridge based and on these streets every day of the week.`,
+    `${city} homes, apartments, storefronts, and vehicles — all covered, every day, by a family-run Bay Ridge locksmith.`,
     `We work ${city} the same way we work our own block: quote first, arrive when we said, and charge what we quoted.`,
-    `Locksmith in ${city} (${zip}) — ${eta} from Bay Ridge, open 7 days a week, licensed, insured, and answering the phone ourselves.`,
+    `Locksmith in ${city} (${zip}) — Bay Ridge based, open 7 days a week, licensed, insured, and answering the phone ourselves.`,
   ];
 
   const details = [
@@ -551,8 +549,8 @@ export function areaFaqs(area: ServiceArea): { q: string; a: string }[] {
   const pool = [
     { q: `Do you cover all of ${city}?`,
       a: `Yes — every block. ${area.blurb}` },
-    { q: `How long does it take you to reach ${city}?`,
-      a: `${eta} from our Bay Ridge base under normal conditions. We're open every day 7 AM to 11 PM, so call ${phone} and we'll give you a real arrival window rather than a vague "on our way."` },
+    { q: `When can you get to ${city}?`,
+      a: `It depends on traffic and what we're already working on, so we won't promise a time here. Call ${phone} any day 7 AM to 11 PM and we'll give you an honest arrival window on the phone.` },
     { q: `Are you open on weekends in ${city}?`,
       a: `Every day of the week, 7 AM to 11 PM, holidays included. We're not a 24-hour operation — outside those hours nobody is coming, and we'd rather say so than take your call and leave you waiting.` },
     { q: `What does a locksmith cost in ${city}?`,
@@ -568,9 +566,9 @@ export function areaFaqs(area: ServiceArea): { q: string; a: string }[] {
     { q: `Do you work with landlords and property managers in ${city}?`,
       a: `Regularly. ${city} has plenty of multi-unit property, and we handle building-wide rekeys, master key systems, intercoms, and recurring work — billed per property so the accounting stays clean.` },
     { q: `Is there a call-out fee for ${city}?`,
-      a: `No neighborhood surcharge. ${city} is inside our everyday service area at ${eta} out, and anything that would add to the price is stated on the phone before you agree to it.` },
-    { q: `Can you get to ${city} the same day?`,
-      a: `Usually, yes. ${city} is ${eta} from Bay Ridge and the vans carry common parts, so most jobs here are finished on the first visit the day you call.` },
+      a: `No neighborhood surcharge. ${city} is inside our everyday service area, and anything that would add to the price is stated on the phone before you agree to it.` },
+    { q: `Can you finish the job in one visit in ${city}?`,
+      a: `Usually, yes. The vans carry common parts, so most jobs here are finished on the first visit. If a part has to be ordered, you hear that before we start.` },
     { q: `What if I'm just outside ${city}?`,
       a: `Still covered. We work all of ${region} — ${area.nearby.length ? `${area.nearby.join(', ')} included` : 'the surrounding blocks included'} — on the same daily route and the same price list.` },
     { q: `Do you install security cameras and intercoms in ${city}?`,
@@ -694,13 +692,13 @@ export function vehicleCopy(v: Vehicle): VehicleCopy {
     `We come to the ${make}. Keys and fobs cut and programmed at the kerb across Brooklyn and Staten Island, at a fraction of dealer pricing.`,
     `A ${make} key made at your car, not at a dealership — no tow truck, no waiting list, and a price agreed before we set off.`,
     `${make} keys and fobs originated on site anywhere in Brooklyn or Staten Island. Dealer-level equipment, without the dealer bill.`,
-    `Lost the key to your ${m0}? We cut and program a replacement at the vehicle, usually the same day you call.`,
+    `Lost the key to your ${m0}? We cut and program a replacement at the vehicle, no tow needed.`,
   ];
 
   const coverages = [
     `We reach the car wherever it sits. These neighborhoods are the quickest from Bay Ridge, though every one of them is covered.`,
     `Your ${make} does not have to move — we do. Fastest neighborhoods from our Bay Ridge base are listed below.`,
-    `Because the car cannot be driven without a key, we bring the equipment to it. A sample of the areas we reach quickest:`,
+    `Because the car cannot be driven without a key, we bring the equipment to it. A sample of the areas we cover:`,
     `Every neighborhood in both boroughs is on our route. These are simply the closest to Bay Ridge:`,
   ];
 

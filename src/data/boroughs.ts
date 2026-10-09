@@ -49,7 +49,7 @@ export const boroughs: BoroughPage[] = [
       {
         heading: 'How fast we get there',
         body: [
-          'Bay Ridge sits in the south-west corner of the borough, so our honest arrival times are shortest in Dyker Heights, Fort Hamilton, Bensonhurst and Sunset Park — usually under fifteen minutes — and longest up towards Greenpoint and East New York, where twenty-five to thirty-five is realistic depending on the BQE.',
+          'Bay Ridge sits in the south-west corner of the borough, so Dyker Heights, Fort Hamilton, Bensonhurst and Sunset Park are on our doorstep, while Greenpoint and East New York are the far end of the run and depend on the BQE. Either way, you get an honest arrival window when you call.',
           'Every neighborhood page on this site carries its own estimate rather than a single borough-wide promise, because a number that is true for Bay Ridge is a lie for Bushwick. When you call, we tell you where the technician actually is.',
         ],
       },
@@ -64,7 +64,7 @@ export const boroughs: BoroughPage[] = [
     faqs: [
       {
         q: 'Do you cover all of Brooklyn?',
-        a: 'Every neighborhood, all 50 listed on this page. Coverage is genuinely borough-wide rather than a short list near our base with the rest added for show — although the arrival times differ, and each neighborhood page states its own honestly.',
+        a: 'Every neighborhood, all 50 listed on this page. Coverage is genuinely borough-wide rather than a short list near our base with the rest added for show. Every neighborhood gets the same prices and the same crew.',
       },
       {
         q: 'How much does a Brooklyn locksmith charge?',
@@ -76,7 +76,7 @@ export const boroughs: BoroughPage[] = [
       },
       {
         q: 'Do you charge extra to come to my part of Brooklyn?',
-        a: 'No. There is no trip surcharge anywhere in the borough. You pay for the work itself, quoted before we start, whether you are ten minutes from us in Dyker Heights or up in Greenpoint.',
+        a: 'No. There is no trip surcharge anywhere in the borough. You pay for the work itself, quoted before we start, whether you are next door to us in Dyker Heights or up in Greenpoint.',
       },
     ],
   },
@@ -102,9 +102,9 @@ export const boroughs: BoroughPage[] = [
       {
         heading: 'North Shore, Mid-Island, South Shore',
         body: [
-          'The North Shore — St. George, Tompkinsville, Stapleton, New Brighton, Port Richmond — is the densest part of the island and the closest to us, typically fifteen to twenty minutes over the bridge. It carries more multi-family housing and more commercial frontage than the rest, so the work skews towards rekeys between tenants, storefront cylinders and intercom faults.',
+          'The North Shore — St. George, Tompkinsville, Stapleton, New Brighton, Port Richmond — is the densest part of the island and the closest to us, just over the bridge. It carries more multi-family housing and more commercial frontage than the rest, so the work skews towards rekeys between tenants, storefront cylinders and intercom faults.',
           'Mid-Island, through Todt Hill, New Springville, Bulls Head and Westerleigh, is largely single-family with the occasional gated property, and the calls are mostly rekeys, deadbolts and smart locks.',
-          'The South Shore — Great Kills, Eltingville, Annadale, Huguenot, Tottenville — is the furthest run, realistically thirty to forty minutes depending on the expressway, and we say so rather than quoting an island-wide number. Waterfront blocks down there take real weather, and corroded exterior hardware is a large share of what we replace.',
+          'The South Shore — Great Kills, Eltingville, Annadale, Huguenot, Tottenville — is the furthest run, and how long it takes depends on the expressway, so we give you a real arrival window when you call rather than an island-wide promise. Waterfront blocks down there take real weather, and corroded exterior hardware is a large share of what we replace.',
         ],
       },
       {
@@ -122,7 +122,7 @@ export const boroughs: BoroughPage[] = [
       },
       {
         q: 'How long does it take you to get to Staten Island?',
-        a: 'The North Shore is typically fifteen to twenty minutes from Bay Ridge, Mid-Island twenty-five to thirty, and the South Shore thirty to forty depending on the expressway. Bridge traffic is the variable, and we will tell you what it is doing when you call rather than quoting a best case.',
+        a: 'The North Shore is closest to Bay Ridge, Mid-Island next, and the South Shore furthest. Bridge traffic is the variable, so we do not promise a time on the website; we tell you what the bridge is doing and give you an honest arrival window when you call.',
       },
       {
         q: 'Is there a bridge toll added to the bill?',

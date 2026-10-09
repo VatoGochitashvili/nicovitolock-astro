@@ -53,7 +53,6 @@ export const business = {
     schema: ['Mo-Su 07:00-23:00'],
   },
 
-  responseTimePromise: 'Most Brooklyn calls reached in 20–30 minutes',
   licenseNote: 'Licensed & insured New York locksmith',
 
   /**
@@ -117,7 +116,7 @@ export const business = {
   highlights: [
     { label: 'Based in', value: 'Bay Ridge' },
     { label: 'Open daily', value: '7am – 11pm' },
-    { label: 'Typical arrival', value: '20–30 min' },
+    { label: 'Pricing', value: 'Quoted first' },
     { label: 'Licensed & insured', value: 'Yes' },
   ],
 

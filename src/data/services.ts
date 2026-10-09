@@ -86,7 +86,7 @@ export const services: Service[] = [
       },
       {
         q: 'How fast can you get here?',
-        a: "We're based in Bay Ridge and open every day from 7 AM to 11 PM. Most Brooklyn calls we reach in 20–30 minutes; Staten Island usually runs 30–45 depending on the bridge.",
+        a: "We're based in Bay Ridge and open every day from 7 AM to 11 PM. Arrival depends on traffic and where we already are, so we don't promise a time here; when you call, we give you an honest arrival window.",
       },
     ],
   },
@@ -178,7 +178,7 @@ export const services: Service[] = [
       'Deadbolt no longer lines up with the strike',
       'Lock feels loose and spins in the door',
       'Prewar mortise lockset stopped latching',
-      'Break-in damage that needs same-day repair',
+      'Break-in damage that needs repair',
       "Lock froze solid over the winter",
       "Door swollen shut and the bolt will not line up",
       "Handle came off in your hand",
@@ -676,7 +676,7 @@ export const services: Service[] = [
     ],
     faqs: [
       {
-        q: 'Can you service my storefront the same day?',
+        q: 'Can you fix my storefront lock in one visit?',
         a: "Most of the time, yes. We're open every day 7 AM to 11 PM and carry common storefront cylinders and Adams Rite hardware on the van, so a lot of it gets solved on the first visit.",
       },
       {

@@ -46,7 +46,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'bay-ridge', name: 'Bay Ridge', region: 'Brooklyn', zip: '11209', tier: 1,
     coords: [40.625, -74.03],
-    blurb: 'Bay Ridge is home base. We live and work here, so a lockout on 3rd Avenue or a lock change off Shore Road is usually a few minutes away, not a dispatch call to somebody across the city.',
+    blurb: 'Bay Ridge is home base. We live and work here, so a lockout on 3rd Avenue or a lock change off Shore Road is handled by neighbors, not a dispatch call to somebody across the city.',
     landmarks: ['3rd Avenue', '5th Avenue', 'Shore Road', '86th Street', 'the Verrazzano-Narrows Bridge', 'Owl’s Head Park'],
     nearby: ['Dyker Heights', 'Fort Hamilton', 'Sunset Park', 'Bensonhurst'],
     character: 'a mix of limestone row houses, prewar co-ops, and the 3rd and 5th Avenue storefront strips',
@@ -66,7 +66,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'fort-hamilton', name: 'Fort Hamilton', region: 'Brooklyn', zip: '11209', tier: 1,
     coords: [40.61, -74.03],
-    blurb: 'Fort Hamilton sits at the foot of the Verrazzano, minutes from our base. We cover the row houses along the parkway and the small businesses on 4th and 5th Avenue.',
+    blurb: 'Fort Hamilton sits at the foot of the Verrazzano, right next to our base. We cover the row houses along the parkway and the small businesses on 4th and 5th Avenue.',
     landmarks: ['Fort Hamilton Parkway', 'the Belt Parkway', '101st Street', 'John Paul Jones Park'],
     nearby: ['Bay Ridge', 'Dyker Heights', 'Bath Beach'],
     character: 'row houses and low-rise apartment buildings close to the bridge approach',

@@ -27,7 +27,7 @@ const homeFaqs = [
   },
   {
     q: 'What areas do you cover?',
-    a: `All of Brooklyn and all of Staten Island — ${serviceAreas.length} neighborhoods in total. We're based in Bay Ridge, so southwest Brooklyn is fastest, and Staten Island is a straight run over the Verrazzano.`,
+    a: `All of Brooklyn and all of Staten Island — ${serviceAreas.length} neighborhoods in total. We're based in Bay Ridge, so southwest Brooklyn is home turf, and Staten Island is a straight run over the Verrazzano.`,
   },
   {
     q: 'How much does a locksmith cost?',
@@ -35,7 +35,7 @@ const homeFaqs = [
   },
   {
     q: 'How fast can you get here?',
-    a: "Most Brooklyn calls we reach in 20–30 minutes. Staten Island typically runs 30–45 depending on where you are and what the bridge looks like. We give you a real window when you call, not a vague 'on our way.'",
+    a: "It depends on traffic, the bridge and what we're already working on, so we don't promise a time on the website. When you call, we give you an honest arrival window, not a vague 'on our way.'",
   },
   {
     q: 'Are you licensed and insured?',
@@ -65,11 +65,8 @@ const project = ([lat, lng]: [number, number]) => ({
   x: +(((lng - minLng) * kx) / spanX * MAP_W).toFixed(1),
   y: +(((maxLat - lat) / spanY) * MAP_H).toFixed(1),
 });
-const mapPins = serviceAreas.map((a) => ({ slug: a.slug, name: a.name, region: a.region, eta: a.eta, ...project(a.coords) }));
+const mapPins = serviceAreas.map((a) => ({ slug: a.slug, name: a.name, region: a.region, ...project(a.coords) }));
 const base = mapPins.find((p) => p.slug === 'bay-ridge')!;
-// Drive-time band from the real ETA in locations.ts ("about 18 minutes").
-const etaMin = (eta: string) => Number((eta.match(/\d+/) || ['0'])[0]);
-const band = (eta: string) => (etaMin(eta) < 15 ? 'near' : etaMin(eta) <= 30 ? 'mid' : 'far');
 // Borough names sit at the centre of each borough's pins.
 const centroid = (region: string) => {
   const ps = mapPins.filter((p) => p.region === region);
@@ -146,7 +143,7 @@ const description =
 
           <ul class="mt-6 flex flex-wrap gap-2.5 text-[0.86rem]">
             <li class="hero-chip"><Icon name="badge" size={15} class="text-brass-400" /> Licensed &amp; insured</li>
-            <li class="hero-chip"><Icon name="bolt" size={15} class="text-brass-400" /> 20–30 min across Brooklyn</li>
+            <li class="hero-chip"><Icon name="bolt" size={15} class="text-brass-400" /> Price quoted before we come</li>
             <li class="hero-chip"><Icon name="star" size={15} class="text-brass-400" /> {business.googleRating} on Google</li>
           </ul>
         </div>
@@ -155,7 +152,7 @@ const description =
         <div class="hero-center">
             <!-- Coverage map: every neighbourhood we serve, in its real position, with
                  a route drawn from the Bay Ridge base once a location is chosen. Every pin is a link to
-                 its neighbourhood page; hover or focus shows the drive time. -->
+                 its neighbourhood page; hover or focus shows its name. -->
             <div class="hero-map" role="group" aria-label="Coverage map — choose a neighborhood to open its page">
               <div class="hm-tip" data-hm-tip hidden></div>
               <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} preserveAspectRatio="xMidYMid meet">
@@ -165,18 +162,17 @@ const description =
                 <text class="hm-bridge-label" x={(bridgeA.x + bridgeB.x) / 2 - 18} y={(bridgeA.y + bridgeB.y) / 2 + 44} text-anchor="middle">Verrazzano</text>
                 <path class="hm-route hm-route--picked" pathLength="1" d="" data-hm-pick-route />
                 {mapPins.map((p) => (
-                  <a href={`/service-areas/${p.slug}/`} class="hm-link" data-hm-name={p.name} data-hm-eta={p.eta} aria-label={`Locksmith in ${p.name} — ${p.eta} away`}>
+                  <a href={`/service-areas/${p.slug}/`} class="hm-link" data-hm-name={p.name} aria-label={`Locksmith in ${p.name}`}>
                     <circle class="hm-hit" cx={p.x} cy={p.y} r="30" />
-                    <circle class:list={['hm-pin', `hm-pin--${band(p.eta)}`]} cx={p.x} cy={p.y} r="7.5" data-hm-slug={p.slug} />
+                    <circle class:list={['hm-pin', p.region === 'Brooklyn' ? 'hm-pin--near' : 'hm-pin--mid']} cx={p.x} cy={p.y} r="7.5" data-hm-slug={p.slug} />
                   </a>
                 ))}
                 <circle class="hm-base-ring" cx={base.x} cy={base.y} r="14" />
                 <circle class="hm-base" cx={base.x} cy={base.y} r="12" />
               </svg>
               <ul class="hm-legend" aria-hidden="true">
-                <li><i class="hm-key hm-key--near"></i>Under 15 min</li>
-                <li><i class="hm-key hm-key--mid"></i>15–30 min</li>
-                <li><i class="hm-key hm-key--far"></i>30+ min</li>
+                <li><i class="hm-key hm-key--near"></i>Brooklyn</li>
+                <li><i class="hm-key hm-key--mid"></i>Staten Island</li>
               </ul>
             </div>
         </div>
@@ -363,7 +359,7 @@ const description =
 
           <dl class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-5 gap-y-6">
             {[
-              { v: '20–30', k: 'min in Brooklyn' },
+              { v: '12', k: 'services' },
               { v: '7am–11pm', k: 'every day' },
               { v: '105', k: 'neighborhoods' },
               { v: '5.0', k: 'on Google' },
@@ -444,7 +440,7 @@ const description =
 
   <CoverageMap
     heading="Where we work"
-    intro="Every Brooklyn and Staten Island neighborhood we cover, with the drive time from our Bay Ridge base. Tap a pin for that neighborhood's page."
+    intro="Every Brooklyn and Staten Island neighborhood we cover. Tap a pin for that neighborhood's page."
   />
 
 
@@ -677,7 +673,7 @@ const description =
       });
     }
 
-    // Map pins: hover or keyboard focus shows name + drive time; clicking is a normal link to the area page.
+    // Map pins: hover or keyboard focus shows the name; clicking is a normal link to the area page.
     var mapBox = hero.querySelector('.hero-map');
     var tip = hero.querySelector('[data-hm-tip]');
     var routeEl = hero.querySelector('[data-hm-pick-route]');
@@ -697,7 +693,7 @@ const description =
       tip.innerHTML = '';
       tip.appendChild(document.createTextNode(link.getAttribute('data-hm-name')));
       var sub = document.createElement('span');
-      sub.textContent = link.getAttribute('data-hm-eta') + ' from Bay Ridge · click to open';
+      sub.textContent = 'Click to open the ' + link.getAttribute('data-hm-name') + ' page';
       tip.appendChild(sub);
       tip.style.left = (r.left + r.width / 2 - m.left) + 'px';
       tip.style.top = (r.top - m.top) + 'px';

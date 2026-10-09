@@ -140,7 +140,7 @@ export const SERVICE_FIELD_NOTES: Record<string, string[]> = {
     'Master keying a business is worth designing rather than accumulating. Staff keys that open what they should, a management key that opens everything, and a written record — built at the start it stays coherent for years, built piecemeal it becomes a drawer of unlabelled keys.',
     'Restricted keys change what happens when an employee leaves. Instead of rekeying because a key might have been copied, you get the key back and know that is all of them. For a %CITY% business with turnover, that is the whole argument.',
     'Roll-down gates and the door behind them are two separate lock problems on one entrance, and they fail independently. We carry parts for both, because getting a gate up and finding the glass door still locked is not a completed job.',
-    'After a break-in the first job is making the premises lockable the same day, even if the permanent repair comes later. A business that cannot lock up cannot open, and we schedule those ahead of routine work.',
+    'After a break-in the first job is making the premises lockable, even if the permanent repair comes later. A business that cannot lock up cannot open, and we schedule those ahead of routine work.',
     'Scheduled maintenance costs less than emergencies, and for commercial doors it is genuinely predictable. Closers adjusted, exit devices tested and cylinders serviced on a planned visit avoids the failures that otherwise happen mid-trading.',
   ],
 };

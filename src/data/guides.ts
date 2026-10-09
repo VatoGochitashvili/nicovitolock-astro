@@ -66,7 +66,7 @@ export const guides: Record<string, NeighborhoodGuide & { district: District }> 
       'Much of Fort Hamilton is the row houses and apartment buildings off 4th Avenue and Fort Hamilton Parkway, a few blocks from the Verrazzano. Military families renting nearby often want a rekey on move-in, because nobody knows how many keys the last tenant left behind.',
       'Housing on the Army post itself is behind a security gate. If you live on post, check the base’s rules for contractor access before we set out — we can only work where we are allowed in.',
     ],
-    route: 'Fort Hamilton is the southern tip of our home turf, a few minutes down 4th Avenue or Fort Hamilton Parkway.',
+    route: 'Fort Hamilton is the southern tip of our home turf, straight down 4th Avenue or Fort Hamilton Parkway.',
     faqs: [
       { q: 'I just moved near the base — should I change the locks?', a: 'A rekey is the cheap, sensible move. It makes every old key useless without replacing the hardware, and it takes minutes per lock.' },
       { q: 'Can you come onto the Fort Hamilton post?', a: 'Only with the access the base requires for contractors. Ask housing or the gate what they need from a vendor first, and we will arrange the rest.' },
@@ -198,7 +198,7 @@ export const guides: Record<string, NeighborhoodGuide & { district: District }> 
     ],
     route: 'From Bay Ridge we take Kings Highway or Bay Parkway across to Homecrest.',
     faqs: [
-      { q: 'An employee left with a store key. What should I do?', a: 'Rekey the cylinder the same day. Every old key stops working, the lock itself stays, and you get new keys for the current staff.' },
+      { q: 'An employee left with a store key. What should I do?', a: 'Rekey the cylinder as soon as you can. Every old key stops working, the lock itself stays, and you get new keys for the current staff.' },
       { q: 'Can different units in one building have their own keys?', a: 'Yes. We key each unit separately and, if you want it, give the owner a master key for all of them.' },
     ],
   },
@@ -419,7 +419,7 @@ export const guides: Record<string, NeighborhoodGuide & { district: District }> 
       'Carroll Gardens is known for the deep front gardens in front of its brownstones, which means a front gate as well as a front door. Gate locks and latches here face weather all year and are worth upgrading when they get loose.',
       'Inside, many houses are two- or three-family brownstones. Rekeys between tenants and keeping the shared front door secure are the jobs we do most.',
     ],
-    route: 'We take the Gowanus Expressway and come off at Hamilton Avenue, a few minutes from the neighborhood.',
+    route: 'We take the Gowanus Expressway and come off at Hamilton Avenue, right by the neighborhood.',
     faqs: [
       { q: 'Can you put a lock on my front garden gate?', a: 'Yes. We fit gate locks that suit iron gates and stand up to weather, and we can key them to your house key.' },
       { q: 'Do I need to change the locks between tenants?', a: 'You should at least rekey. It makes the previous tenant’s keys useless and costs much less than replacing the locks.' },

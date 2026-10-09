@@ -18,7 +18,7 @@ import { business } from '@/data/business';
 import { areaCopy, areaFaqs, areaTraitNote, seededHash } from '@/lib/localize';
 import { areaTraitParagraphs, TRAIT_SERVICE_PRIORITY } from '@/data/areaknowledge';
 import { serviceBySlug } from '@/data/services';
-import { breadcrumbSchema, faqSchema, pickDescription, pickTitle, quickEta, localBusinessSchema} from '@/lib/seo';
+import { breadcrumbSchema, faqSchema, pickDescription, pickTitle, localBusinessSchema} from '@/lib/seo';
 import { boroughs } from '@/data/boroughs';
 
 export function getStaticPaths() {
@@ -99,14 +99,10 @@ const title = pickTitle([
   `${area.name} Locksmith | Nico & Vito`,
 ]);
 
-// The drive time goes in only when it is short: "about 55 minutes from Bay
-// Ridge" in a snippet loses the call. The page itself still gives it.
-const nearEta = quickEta(area.eta);
+// No drive times: Google Ads verification rejects response-time claims.
 const arrival = area.name === business.base.neighborhood
   ? 'Based right here in Bay Ridge.'
-  : nearEta
-    ? `${nearEta.charAt(0).toUpperCase()}${nearEta.slice(1)} from our Bay Ridge base.`
-    : 'No trip charge from Bay Ridge.';
+  : 'No trip charge from Bay Ridge.';
 const description = pickDescription([
   `Lockouts, rekeys, lock changes, car keys, intercoms & cameras in ${area.name}, ${area.region} ${area.zip}. ${arrival} Open daily 7AM–11PM. Call ${business.phone}.`,
   `Lockouts, rekeys, car keys, intercoms & cameras in ${area.name}, ${area.region} ${area.zip}. ${arrival} Open daily 7AM–11PM. Call ${business.phone}.`,
@@ -179,7 +175,7 @@ const schema = [
   <section class="bg-navy-800 border-b border-white/10">
     <div class="container-x grid grid-cols-2 lg:grid-cols-4 divide-x divide-white/10">
       {[
-        { k: 'Typical arrival', v: area.eta, i: 'bolt' },
+        { k: 'Pricing', v: 'Quoted before we come', i: 'bolt' },
         { k: 'Hours', v: 'Every day, 7am–11pm', i: 'clock' },
         { k: 'Borough', v: area.region, i: 'pin' },
         { k: 'Trip surcharge', v: 'None', i: 'dollar' },
@@ -346,7 +342,7 @@ const schema = [
           Get a price for {area.name}
         </h2>
         <p class="mt-4 text-navy-200 leading-relaxed">
-          Describe the job and we'll quote it before we leave Bay Ridge — {area.eta} from you,
+          Describe the job and we'll quote it before we leave Bay Ridge,
           any day between 7 AM and 11 PM.
         </p>
         <a href={`tel:${business.phoneHref}`} class="btn btn-brass mt-6" data-call-cta="area-band">
@@ -373,6 +369,6 @@ const schema = [
 
   <CtaBand
     heading={`Need a locksmith in ${area.name}?`}
-    body={`We're ${area.eta} away, open every day 7 AM to 11 PM. Call for a price before we head out.`}
+    body={`Open every day 7 AM to 11 PM. Call for a price before we head out.`}
   />
 </BaseLayout>
