@@ -16,31 +16,49 @@ import PageHero from '@/components/PageHero.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { ownPhotos, photoDims, shareablePhoto, type WorkPhoto } from '@/data/work';
 import { services } from '@/data/services';
-import { breadcrumbSchema, localBusinessSchema, pickDescription, ogPhoto } from '@/lib/seo';
+import { vehicles } from '@/data/vehicles';
+import { business } from '@/data/business';
+import { breadcrumbSchema, localBusinessSchema, pickDescription, ogPhoto, faqSchema } from '@/lib/seo';
 
-const GROUPS: { id: string; title: string; intro: string; match: string[] }[] = [
+const GROUPS: { id: string; title: string; intro: string; body: string[]; match: string[] }[] = [
   {
     id: 'car-keys',
     title: 'Car keys and key fobs',
     intro: 'Keys cut and programmed at the car — transponder keys, flip keys and smart fobs, with the badge in frame where it was.',
+    body: [
+      'Most car key calls are one of three jobs: a spare while you still have a working key, a replacement when every key is lost, or a remote or push-to-start fob that has stopped pairing. All three are done at the vehicle. The blade is cut on a machine in the van, and the chip is programmed to the car’s immobilizer with diagnostic equipment — the tablet you can see plugged in under the dash in several of these photos.',
+      'The badge is left in frame on purpose, so you can see the range of cars behind these jobs. If your make is listed below, its page explains which key it uses and what replacing it involves.',
+    ],
     match: ['car-key-replacement', 'key-fob-and-remote-programming'],
   },
   {
     id: 'lockouts',
     title: 'Lockouts',
     intro: 'Doors opened by picking, not drilling.',
+    body: [
+      'How a door is opened matters more than anything else on a lockout. We pick or bypass the lock whenever we can, which leaves it working and costs you nothing extra. Drilling is a last resort, and if it ever comes to that you hear the reason and the price before we start.',
+      'These photos are doors opened that way: picking tools in the cylinder, no damage to the door, the frame or the lock.',
+    ],
     match: ['emergency-lockout-service'],
   },
   {
     id: 'home',
     title: 'Home locks',
     intro: 'Mortise locks, deadbolts and smart locks fitted to Brooklyn front doors, old and new.',
+    body: [
+      'Housing here runs from prewar brownstones with their original mortise locks to new builds with keypad deadbolts, and this section covers both ends. On older doors we service a mortise case or an antique rim lock rather than rip it out when it can be saved, and add a modern deadbolt alongside it for real security.',
+      'Newer doors get deadbolts, handlesets keyed alike so one key opens everything, and smart locks set up and paired before we leave. If you have just moved in, rekeying is usually the first job: the locks stay, and every old key stops working.',
+    ],
     match: ['lock-replacement-and-repair', 'deadbolt-installation', 'smart-lock-installation', 'lock-rekeying', 'high-security-locks'],
   },
   {
     id: 'commercial',
     title: 'Commercial and access control',
     intro: 'Exit hardware, closers, keypads and door work for shops, offices and institutions.',
+    body: [
+      'Shops, offices and buildings need door hardware that works every time it is pushed: panic bars set level so an exit opens with one push, closers adjusted so a door neither slams nor hangs open, and electric strikes and keypads that control who gets in.',
+      'For businesses we also rekey after staff changes, set up master key systems so a manager carries one key, and install intercoms and cameras. Every job is quoted before the work starts.',
+    ],
     match: ['commercial-locksmith', 'access-control-systems', 'intercom-systems', 'security-camera-installation'],
   },
 ];
@@ -54,6 +72,19 @@ const unplaced = ownPhotos.filter((p) => !placed.has(p.slug));
 if (unplaced.length) throw new Error(`our-work: no group for ${unplaced.map((p) => p.slug).join(', ')}`);
 
 const serviceFor = (p: WorkPhoto) => services.find((s) => s.slug === p.services[0])!;
+// Links under each group: the services it covers, and for car keys the make
+// pages of the cars actually in the photos.
+const groupServices = (g: (typeof groups)[number]) => services.filter((sv) => g.match.includes(sv.slug));
+const photoMakes = vehicles.filter((v) => ownPhotos.some((p) => p.makes?.[0] === v.slug));
+
+const faqs = [
+  { q: 'Are these photos really from your jobs?',
+    a: 'Yes. Every photo on this page was taken by us on a real job. There is no stock photography and nothing generated, and new photos are added as we take them.' },
+  { q: 'Why do some photos show the car badge?',
+    a: 'So you can see what the job was. A car key photo with the badge in frame shows the make we cut and programmed the key for, which is more useful than a generic picture of a key.' },
+  { q: 'Can you do the same work on my door or car?',
+    a: `Very likely. Call ${business.phone} any day between 7 AM and 11 PM, tell us the door, the lock or the vehicle, and we will tell you what it needs and what it costs before we come out.` },
+];
 
 const crumbs = [
   { name: 'Home', url: '/' },
@@ -66,7 +97,19 @@ const description = pickDescription([
   `${ownPhotos.length} photos from real Nico & Vito jobs: car keys, lockouts, home locks and commercial hardware across Brooklyn and Staten Island. No stock.`,
 ]);
 ---
-<BaseLayout title={title} description={description} canonical="/our-work" schema={[breadcrumbSchema(crumbs), localBusinessSchema()]} ogImage={ogPhoto(shareCard.slug)} ogImageAlt={shareCard.alt}>
+<BaseLayout title={title} description={description} canonical="/our-work" schema={[breadcrumbSchema(crumbs), localBusinessSchema(), faqSchema(faqs), {
+  '@context': 'https://schema.org',
+  '@type': 'ImageGallery',
+  name: 'Nico & Vito Locksmith job photos',
+  url: new URL('/our-work/', Astro.site).toString(),
+  image: ownPhotos.map((p) => ({
+    '@type': 'ImageObject',
+    contentUrl: new URL(`/work/${p.slug}.webp`, Astro.site).toString(),
+    caption: p.caption,
+    description: p.alt,
+    creator: { '@type': 'Organization', name: business.name },
+  })),
+}]} ogImage={ogPhoto(shareCard.slug)} ogImageAlt={shareCard.alt}>
   <PageHero
     eyebrow={`${ownPhotos.length} photos · no stock`}
     title="Our work"
@@ -87,11 +130,37 @@ const description = pickDescription([
     </ul>
   </nav>
 
+  <section class="py-10 md:py-12 bg-white">
+    <div class="container-x max-w-3xl">
+      <p class="text-navy-800 leading-relaxed text-[1.06rem]">
+        Most locksmith websites use stock photos of a hand holding a key. Every picture below is from a job
+        we did ourselves across Brooklyn and Staten Island, photographed on the day: car keys cut and programmed
+        at the vehicle, front doors picked open without drilling, locks fitted to old and new doors, and
+        commercial door hardware for shops and buildings.
+      </p>
+      <p class="mt-4 text-navy-800 leading-relaxed text-[1.06rem]">
+        We are a mobile locksmith with no shop to visit, so this page is the closest thing to walking in and seeing
+        the work. Each photo links to the service behind it, and each section explains how that kind of job is done.
+      </p>
+    </div>
+  </section>
+
   {groups.map((g, gi) => (
     <section id={g.id} class:list={['py-12 md:py-16 scroll-mt-16', gi % 2 ? 'bg-cream-deep' : 'bg-cream']}>
       <div class="container-x">
         <h2 class="display text-navy-900 text-2xl md:text-3xl pb-3 border-b-2 border-navy-900">{g.title}</h2>
-        <p class="mt-3 mb-8 text-muted max-w-2xl">{g.intro}</p>
+        <p class="mt-3 text-navy-800 font-semibold max-w-3xl">{g.intro}</p>
+        {g.body.map((para) => <p class="mt-3 text-muted leading-relaxed max-w-3xl">{para}</p>)}
+        <p class="mt-4 mb-8 max-w-3xl text-[0.92rem] leading-relaxed">
+          <span class="font-semibold text-navy-900">Services: </span>
+          {groupServices(g).map((sv, i) => <>{i > 0 && ' · '}<a href={`/services/${sv.slug}/`} class="text-brass-700 hover:underline">{sv.short}</a></>)}
+          {g.id === 'car-keys' && photoMakes.length > 0 && (
+            <>
+              <br /><span class="font-semibold text-navy-900">Makes in these photos: </span>
+              {photoMakes.map((v, i) => <>{i > 0 && ' · '}<a href={`/car-keys/${v.slug}/`} class="text-brass-700 hover:underline">{v.make}</a></>)}
+            </>
+          )}
+        </p>
         <ul class="gallery-cols">
           {g.photos.map((p) => {
             const [w, h] = photoDims(p.slug);
@@ -129,6 +198,20 @@ const description = pickDescription([
       <h2 class="display text-navy-900 text-2xl md:text-3xl pb-3 border-b-2 border-navy-900">From our Google profile</h2>
       <p class="mt-3 mb-8 text-muted max-w-2xl">The latest photos we have posted on Google, added here automatically.</p>
       <ul class="gallery-cols" data-gbp-photos></ul>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 bg-cream">
+    <div class="container-x max-w-3xl">
+      <h2 class="display text-navy-900 text-2xl md:text-3xl pb-3 border-b-2 border-navy-900">About these photos</h2>
+      <dl class="mt-6 space-y-6">
+        {faqs.map((f) => (
+          <div>
+            <dt class="font-bold text-navy-900">{f.q}</dt>
+            <dd class="mt-1.5 text-muted leading-relaxed">{f.a}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   </section>
 
