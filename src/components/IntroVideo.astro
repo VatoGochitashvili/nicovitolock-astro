@@ -1,0 +1,41 @@
+---
+// Homepage / About section for the intro video. The VideoObject schema lives
+// on /videos/ (the watch page), where the video is the main content — Google
+// only gives video results to pages like that.
+import Icon from './Icon.astro';
+import YouTubeVideo from './YouTubeVideo.astro';
+import { videos } from '@/data/videos';
+import { business } from '@/data/business';
+
+interface Props {
+  heading?: string;
+  intro?: string;
+  tone?: 'cream' | 'white';
+}
+const {
+  heading = 'See how we work',
+  intro = 'Lockouts, car keys cut and programmed at the car, lock changes, smart locks and business doors. All real jobs.',
+  tone = 'cream',
+} = Astro.props;
+const video = videos[0];
+---
+{video && (
+  <section class:list={['py-16 md:py-20', tone === 'cream' ? 'bg-cream' : 'bg-white']}>
+    <div class="container-x">
+      <div class="max-w-2xl">
+        <p class="eyebrow mb-3">Video</p>
+        <h2 class="display text-navy-900 text-3xl md:text-[2.6rem]">{heading}</h2>
+        <p class="mt-4 text-muted leading-relaxed">{intro}</p>
+      </div>
+      <YouTubeVideo video={video} class="mt-9" />
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/videos/" class="btn btn-outline">More videos <Icon name="arrow" size={17} /></a>
+        {business.social.youtube && (
+          <a href={business.social.youtube} target="_blank" rel="noopener" class="btn btn-outline">
+            <Icon name="youtube" size={18} /> Our YouTube channel
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+)}

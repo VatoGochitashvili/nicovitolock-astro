@@ -1,0 +1,29 @@
+---
+// A real YouTube iframe (Google needs to see the embed to index the video),
+// lazy-loaded so it costs nothing until it is scrolled near.
+import { youtubeEmbed, type Video } from '@/data/videos';
+interface Props { video: Video; class?: string }
+const { video, class: cls = '' } = Astro.props;
+---
+<div class:list={['yt-frame', cls]}>
+  <iframe
+    src={`${youtubeEmbed(video.id)}?rel=0&modestbranding=1`}
+    title={video.title}
+    loading="lazy"
+    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  ></iframe>
+</div>
+<style>
+  .yt-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: #102330;
+    border: 1px solid var(--color-line);
+    box-shadow: 0 30px 70px -40px rgb(16 35 48 / 0.6);
+  }
+  .yt-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+</style>

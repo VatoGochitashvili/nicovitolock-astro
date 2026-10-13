@@ -83,6 +83,7 @@ export const business = {
     instagram: 'https://www.instagram.com/nicovitolocksmith/',
     yelp: 'https://www.yelp.com/biz/nico-and-vito-locksmith-brooklyn',
     nextdoor: 'https://nextdoor.com/page/nico-vito-locksmith/',
+    youtube: 'https://www.youtube.com/@NicoVitoLocksmith',
   },
 
   /** Deep link that opens the "write a review" dialog directly. */
