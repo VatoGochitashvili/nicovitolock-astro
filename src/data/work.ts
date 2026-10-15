@@ -222,6 +222,60 @@ export const workPhotos: WorkPhoto[] = [
     orientation: 'portrait',
   },
 
+  // Added Oct 2026 from the owner's latest job photos.
+  {
+    slug: 'mercedes-eis-ignition-switch-key',
+    alt: 'A Mercedes-Benz smart key seated in an electronic ignition switch (EIS) module, part number 209 545 33 08, held in a hand over a parking lot',
+    caption: 'Mercedes EIS ignition switch and key',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['mercedes-benz'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'honda-remote-keys-cut',
+    alt: 'Two Honda remote-head keys held up in front of the Honda badge on a dark grey Honda',
+    caption: 'Two Honda remote keys made at the car',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['honda'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'mazda-smart-keys-programmed',
+    alt: 'Two push-to-start smart keys held in front of the Mazda badge on a dark blue Mazda',
+    caption: 'Mazda smart keys programmed at the car',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['mazda'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'bmw-smart-key-at-night',
+    alt: 'A BMW smart key held in front of a BMW at night with its headlights on',
+    caption: 'BMW smart key, handed over after dark',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['bmw'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'key-cutting-machine-in-van',
+    alt: 'An automatic key cutting machine in the service van, its screen reading cutting key completed, next to trays of key blanks',
+    caption: 'New key cut on the machine in our van',
+    services: ['car-key-replacement', 'lock-rekeying'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'ignition-cylinders-out-of-column',
+    alt: 'Two ignition lock cylinders and their keys held below a dashboard, with the ignition opening exposed behind them',
+    caption: 'Ignition lock cylinders out of the column',
+    services: ['car-key-replacement'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'steering-column-ignition-housing',
+    alt: 'A steering column opened up to the ignition lock housing and wiring during an ignition repair',
+    caption: 'Steering column opened to the ignition housing',
+    services: ['car-key-replacement'],
+    orientation: 'portrait',
+  },
   // ---------------------------- residential ---------------------------
   {
     slug: 'brass-rim-lock-wood-door',
@@ -274,6 +328,20 @@ export const workPhotos: WorkPhoto[] = [
     orientation: 'portrait',
   },
 
+  {
+    slug: 'black-deadbolt-and-knob-set',
+    alt: 'A matte black deadbolt and knob set on a white door, with a locksmith tool bag on the floor beside it',
+    caption: 'Black deadbolt and knob set fitted',
+    services: ['deadbolt-installation', 'lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'cabinet-lock-wood-door',
+    alt: 'A cabinet lock cylinder fitted in a wooden cabinet door',
+    caption: 'Cabinet lock on a wooden cabinet',
+    services: ['lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
   // ---------------------------- commercial ----------------------------
   {
     slug: 'keypad-access-control',
@@ -310,6 +378,13 @@ export const workPhotos: WorkPhoto[] = [
     alt: 'A high-security mortise cylinder fitted to the entrance door of a church, tool case open on the step',
     caption: 'High-security cylinder on an institutional entrance',
     services: ['commercial-locksmith', 'high-security-locks', 'lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'commercial-door-mortise-lock',
+    alt: 'A mortise lock body and lever handle on the edge of a grey commercial door',
+    caption: 'Mortise lock and lever on a commercial door',
+    services: ['commercial-locksmith', 'lock-replacement-and-repair'],
     orientation: 'portrait',
   },
 ];
@@ -425,6 +500,9 @@ export const homeHeroPhotos: string[] = [
   'ignition-cylinder-removed',
   'panic-bar-exit-device-install',
   'hyundai-keys-cut',
+  'key-cutting-machine-in-van',
+  'black-deadbolt-and-knob-set',
+  'mercedes-eis-ignition-switch-key',
 ];
 
 /** Curated orders where a service has more photos than a slideshow needs. */
@@ -438,6 +516,8 @@ const HERO_ORDER: Record<string, string[]> = {
     'nissan-smart-key-fob',
     'bmw-key-grille',
     'car-key-programming-dashboard',
+    'key-cutting-machine-in-van',
+    'honda-remote-keys-cut',
   ],
   'key-fob-and-remote-programming': [
     'chrysler-key-fobs',
@@ -446,6 +526,8 @@ const HERO_ORDER: Record<string, string[]> = {
     'jeep-key-programming-autel',
     'ford-key-fobs',
     'luxury-car-key-fob',
+    'mazda-smart-keys-programmed',
+    'mercedes-eis-ignition-switch-key',
   ],
   // No own intercom photograph yet: the entry keypad is the nearest real job.
   'intercom-systems': ['keypad-access-control'],
@@ -477,6 +559,9 @@ export const carKeysHubPhotos: string[] = [
   'chrysler-key-fobs',
   'bmw-key-grille',
   'jeep-smart-fob-replaced',
+  'honda-remote-keys-cut',
+  'mazda-smart-keys-programmed',
+  'mercedes-eis-ignition-switch-key',
 ];
 
 /** Every own photograph, for pages that rotate one hero by seed. */
