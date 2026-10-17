@@ -36,13 +36,23 @@ export interface Review {
   photo?: { thumb: string; full: string; alt: string };
 }
 
-// All 15 Google reviews, copied word for word from the Business Profile on
-// 2026-10-06 (newest first). Google only gives relative dates ("3 weeks ago"),
+// Google reviews, copied word for word from the Business Profile (newest
+// first); last added 2026-10-16. Google only gives relative dates ("3 weeks ago"),
 // so these dates are approximate; only the month is displayed. Google's
 // "Great price" highlight chips are not part of the review text and are left
 // out. When the Business Profile API is connected, worker/gbp.js replaces
 // these with the live reviews automatically.
 export const reviews: Review[] = [
+  { author: "Kieron O'Sullivan", rating: 5, date: '2026-10-16',
+    text: 'Lost key for Dodge Dakota 1996 not many locksmith can make key for but Vito had it covered thanks to this company they straightforward with pricing',
+    photo: { thumb: '/reviews/kieron-dodge-dakota-300.webp', full: '/reviews/kieron-dodge-dakota-900.webp',
+      alt: 'Dashboard and ignition of a 1996 Dodge Dakota during the key job — photo from the Google review' } },
+  { author: 'daniel gavrity', rating: 5, date: '2026-10-16',
+    text: 'Everything was straight forward great prices',
+    photo: { thumb: '/reviews/daniel-keys-300.webp', full: '/reviews/daniel-keys-900.webp',
+      alt: 'New remote car key and a house key held in a hand — photo from the Google review' } },
+  { author: 'Queen', rating: 5, date: '2026-10-16',
+    text: 'I lost key for Volkswagen EOS 2010 even the key was hard to make vito was precise and awesome.' },
   { author: 'Isabella Esposito', rating: 5, date: '2026-10-06',
     text: 'I was driving with messed up key for a while and finally decided to call a locksmith and get proper key made . Nico showed up on time and I had new key in less than 30 minutes. Great local locksmith in bay ridge neighbourhood. Call them for any locksmith needs!!!',
     photo: { thumb: '/reviews/isabella-lexus-key-300.webp', full: '/reviews/isabella-lexus-key-900.webp',
