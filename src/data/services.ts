@@ -29,6 +29,10 @@ export interface Service {
   scenarios: string[];
   /** Inline SVG icon id (see components/Icon.astro) */
   icon: string;
+  /** false = hub page only: no /services/[slug]/[area] local pages, kept off
+   *  the homepage grid and footer (linked from the commercial hub and the
+   *  services index instead). Defaults to true. */
+  localPages?: boolean;
   /** True for the services we want featured on the homepage grid */
   featured?: boolean;
   faqs: ServiceFaq[];
@@ -689,11 +693,390 @@ export const services: Service[] = [
       },
     ],
   },
+  // ---- Added Oct 2026 to match the Google Business Profile service list.
+  // localPages: false — hub page only, no service × neighborhood pages, so
+  // the new services do not add hundreds of URLs while indexing is catching up.
+  {
+    slug: 'commercial-lockout',
+    name: 'Commercial Lockout Service',
+    short: 'Commercial lockouts',
+    workTerm: 'commercial lockout',
+    category: 'Commercial',
+    icon: 'store',
+    localPages: false,
+    summary:
+      'Locked out of your store, office or building? Storefront glass doors, office suites, back doors and gates opened without damage in most cases.',
+    intro:
+      "A business that can't get through its own door can't open, so a commercial lockout is a different kind of call from a house lockout. We open storefront glass doors, office suites, stockroom and back doors, and gate locks for businesses across Brooklyn and Staten Island, and we quote the job on the phone before we come out.",
+    detail:
+      "Most commercial doors can be opened without damage: aluminum storefront doors with Adams Rite deadlocks, mortise locks on office doors, and cylindrical levers on interior suites all have non-destructive ways in. Roll-down gate padlocks and gate locks are the exception that sometimes has to be cut, and you hear that before we touch it. Once you're in, we can rekey or replace the cylinder on the spot if the lockout came from a lost or unreturned key, so the business is secure again before we leave. We ask to see proof that you're authorized to enter the premises, the same as we would at a house.",
+    features: [
+      'Storefront glass doors and Adams Rite deadlocks',
+      'Office suites and interior doors',
+      'Back doors, stockrooms and fire exits',
+      'Roll-down gate padlocks and gate locks',
+      'Non-destructive entry whenever possible',
+      'Price quoted on the phone before we come',
+      'Rekey on the spot if keys were lost or not returned',
+      'Proof of authorization checked before entry',
+      'Licensed and insured',
+    ],
+    scenarios: [
+      'Key snapped in the storefront cylinder at opening time',
+      'Manager left with the only key',
+      'Gate padlock seized or the key lost',
+      'Office suite locked with the keys inside',
+      'Back door locked from inside after a delivery',
+      'New owner never received keys from the old tenant',
+    ],
+    faqs: [
+      { q: 'Can you open a storefront glass door without damaging it?',
+        a: 'In most cases, yes. Aluminum storefront doors usually have an Adams Rite style deadlock that can be opened without harming the door or the glass. If a lock is damaged and has to be drilled, we tell you and agree the price first.' },
+      { q: 'What do you need from me to open a business?',
+        a: 'Proof that you are allowed to be inside: ID together with a lease, a business document, or confirmation from the owner or manager. We ask every time, because it protects you as much as anyone.' },
+      { q: 'Can you change the lock while you are there?',
+        a: 'Yes. If the lockout happened because a key was lost or not returned, we can rekey or replace the cylinder on the same visit, so old keys stop working before we leave.' },
+    ],
+  },
+  {
+    slug: 'storefront-lock-repair',
+    name: 'Storefront Lock Repair & Replacement',
+    short: 'Storefront locks',
+    workTerm: 'storefront lock',
+    category: 'Commercial',
+    icon: 'store',
+    localPages: false,
+    summary:
+      'Aluminum storefront locks, mortise cylinders and hookbolts on glass doors repaired or replaced, so your shop closes up properly every night.',
+    intro:
+      "The lock on a shop's front door is used hundreds of times a day, and it is usually the first thing on the building to wear out. We repair and replace storefront locks, and handle commercial lock changes on office and building doors, across Brooklyn and Staten Island: Adams Rite style deadlocks and hookbolts on aluminum glass doors, mortise cylinders, thumbturns and the cylinder rings and cams that go with them.",
+    detail:
+      "Most storefront problems come down to a worn cylinder, a cam that no longer reaches the lock body, a deadlock that has drifted out of line with the strike, or a door that has dropped on its hinges so the bolt binds. We diagnose which it is on the spot and fix the actual cause, not just the symptom. Where a part has to be replaced, we carry common storefront cylinders and lock bodies on the van, and we can key a new cylinder to your existing keys or to a new key, including a master key system across several doors.",
+    features: [
+      'Adams Rite style deadlocks and hookbolts',
+      'Mortise cylinders, cams and cylinder rings',
+      'Thumbturn and keyed-both-sides options',
+      'Strike and door alignment so the bolt throws cleanly',
+      'Worn or broken cylinders replaced',
+      'Keyed to existing keys or new keys',
+      'Keyed alike across front and back doors',
+      'Office and building lock changes',
+      'Price agreed before work starts',
+    ],
+    scenarios: [
+      'Key turns but the bolt will not throw',
+      'Lock has to be lifted or pushed to lock it',
+      'Cylinder worn smooth from daily use',
+      'Hookbolt not catching the frame',
+      'Door dropped and the lock now binds',
+      'New tenant wants new keys on the front door',
+    ],
+    faqs: [
+      { q: 'Why is my storefront lock so hard to turn?',
+        a: 'Usually because the door has dropped or shifted and the bolt is rubbing against the strike, or because the cylinder is worn. Forcing it wears it further. Aligning the door and strike often fixes it without new parts.' },
+      { q: 'Can you keep my existing keys?',
+        a: 'Yes. A replacement cylinder can be keyed to your current key, or to a new one if you want the old keys to stop working.' },
+      { q: 'Do you work on restaurant and office doors too?',
+        a: 'Yes. Any commercial aluminum or glass door with a storefront-style lock, whether it is a shop, a restaurant, an office lobby or a building entrance.' },
+    ],
+  },
+  {
+    slug: 'panic-bar-installation',
+    name: 'Panic Bar & Exit Device Installation',
+    short: 'Panic bars & exit devices',
+    workTerm: 'panic bar',
+    category: 'Commercial',
+    icon: 'store',
+    localPages: false,
+    summary:
+      'Panic bars and exit devices installed, repaired and adjusted on commercial and fire doors, fitted level so the door latches and releases correctly.',
+    intro:
+      "A panic bar has one job that matters more than any other: letting people out with a single push, every time, without a key. We install, repair and adjust panic bars and exit devices on commercial and fire doors across Brooklyn and Staten Island, for shops, restaurants, offices, schools, churches and residential buildings.",
+    detail:
+      "Most exit device faults are mechanical and fixable: a bar that has to be pushed twice, a latch that does not catch the strike so the door blows open, a rod that has slipped out of adjustment on a vertical-rod device, or an outside trim that no longer locks. We set devices level and adjust the latch and strike so the door closes, latches and releases correctly. We work on rim, mortise and vertical rod devices from the common commercial brands, and can add outside trim with a key or lever where you need entry from outside without compromising the exit.",
+    features: [
+      'Rim, mortise and vertical rod exit devices',
+      'New installs and replacement devices',
+      'Bars set level so one push releases the door',
+      'Latch and strike adjusted so the door latches',
+      'Outside trim: keyed, lever or pull',
+      'Dogging so the door can stay unlatched during business hours',
+      'Fire and exit doors checked for proper release',
+      'Price agreed before work starts',
+    ],
+    scenarios: [
+      'Bar has to be pushed hard or twice to open',
+      'Door does not latch and blows open',
+      'Fire inspection flagged the exit hardware',
+      'Outside key no longer works',
+      'Vertical rods out of adjustment',
+      'Need to replace an old chain or deadbolt on an exit door',
+    ],
+    faqs: [
+      { q: 'Can I put a deadbolt or chain on my exit door?',
+        a: 'Not on a required exit. People must be able to get out with one motion and no key. A panic bar is how you secure the door from outside while keeping the exit legal.' },
+      { q: 'Why does my door not latch after it closes?',
+        a: 'Usually the latch and strike are out of alignment, or the door closer is not bringing the door all the way shut. We adjust both so the door closes and latches every time.' },
+      { q: 'Do you repair existing panic bars or only install new ones?',
+        a: 'Both. Many devices only need adjustment or a replacement part. If the device is worn out, we replace it with one that fits the door.' },
+    ],
+  },
+  {
+    slug: 'door-closer-repair',
+    name: 'Door Closer Installation & Adjustment',
+    short: 'Door closers',
+    workTerm: 'door closer',
+    category: 'Commercial',
+    icon: 'store',
+    localPages: false,
+    summary:
+      'Commercial door closers installed, replaced and adjusted so doors close and latch properly, without slamming or sticking.',
+    intro:
+      "A door closer that slams wears out the door, the frame and the lock, and one that leaves the door hanging open leaves the business unlocked. We install, replace and adjust door closers on storefronts, offices, building entrances and fire doors across Brooklyn and Staten Island.",
+    detail:
+      "Most closers can be adjusted rather than replaced: the closing speed, the latch speed that pulls the door into the strike, and the backcheck that stops the door slamming into the wall when it is opened. A closer leaking oil, or one that has lost its spring, has to be replaced, and we fit the right size for the door's weight and width so it closes reliably without being hard to open. We also replace worn arms and brackets, and set up hold-open arms where a door needs to stay open during business hours.",
+    features: [
+      'Closing and latch speed adjusted',
+      'Backcheck set so the door does not hit the wall',
+      'Leaking or worn closers replaced',
+      'Sized to the door so it is not too heavy to open',
+      'Surface-mounted closers on storefronts and offices',
+      'Arms, brackets and hold-open arms',
+      'Fire doors brought back to closing and latching',
+      'Price agreed before work starts',
+    ],
+    scenarios: [
+      'Door slams shut',
+      'Door drifts and stays slightly open',
+      'Closer leaking oil',
+      'Door too heavy to open',
+      'Wind catches the door and pulls it open',
+      'Fire door no longer closes on its own',
+    ],
+    faqs: [
+      { q: 'Can my door closer be adjusted instead of replaced?',
+        a: 'Often, yes. Speed and latch adjustments fix most slamming and drifting. A closer that leaks oil or has lost its spring needs to be replaced.' },
+      { q: 'Why does my door close but not lock?',
+        a: 'The final part of the swing, the latch speed, is too weak or the strike is out of line, so the latch never engages. Adjusting the closer and the strike fixes it.' },
+      { q: 'Do you work on fire doors?',
+        a: 'Yes. Fire doors have to close and latch on their own, and a failed closer is one of the most common reasons they do not.' },
+    ],
+  },
+  {
+    slug: 'master-key-systems',
+    name: 'Master Key Systems',
+    short: 'Master key systems',
+    workTerm: 'master key',
+    category: 'Commercial',
+    icon: 'key',
+    localPages: false,
+    summary:
+      'Master key systems designed and installed for offices, retail and multi-unit buildings: one key for management, controlled access for staff and tenants.',
+    intro:
+      "A master key system replaces the ring of keys behind the counter with a plan. Management carries one key that opens everything, while each employee, department or tenant key opens only the doors it should. We design and install master key systems for offices, retail, restaurants and multi-unit buildings across Brooklyn and Staten Island.",
+    detail:
+      "We start with the doors and the people: who needs to open what. From that we lay out the system, rekey or replace the cylinders to match it, cut and label the keys, and keep a record of how everything is keyed, so future changes, a lost key or a new tenant, can be handled by rekeying one or two cylinders instead of the whole building. Restricted keyways are available, so keys cannot be copied at a hardware store without authorization.",
+    features: [
+      'System designed around your doors and staff',
+      'Grand master, master and individual keys',
+      'Existing locks rekeyed where possible',
+      'Keys cut, stamped and labeled',
+      'Records kept for future changes',
+      'Restricted keyways that cannot be copied freely',
+      'Multi-unit buildings: tenant and management keys',
+      'Price agreed before work starts',
+    ],
+    scenarios: [
+      'Manager carrying a ring of twenty keys',
+      'Staff need access to some rooms but not others',
+      'Building owner needs a key to every unit',
+      'A lost key means rekeying the whole office',
+      'New business moving into an existing space',
+      'Several locations that should share one manager key',
+    ],
+    faqs: [
+      { q: 'Do I need new locks for a master key system?',
+        a: 'Often not. Many existing cylinders can be rekeyed into the system. We replace only the ones that cannot be, or that are worn out.' },
+      { q: 'What happens if a master key is lost?',
+        a: 'Because we keep the records, we can rekey the affected cylinders to a new master without redesigning the whole system.' },
+      { q: 'Can keys be stopped from being copied?',
+        a: 'Yes. A restricted keyway means copies can only be made through an authorized locksmith, with your permission.' },
+    ],
+  },
+  {
+    slug: 'commercial-rekeying',
+    name: 'Commercial Rekeying',
+    short: 'Commercial rekeying',
+    workTerm: 'commercial rekey',
+    category: 'Commercial',
+    icon: 'key',
+    localPages: false,
+    summary:
+      'Business locks rekeyed after staff turnover, lost keys or a new lease. Keep your hardware, make the old keys useless, key doors alike.',
+    intro:
+      "When an employee leaves with a key, a key goes missing, or you take over a lease, every old key is a risk. Rekeying fixes that without replacing the locks: we change the pins inside your existing cylinders so only the new keys work. We rekey shops, offices, restaurants and buildings across Brooklyn and Staten Island.",
+    detail:
+      "Rekeying keeps your existing hardware and costs less than new locks. While we are there we can key several doors alike, so one key opens the front, back and office, or set the business up on a master key system so managers carry one key and staff carry only what they need. If a cylinder is worn out, we tell you and replace it rather than rekey something that will fail again.",
+    features: [
+      'Storefront, mortise and lever cylinders rekeyed',
+      'Old keys stop working',
+      'Doors keyed alike',
+      'Master key systems set up or updated',
+      'Worn cylinders replaced instead of rekeyed',
+      'New keys cut and labeled',
+      'After staff changes, lost keys or a new lease',
+      'Price agreed before work starts',
+    ],
+    scenarios: [
+      'Employee left and did not return keys',
+      'New lease on a shop or office',
+      'Keys lost or stolen',
+      'Too many keys for too many doors',
+      'Former contractor still has a key',
+      'Merging two locations onto one key',
+    ],
+    faqs: [
+      { q: 'Is rekeying cheaper than changing the locks?',
+        a: 'Usually, yes. You keep the hardware and only the inside of the cylinder changes. We quote both if a lock is worn enough that replacing it makes more sense.' },
+      { q: 'Can all my doors use one key?',
+        a: 'Yes. We can key the doors alike while rekeying, or set up a master key system if different people need different access.' },
+      { q: 'How often should a business rekey?',
+        a: 'Any time a key leaves with someone who should no longer have access: staff turnover, a lost key, or a change of tenant.' },
+    ],
+  },
+  {
+    slug: 'key-duplication',
+    name: 'Key Duplication',
+    short: 'Key copying',
+    workTerm: 'key duplication',
+    category: 'Residential',
+    icon: 'key',
+    localPages: false,
+    summary:
+      'Spare keys cut for houses, apartments and offices, made at your door from our van, plus car key spares cut and programmed at the vehicle.',
+    intro:
+      "Spare keys are cheapest to make while you still have a working original. We cut house, apartment, office and mailbox keys from our van, at your door across Brooklyn and Staten Island, and cut and program spare car keys at the vehicle, including transponder and flip keys.",
+    detail:
+      "A copy made at a kiosk is a copy of a copy, and every generation is a little further from the original cut, which is why some spares stick or will not turn. We cut to the key code where we can, check each key in the lock before we leave, and can key several doors alike at the same time so one key does the job. For restricted and high-security keys, copies are only made with the owner's authorization.",
+    features: [
+      'House, apartment and office keys',
+      'Mailbox and cabinet keys',
+      'Car key spares cut and programmed at the vehicle',
+      'Cut to code where possible',
+      'Every key tested in the lock',
+      'Several doors keyed alike on request',
+      'Restricted keys copied only with authorization',
+      'Made at your door, from the van',
+    ],
+    scenarios: [
+      'Moving in and need keys for family',
+      'Spare for a tenant, dog walker or contractor',
+      'A spare that sticks because it is a copy of a copy',
+      'Down to one car key',
+      'Too many keys and want doors keyed alike',
+      'Office keys for new staff',
+    ],
+    faqs: [
+      { q: 'Why does my spare key stick?',
+        a: 'It is probably a copy of a copy. Each generation drifts from the original. Cutting from the original key, or from the key code, gives a key that works properly.' },
+      { q: 'Can you copy a car key?',
+        a: 'Yes. We cut the blade and program the chip to the car, at the vehicle. A spare is much simpler to make while you still have a working key.' },
+      { q: 'Can you copy a "do not duplicate" key?',
+        a: 'Restricted keys are copied only with authorization from the owner or the property manager. That restriction is what keeps them secure.' },
+    ],
+  },
+  {
+    slug: 'car-lockout',
+    name: 'Car Lockout Service',
+    short: 'Car lockouts',
+    workTerm: 'car lockout',
+    category: 'Automotive',
+    icon: 'car',
+    localPages: false,
+    summary:
+      'Keys locked in the car? Cars, SUVs, vans and trucks opened with proper automotive tools, wherever you are parked in Brooklyn or Staten Island.',
+    intro:
+      "Keys in the ignition, a fob on the seat, or a car that locked itself: we open cars, SUVs, vans and trucks across Brooklyn and Staten Island with proper automotive tools, and we quote the job on the phone before we come out.",
+    detail:
+      "We use wedges and long-reach tools made for vehicle entry, not a coat hanger, which keeps the weather seals, the door card and the paint intact. If the key is not locked inside but lost, that is a different job, and we can cut and program a new key at the vehicle instead. We ask for proof that the car is yours, such as ID matching the registration, before we open it.",
+    features: [
+      'Cars, SUVs, vans and pickup trucks',
+      'Proper automotive entry tools',
+      'Weather seals and paint protected',
+      'Keys locked in, or fob locked in the car',
+      'Trunk lockouts',
+      'Lost key? New key cut and programmed at the vehicle',
+      'Proof of ownership checked',
+      'Price quoted on the phone before we come',
+    ],
+    scenarios: [
+      'Keys left in the ignition',
+      'Fob left on the seat and the car locked itself',
+      'Keys locked in the trunk',
+      'Child or pet locked in (call 911 first)',
+      'Keys lost rather than locked inside',
+      'Work van locked with tools inside',
+    ],
+    faqs: [
+      { q: 'Will opening my car damage it?',
+        a: 'No, not with the right tools. We use automotive wedges and long-reach tools that protect the seals and paint. We do not use coat hangers or slim jims on modern cars.' },
+      { q: 'What if a child or a pet is locked in the car?',
+        a: 'Call 911 first. Emergency services will get there and act without waiting on a price.' },
+      { q: 'What if I lost the key rather than locked it inside?',
+        a: 'Then opening the car is only half the job. We can cut and program a new key at the vehicle for most makes.' },
+    ],
+  },
+  {
+    slug: 'broken-key-extraction',
+    name: 'Broken Key Extraction',
+    short: 'Broken key extraction',
+    workTerm: 'broken key',
+    category: 'Emergency',
+    icon: 'key',
+    localPages: false,
+    summary:
+      'Key snapped off in a door lock or your car ignition? We extract the broken piece, check the lock for damage, and cut you a working key.',
+    intro:
+      "A key that snaps off in the lock usually leaves the lock fine and the key piece stuck inside. We extract broken keys from door locks, padlocks, storefront cylinders and car ignitions and door locks across Brooklyn and Staten Island, check the lock for damage, and cut a working key on the spot.",
+    detail:
+      "Extraction is done with thin hooked tools that grip the broken piece without pushing it deeper or damaging the pins. Trying to dig it out with tweezers or glue usually pushes it further in and turns an extraction into a lock replacement, so it is worth leaving it alone. Keys usually break because they are worn or because the lock has become stiff, so we check why it happened and fix the lock if it needs it, and cut a fresh key from the pieces or from the code.",
+    features: [
+      'Door locks, deadbolts and padlocks',
+      'Storefront and commercial cylinders',
+      'Car ignitions and door locks',
+      'Extraction without damaging the lock',
+      'Lock checked for the cause of the break',
+      'New key cut from the pieces or the code',
+      'Price quoted on the phone before we come',
+    ],
+    scenarios: [
+      'Key snapped off in the front door',
+      'Half a key stuck in the car ignition',
+      'Padlock key broken off in the gate lock',
+      'Storefront key broken at closing time',
+      'Glue or tweezers made it worse',
+      'Old worn key finally gave out',
+    ],
+    faqs: [
+      { q: 'Should I try to pull the broken key out myself?',
+        a: 'Only if part of it is sticking out far enough to grip firmly. Otherwise leave it: tweezers and glue tend to push it deeper and damage the lock.' },
+      { q: 'Will I need a new lock?',
+        a: 'Usually not. Most locks are fine once the broken piece is out. If the lock is stiff or damaged, which is often why the key broke, we tell you and fix or replace it.' },
+      { q: 'Can you make a new key from the broken pieces?',
+        a: 'Yes, in most cases, by reading the cuts on the pieces or working from the key code.' },
+    ],
+  },
 ];
 
 export const serviceBySlug = (slug: string) => services.find((s) => s.slug === slug);
 
 export const featuredServices = services.filter((s) => s.featured);
+
+/** The original twelve, which also have service × neighborhood pages. */
+export const coreServices = services.filter((s) => s.localPages !== false);
+export const hasLocalPages = (s: Service) => s.localPages !== false;
+/** Commercial services, for the business section and cross-links. */
+export const commercialServices = services.filter((s) => s.category === 'Commercial');
 
 export const serviceCategories: ServiceCategory[] = [
   'Emergency', 'Residential', 'Automotive', 'Commercial', 'Security',

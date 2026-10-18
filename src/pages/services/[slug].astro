@@ -8,7 +8,7 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
 import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos, photoBySlug } from '@/data/work';
-import { services } from '@/data/services';
+import { services, hasLocalPages } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import { serviceAreas, tier1Areas } from '@/data/locations';
 import { business } from '@/data/business';
@@ -42,7 +42,13 @@ const sceneFor: Record<string, 'residential' | 'automotive' | 'commercial' | 'se
 import { fieldNotesFor } from '@/data/fieldnotes';
 // The hub carries the full set; the local pages draw two each.
 const notes = fieldNotesFor(service.slug, 'Brooklyn', 'Brooklyn and Staten Island');
-const related = services.filter((s) => s.slug !== service.slug).slice(0, 3);
+// Same-category services first (so the commercial pages link to each other),
+// then the rest.
+const related = [
+  ...services.filter((s) => s.slug !== service.slug && s.category === service.category),
+  ...services.filter((s) => s.slug !== service.slug && s.category !== service.category),
+].slice(0, service.category === 'Commercial' ? 6 : 3);
+const local = hasLocalPages(service);
 const photos = ownPhotosForService(service.slug);
 const brooklyn = tier1Areas.filter((a) => a.region === 'Brooklyn');
 const statenIsland = tier1Areas.filter((a) => a.region === 'Staten Island');
@@ -183,14 +189,14 @@ const schema = [
           <span class="rule-brass mt-3 block"></span>
           <p class="mt-4 text-muted leading-relaxed">
             We're based in Bay Ridge and cover {serviceAreas.length} neighborhoods.
-            Pick yours for local pricing, arrival times, and detail specific to your streets.
+            Pick yours for detail specific to your streets.
           </p>
 
           <h3 class="mt-6 font-display font-bold text-navy-900 text-[1.05rem]">Brooklyn</h3>
           <div class="mt-3 flex flex-wrap gap-2">
             {brooklyn.map((a) => (
               <a
-                href={`/services/${service.slug}/${a.slug}/`}
+                href={local ? `/services/${service.slug}/${a.slug}/` : `/service-areas/${a.slug}/`}
                 class="px-2.5 py-1.5 rounded-md bg-white border border-line text-[0.85rem] text-navy-800 hover:bg-brass-400 hover:border-brass-400 hover:text-navy-950 transition-colors"
               >{a.name}</a>
             ))}
@@ -200,7 +206,7 @@ const schema = [
           <div class="mt-3 flex flex-wrap gap-2">
             {statenIsland.map((a) => (
               <a
-                href={`/services/${service.slug}/${a.slug}/`}
+                href={local ? `/services/${service.slug}/${a.slug}/` : `/service-areas/${a.slug}/`}
                 class="px-2.5 py-1.5 rounded-md bg-white border border-line text-[0.85rem] text-navy-800 hover:bg-brass-400 hover:border-brass-400 hover:text-navy-950 transition-colors"
               >{a.name}</a>
             ))}

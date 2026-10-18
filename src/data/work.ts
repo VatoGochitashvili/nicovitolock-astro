@@ -470,6 +470,15 @@ export const serviceCardPhoto: Record<string, string> = {
   'access-control-systems': 'keypad-access-control',
   'security-camera-installation': 'stock-security-cameras',
   'commercial-locksmith': 'panic-bar-exit-device-install',
+  'commercial-lockout': 'commercial-exit-door-panic-bar',
+  'storefront-lock-repair': 'commercial-exit-door-panic-bar',
+  'panic-bar-installation': 'panic-bar-exit-device-install',
+  'door-closer-repair': 'storefront-door-closer',
+  'master-key-systems': 'brass-deadbolt-and-knob',
+  'commercial-rekeying': 'commercial-exit-door-panic-bar',
+  'key-duplication': 'ford-ranger-transponder-key',
+  'car-lockout': 'jeep-smart-fob-replaced',
+  'broken-key-extraction': 'ignition-cylinder-removed',
 };
 
 /** Pixel size of each /work original, for the <img> width/height. */

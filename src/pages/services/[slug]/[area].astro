@@ -10,14 +10,14 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import WorkGallery from '@/components/WorkGallery.astro';
 import { ownPhotosForService, serviceCardPhoto, serviceHeroPhotos, photoBySlug } from '@/data/work';
-import { services } from '@/data/services';
+import { services, coreServices } from '@/data/services';
 import { tier1Areas, nearbyAreas } from '@/data/locations';
 import { business } from '@/data/business';
 import { localCopy, traitNote, localLists, seededHash, pickManyPublic } from '@/lib/localize';
 import { breadcrumbSchema, serviceSchema, faqSchema, pickTitle, localBusinessSchema, ogPhoto} from '@/lib/seo';
 
 export function getStaticPaths() {
-  return services.flatMap((service) =>
+  return coreServices.flatMap((service) =>
     tier1Areas.map((area) => ({
       params: { slug: service.slug, area: area.slug },
       props: { service, area },
@@ -59,7 +59,7 @@ const near = nearbyAreas(area);
 // Seeded rather than the first six, so the cross-link block is not the same
 // twelve words on all 55 pages of a service.
 const otherServices = pickManyPublic(
-  services.filter((s) => s.slug !== service.slug),
+  coreServices.filter((s) => s.slug !== service.slug),
   seededHash(`other::${service.slug}::${area.slug}`),
   3,
   6,

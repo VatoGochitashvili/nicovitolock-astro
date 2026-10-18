@@ -12,6 +12,61 @@
 // %CITY% and %REGION% are substituted at render time.
 
 export const SERVICE_FIELD_NOTES: Record<string, string[]> = {
+  'commercial-lockout': [
+    'Most storefront glass doors in %CITY% use a narrow-stile deadlock with a hook or swing bolt, and the cylinder is held in by a single set screw on the door edge. That is good news on a lockout: the door can usually be opened through the lock itself, without touching the glass or the frame, and the hardware is still usable afterwards.',
+    'Roll-down gates are the part of a commercial lockout most likely to need cutting, because many are secured with a padlock on a bottom bar where there is nothing to pick from a comfortable angle. If the padlock has to go, we tell you first, cut only the padlock, and can supply a replacement on the spot so the gate locks again that night.',
+    'A business lockout often turns out to be a key problem rather than a door problem: a manager who left with the only key, or a new tenant who was never given one. Once you are in, the sensible next step is a rekey of that cylinder so every key that went missing stops working, done on the same visit while the door is open.',
+    'We ask for proof that you are entitled to enter before opening a commercial door, usually ID together with a lease, a business document, or the owner on the phone. It can feel like a delay when you are standing outside your own shop, but it is the same check that stops someone else talking their way into it.',
+  ],
+  'storefront-lock-repair': [
+    'The classic storefront failure is a cylinder that turns but no longer throws the bolt. Nine times out of ten the cylinder is fine and the cam on the back of it has worn, or the cylinder has backed out a fraction because its set screw loosened, so the cam no longer reaches the lock body. Re-seating it and tightening the set screw is a repair, not a replacement.',
+    'If you have to lift the door or lean on it to get the key to turn, the lock is not the problem; the door has dropped on its pivots or hinges and the bolt is binding in the strike. Forcing it is how keys snap and cams strip. Adjusting the door and the strike fixes the lock without new parts.',
+    'Storefront cylinders on busy %CITY% shops are turned hundreds of times a day, and the brass wears just like the keys do. When the key starts needing to be jiggled, the pins are worn, and that is the point to replace the cylinder before it fails at closing time with the shop full of stock.',
+    'The same work applies to office and building doors, not only shopfronts: a lock change on an office suite or a lobby door is usually a cylinder or a lever set, keyed to new keys so the old ones stop working, or keyed alike with the other doors so one key does it all.',
+  ],
+  'panic-bar-installation': [
+    'A required exit has to open with a single motion and no key, from the inside, every time. That rule is why chains, slide bolts and extra deadbolts on exit doors are flagged by inspectors, and why a panic bar is the way to keep the door secure from outside while leaving the exit legal.',
+    'The most common exit device complaint is a door that has to be pushed twice. That is almost always the latch dragging on the strike or the bar sitting out of level, and both are adjustments. Replacing the device is only needed when internal parts are worn or broken.',
+    'Vertical rod devices, the kind that latch at the top and bottom of the door, drift out of adjustment as the door settles. When the bottom rod no longer clears the floor or the top latch stops catching, the fix is setting the rods to the door as it hangs now, not as it hung when it was installed.',
+    'Dogging lets a panic bar stay pushed in during business hours, so customers can push or pull the door open without latching it every time. It is useful on a busy %CITY% entrance, as long as the door goes back to latching at closing and the dogging key is kept where staff can find it.',
+  ],
+  'door-closer-repair': [
+    'A surface closer has separate adjustments for the main swing, the last few inches where the door latches, and the backcheck that cushions it when it is thrown open. Most slamming and drifting complaints are fixed with those valves, which is why we adjust before we talk about replacing anything.',
+    'Oil on the floor under a closer, or a door that suddenly swings freely, means the closer has failed internally. It cannot be adjusted back to life, and the right fix is a new closer sized to the door, because an undersized one never latches the door and an oversized one makes it hard to open.',
+    'Wind is a closer\'s worst enemy on %CITY% storefronts and building entrances. A gust that catches an open door can bend the arm and tear the closer off its bracket. The backcheck setting is what protects it, and a door that faces the wind may need a parallel arm or a stronger closer.',
+    'A fire door that no longer closes and latches on its own is no longer doing its job, and a failed closer is the most common cause. Getting it closing and latching again is usually a closer adjustment or replacement and a strike alignment.',
+  ],
+  'master-key-systems': [
+    'A master key system is a plan before it is hardware: a list of doors and a list of who needs to open which ones. Getting that plan right at the start is what keeps the system manageable for years, because every later change, a new tenant or a lost key, is then a small rekey rather than a redesign.',
+    'Many existing cylinders can be rekeyed into a master key system without buying new locks, as long as they are in good condition and of a type that takes master pins. Worn or very old cylinders are the ones worth replacing, and we point those out rather than rekey something that will fail.',
+    'The records matter as much as the keys. A master system with no record of how each cylinder is pinned becomes a puzzle the moment something changes. We keep a record of the keying so the next change is quick and accurate.',
+    'For %CITY% buildings with several tenants, a master system usually gives each unit its own key, a building master for management, and common doors like the lobby and mail room that every tenant key opens. Restricted keyways stop tenants copying keys freely.',
+  ],
+  'commercial-rekeying': [
+    'Rekeying changes the pin stack inside a cylinder so it answers to a new key. The lock body, the handles and the finish stay exactly as they are, which is why it is usually the cheaper and faster way to make old keys worthless after staff turnover or a new lease.',
+    'Whenever a key leaves with someone who should no longer have access, the business is relying on that person\'s goodwill. Rekeying the doors they could open is the clean answer, and it is quickest when done as one visit for every affected door.',
+    'Rekeying is the natural moment to simplify: keying the front, back and office doors alike so one key opens all three, or moving the business onto a master key system so managers carry one key and staff carry only what they need.',
+    'A cylinder that is badly worn is not worth rekeying, because the new key will soon start sticking for the same reason the old one did. On busy %CITY% storefronts we check the cylinder first and recommend a replacement where that is the better use of your money.',
+  ],
+  'key-duplication': [
+    'Every copy of a copy drifts a little further from the original cuts, which is why a spare made from another spare often sticks or needs jiggling. Cutting from the original key, or from the key code where we can, gives a key that works like the first one.',
+    'If you have several doors with different keys, the time you are getting spares cut is a good time to ask about keying them alike, so one key opens the front door, the back door and the deadbolt instead of three separate keys on the ring.',
+    'Car key spares are a different job: the blade is cut, then the chip inside is programmed to the car. Making a spare while you still have one working key is far simpler than starting from nothing after the last key is lost.',
+    'Keys stamped "do not duplicate" or cut on a restricted keyway are copied only with the authorization of the owner or the building\'s management. That restriction is what makes them secure, and a %CITY% landlord who chose them is relying on it.',
+  ],
+  'car-lockout': [
+    'Modern car doors are opened with an inflatable wedge to create a small gap and a long-reach tool to press the unlock button or pull the handle from inside. Done properly, nothing touches the paint and the weather seals return to shape. Coat hangers and slim jims belong to older cars and are how door wiring gets damaged on new ones.',
+    'Many cars lock themselves with the fob inside, and some will not let a door lock while the fob is in the cabin. If yours did lock with the fob inside, the fob battery may be weak, which is worth replacing once you are back in.',
+    'If the key is not locked in the car but lost, opening the door only gets you halfway. The job then becomes cutting and programming a new key at the vehicle, which we can do for most makes in %CITY% without a tow.',
+    'If a child or a pet is locked in a car, call 911 first. Emergency services will act immediately and will not wait on anything, and a locksmith is the second call, not the first.',
+  ],
+  'broken-key-extraction': [
+    'A key usually snaps because it is worn thin at the shoulder or because the lock has become stiff and the key was forced. Pulling the broken piece out solves today\'s problem, but finding out which of those it was is what stops it happening again.',
+    'Superglue on a matchstick and tweezers are the two most common home attempts, and both tend to push the piece deeper or glue it to the pins. If nothing is sticking out to grip, leaving it alone and calling saves the lock.',
+    'Keep both halves of a snapped key. With the bow in your hand and the tip extracted, the cuts can usually be read directly and a new key cut on the spot without decoding the lock.',
+    'A key broken in a car ignition is extracted the same way, with thin hooked tools that catch the side of the blade. Once it is out we check the ignition turns smoothly, because a stiff ignition is often why the key broke in the first place.',
+  ],
+
   'emergency-lockout-service': [
     'Drilling is a decision, not a technique. A lock gets drilled when it is a high-security cylinder we cannot pick in reasonable time, when it has already been forced and the pins are bent, or when the key snapped deep enough to jam the plug. Every other lockout should end with the door unmarked, and if a locksmith reaches for a drill first in %CITY%, that tells you what you need to know.',
     'The cheapest lockout quote on the phone is usually the most expensive one at the door. The pattern is a very low call-out figure, then a separate charge for the opening once the technician is standing there and you have no other option. We quote the job, not the visit, and the number we give on the call is the number on the invoice.',

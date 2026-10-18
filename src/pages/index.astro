@@ -12,7 +12,7 @@ import Reviews from '@/components/Reviews.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import { business } from '@/data/business';
-import { services } from '@/data/services';
+import { services, coreServices, serviceBySlug } from '@/data/services';
 import { serviceAreas } from '@/data/locations';
 import { serviceCardPhoto, homeHeroPhotos } from '@/data/work';
 import { vehicles } from '@/data/vehicles';
@@ -228,7 +228,7 @@ const description =
       {/* Two feature tiles span wide so the grid has rhythm instead of reading
           like a spreadsheet of identical squares. */}
       <div class="svc-grid">
-        {services.map((s, i) => {
+        {coreServices.map((s, i) => {
           const wide = i === 0 || i === 5;
           return (
             <a
@@ -277,6 +277,52 @@ const description =
             </li>
           ))}
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 03b · FOR BUSINESSES ══════════════ -->
+  <section class="py-16 md:py-20 bg-white border-t border-line" id="commercial">
+    <div class="container-x grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div class="lg:col-span-5">
+        <img
+          src="/work/panic-bar-exit-device-install-800.webp"
+          alt="Panic bar set level on a commercial fire door, one of our commercial jobs"
+          width="800" height="1067" loading="lazy" decoding="async"
+          class="w-full h-[22rem] lg:h-[30rem] object-cover rounded-2xl shadow-[0_24px_60px_-34px_rgba(16,35,48,0.55)]"
+        />
+      </div>
+      <div class="lg:col-span-7">
+        <p class="font-display text-[0.7rem] font-bold uppercase tracking-[0.26em] text-brass-600 mb-3">For businesses</p>
+        <h2 class="display text-navy-900 text-3xl md:text-[2.5rem] leading-[1.05]">
+          Locksmith for shops, offices and buildings
+        </h2>
+        <p class="mt-5 text-navy-800 leading-relaxed max-w-2xl">
+          Commercial doors get used hundreds of times a day and carry rules a house door doesn't. We keep storefronts,
+          offices, restaurants and residential buildings across Brooklyn and Staten Island opening, closing and locking
+          the way they should, with the price agreed before any work starts.
+        </p>
+        <ul class="mt-7 grid sm:grid-cols-2 gap-x-6 gap-y-1">
+          {['commercial-lockout', 'storefront-lock-repair', 'panic-bar-installation', 'door-closer-repair',
+            'master-key-systems', 'commercial-rekeying', 'access-control-systems', 'intercom-systems']
+            .map((slug) => serviceBySlug(slug)!)
+            .map((s) => (
+              <li class="border-b border-line">
+                <a href={`/services/${s.slug}/`} class="group flex items-center gap-3 py-3">
+                  <Icon name={s.icon} size={17} class="text-brass-600 shrink-0" />
+                  <span class="font-semibold text-navy-900 group-hover:text-brass-600 transition-colors">{s.name}</span>
+                </a>
+              </li>
+            ))}
+        </ul>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={`tel:${business.phoneHref}`} class="btn btn-brass" data-call-cta="home-commercial">
+            <Icon name="phone" size={18} /> {business.phoneDisplay}
+          </a>
+          <a href="/services/commercial-locksmith/" class="btn btn-outline">
+            Commercial services <Icon name="arrow" size={17} />
+          </a>
+        </div>
       </div>
     </div>
   </section>
