@@ -585,61 +585,6 @@ export const services: Service[] = [
     ],
   },
   {
-    slug: 'security-camera-installation',
-    name: 'Security Camera Installation',
-    short: 'Cameras',
-    workTerm: 'camera',
-    category: 'Security',
-    icon: 'camera',
-    featured: true,
-    summary:
-      'CCTV that actually produces usable footage — placed, aimed, and set up so you can find the clip when it matters.',
-    intro:
-      "Most camera systems disappoint their owners at the exact moment they're needed, and it's nearly always the same three reasons: the camera was aimed at the wrong place, it was useless at night, or nobody knew how to pull the footage. We install systems that avoid all three.",
-    detail:
-      "We design coverage around the actual chokepoints — the front door, the vestibule, the register, the driveway, the package drop — rather than scattering cameras and hoping. We run proper cable instead of relying on Wi-Fi that drops, install IR or color-at-night cameras where lighting is bad, size the recorder for the retention you actually need, and set up remote viewing on your phone. Then we sit with you and pull a clip together, so the first time you export footage isn't the day something happens. Homes, storefronts, warehouses, and multi-family buildings.",
-    features: [
-      'HD and 4K camera systems',
-      'Night vision and low-light color cameras',
-      'NVR/DVR sized for real retention needs',
-      'Proper cable runs, not dropout-prone Wi-Fi',
-      'Remote viewing set up on your phone',
-      'We teach you to export a clip before we leave',
-      "Coverage walked and planned before a hole is drilled",
-      "Cable runs concealed through walls and soffits",
-      "Vandal-resistant housings for reachable spots",
-      "Motion zones set to cut false alerts",
-      "Existing systems expanded rather than replaced",
-      "Footage export walked through with you on site",
-    ],
-    scenarios: [
-      'Packages disappearing from the vestibule',
-      'Storefront needing register and entrance coverage',
-      'Repeated vandalism on a building or gate',
-      'Landlord wanting coverage of a shared hallway',
-      'Existing cameras that record unusable night footage',
-      "Existing cameras recording unusable night footage",
-      "Blind spot exactly where the incident happened",
-      "System full and overwriting before you can review",
-      "Cameras offline and nobody noticed for weeks",
-      "Needing footage for an insurance or police report",
-    ],
-    faqs: [
-      {
-        q: 'How many cameras do I actually need?',
-        a: "Fewer than most people are sold. Cover the chokepoints — entrances, the register, the driveway — with cameras placed close enough to identify a face rather than one wide shot of everything. A well-placed four beats a badly placed twelve.",
-      },
-      {
-        q: 'How long is footage kept?',
-        a: 'It depends on the recorder size, camera count, and resolution. Two weeks is the common target and usually enough; we size the drive for what you tell us you need.',
-      },
-      {
-        q: 'Can I watch it on my phone?',
-        a: 'Yes, and we set it up and test it with you on your own phone before we leave, including how to scrub back and export a clip.',
-      },
-    ],
-  },
-  {
     slug: 'commercial-locksmith',
     name: 'Commercial Locksmith Service',
     short: 'Commercial',

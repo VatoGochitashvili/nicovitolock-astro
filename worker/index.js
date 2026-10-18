@@ -34,6 +34,9 @@ const LEGACY_PREFIXES = [
   ['/service-area/', '/service-areas/'],
   ['/neighborhoods/', '/service-areas/'],
   ['/service/', '/services/'],
+  // Security cameras dropped Oct 2026: hub and every local page go to the
+  // matching access-control page.
+  ['/services/security-camera-installation/', '/services/access-control-systems/'],
 ];
 
 export default {

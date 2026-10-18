@@ -9,7 +9,7 @@ export const business = {
   shortName: 'Nico & Vito',
   tagline: 'Bay Ridge Locksmith Serving Brooklyn & Staten Island',
   shortPitch:
-    'A neighborhood locksmith run out of Bay Ridge, Brooklyn. Lockouts, lock changes, car keys, intercoms, and cameras — done by licensed techs who actually live around here.',
+    'A neighborhood locksmith run out of Bay Ridge, Brooklyn. Lockouts, lock changes, car keys, intercoms, and commercial locks — done by licensed techs who actually live around here.',
 
   // The ONE number. Single primary everywhere — site, Google Business Profile,
   // every citation. NAP consistency depends on it never varying.

@@ -462,12 +462,12 @@ export function areaCopy(area: ServiceArea): AreaCopy {
 
   const leads = [
     `Nico & Vito Locksmith covers every block of ${city}, ${region} from our Bay Ridge base, every day between 7 AM and 11 PM.`,
-    `We're a Bay Ridge locksmith serving ${city} daily. Lockouts, lock changes, car keys, intercoms, and cameras.`,
+    `We're a Bay Ridge locksmith serving ${city} daily. Lockouts, lock changes, car keys, intercoms, and commercial locks.`,
     `${city} is part of our regular ${region} coverage. One licensed local outfit, open seven days a week.`,
     `Locksmith service throughout ${city} (${zip}) — residential, automotive, and commercial — from a Bay Ridge locksmith.`,
     `Need a locksmith in ${city}? We're based in Bay Ridge, licensed and insured, and open 7 AM to 11 PM every day of the week.`,
     `${city} sits well inside our daily route. Call ${business.phone} and you get a Bay Ridge technician rather than a national dispatch number.`,
-    `From lockouts to camera systems, ${city} gets the full range from one local crew, open every day including weekends.`,
+    `From lockouts to access control, ${city} gets the full range from one local crew, open every day including weekends.`,
     `Our ${city} coverage is not an afterthought: ${zip} is on the route every day, 7 AM to 11 PM, at the same prices we charge at home in Bay Ridge.`,
     `A licensed locksmith for ${city}, ${region}. Bay Ridge based and on these streets every day of the week.`,
     `${city} homes, apartments, storefronts, and vehicles — all covered, every day, by a family-run Bay Ridge locksmith.`,
@@ -571,8 +571,8 @@ export function areaFaqs(area: ServiceArea): { q: string; a: string }[] {
       a: `Usually, yes. The vans carry common parts, so most jobs here are finished on the first visit. If a part has to be ordered, you hear that before we start.` },
     { q: `What if I'm just outside ${city}?`,
       a: `Still covered. We work all of ${region} — ${area.nearby.length ? `${area.nearby.join(', ')} included` : 'the surrounding blocks included'} — on the same daily route and the same price list.` },
-    { q: `Do you install security cameras and intercoms in ${city}?`,
-      a: `Yes. Alongside the lock work we install and repair CCTV, video intercoms, and access control across ${city} — for private homes, multi-family buildings, and businesses alike.` },
+    { q: `Do you install intercoms and access control in ${city}?`,
+      a: `Yes. Alongside the lock work we install and repair video intercoms and keypad or fob access control across ${city} — for private homes, multi-family buildings, and businesses alike.` },
   ];
 
   return pickMany(pool, seed, 23, 6);

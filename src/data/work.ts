@@ -395,14 +395,6 @@ export const workPhotos: WorkPhoto[] = [
 // exists — our own beats stock every time, for trust and for image search.
 workPhotos.push(
   {
-    slug: 'stock-security-cameras',
-    alt: 'Two bullet security cameras mounted on an exterior wall',
-    caption: 'CCTV coverage on a building exterior',
-    services: ['security-camera-installation'],
-    orientation: 'landscape',
-    stock: true,
-  },
-  {
     slug: 'stock-intercom-panel',
     alt: 'A multi-button apartment intercom panel mounted beside a brick entrance',
     caption: 'Multi-unit intercom panel',
@@ -468,7 +460,6 @@ export const serviceCardPhoto: Record<string, string> = {
   'smart-lock-installation': 'smart-deadbolt-keypad-front-door',
   'intercom-systems': 'stock-intercom-panel',
   'access-control-systems': 'keypad-access-control',
-  'security-camera-installation': 'stock-security-cameras',
   'commercial-locksmith': 'panic-bar-exit-device-install',
   'commercial-lockout': 'commercial-exit-door-panic-bar',
   'storefront-lock-repair': 'commercial-exit-door-panic-bar',
@@ -540,9 +531,6 @@ const HERO_ORDER: Record<string, string[]> = {
   ],
   // No own intercom photograph yet: the entry keypad is the nearest real job.
   'intercom-systems': ['keypad-access-control'],
-  // No own camera photograph yet — the page falls back to a blurred texture
-  // rather than stock. Replace as soon as there is an install photo.
-  'security-camera-installation': [],
 };
 
 /**

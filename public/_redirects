@@ -26,8 +26,8 @@
 /keys                     /services/car-key-replacement/         301
 /rekey                    /services/lock-rekeying/               301
 /rekeying                 /services/lock-rekeying/               301
-/cameras                  /services/security-camera-installation/ 301
-/cctv                     /services/security-camera-installation/ 301
+/cameras                  /services/access-control-systems/      301
+/cctv                     /services/access-control-systems/      301
 /intercom                 /services/intercom-systems/            301
 /intercoms                /services/intercom-systems/            301
 /access-control           /services/access-control-systems/      301

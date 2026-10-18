@@ -34,7 +34,7 @@ export const boroughs: BoroughPage[] = [
     title: 'Brooklyn Locksmith in All 50 Neighborhoods | Nico & Vito',
     h1: 'Brooklyn locksmith, neighborhood by neighborhood',
     metaDescription:
-      'Licensed Brooklyn locksmith based in Bay Ridge. Lockouts, rekeys, car keys, intercoms and cameras in all 50 neighborhoods, daily 7AM–11PM. (718) 618-6002.',
+      'Licensed Brooklyn locksmith based in Bay Ridge. Lockouts, rekeys, car keys, intercoms and access control in all 50 neighborhoods, daily 7AM–11PM. (718) 618-6002.',
     lead:
       'We are a Brooklyn locksmith in the literal sense: we live here, the van is parked here, and the number you call reaches the person who turns up. Bay Ridge is home base, and the whole borough is on the daily route — every day, 7 AM to 11 PM.',
     sections: [

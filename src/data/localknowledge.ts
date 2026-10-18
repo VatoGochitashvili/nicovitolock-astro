@@ -238,26 +238,6 @@ export const TRAIT_SERVICE: Record<string, TraitMap> = {
       'On gated %CITY% properties the reader belongs at the gate and needs to drive the operator, not just a strike. Vehicle entry, pedestrian entry and a delivery route are three different problems and worth deciding on before hardware is bought.',
   },
 
-  'security-camera-installation': {
-    rowhouse:
-      'On attached %CITY% houses the useful camera views are the stoop and the rear yard, because those are the two ways in. Shared party walls limit where cable can run, so we plan the route before mounting anything.',
-    multifamily:
-      'Cameras in %CITY% buildings sit at the vestibule, the mail area and the rear or basement door, which is where package theft and unauthorized entry actually happen. Coverage of common areas needs to be agreed with the board or owner first.',
-    singlefamily:
-      'A %CITY% house normally needs four views: front door, driveway, rear door and the side path. The side is the one people skip and the one that matters, because it is the approach nobody on the street can see.',
-    waterfront:
-      'Exposed positions in %CITY% take wind, salt and driving rain. Cameras there need a proper outdoor rating and sealed connections at the housing, or the image fogs and the connector corrodes within a season.',
-    commercial:
-      'For %CITY% storefronts the shots that matter are the register, the entrance at head height, and the rear door. A camera high in a corner producing a view of the tops of heads is a camera that will never identify anybody.',
-    prewar:
-      'Cabling a %CITY% prewar building is the whole job. Plaster walls, no cavity, and finishes worth protecting mean routes have to be planned rather than improvised, and that is where most of the installation time goes.',
-    industrial:
-      'Yards and loading areas around %CITY% need cameras that work at night at distance, which means infrared or low-light capability and adequate lighting. A daytime-only view of a loading dock is worth very little.',
-    highrise:
-      'Camera work in %CITY% buildings covers lobbies, service entrances and parking, and it usually needs building approval and coordination with existing systems before any installation starts.',
-    gated:
-      'On a gated %CITY% property the camera belongs at the gate, covering the approach and the plate of anything that pulls up. Cable and power out to the perimeter is the part that determines whether the job is straightforward or not.',
-  },
 
   'commercial-locksmith': {
     rowhouse:

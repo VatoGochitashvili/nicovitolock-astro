@@ -156,7 +156,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'manhattan-beach', name: 'Manhattan Beach', region: 'Brooklyn', zip: '11235', tier: 1,
     coords: [40.578, -73.938],
-    blurb: 'Manhattan Beach is single-family and security-conscious — high-security cylinders, camera systems, and gate hardware make up most of what we install out here.',
+    blurb: 'Manhattan Beach is single-family and security-conscious — high-security cylinders, smart locks, and gate hardware make up most of what we install out here.',
     landmarks: ['Oriental Boulevard', 'Shore Boulevard', 'Manhattan Beach Park', 'Kingsborough Community College'],
     nearby: ['Sheepshead Bay', 'Brighton Beach'],
     character: 'detached single-family homes with driveways, gates, and multiple exterior doors',
@@ -176,7 +176,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'marine-park', name: 'Marine Park', region: 'Brooklyn', zip: '11234', tier: 1,
     coords: [40.6, -73.93],
-    blurb: 'Marine Park is mostly private houses with side doors, garages, and back gates — which is why keying alike and camera coverage are the two things we get asked for most here.',
+    blurb: 'Marine Park is mostly private houses with side doors, garages, and back gates — which is why keying alike and gate locks are the two things we get asked for most here.',
     landmarks: ['Avenue U', 'Fillmore Avenue', 'Marine Park itself', 'Gerritsen Avenue'],
     nearby: ['Mill Basin', 'Gerritsen Beach', 'Flatlands', 'Bergen Beach'],
     character: 'detached and semi-detached houses with garages and rear entrances',
@@ -186,7 +186,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'mill-basin', name: 'Mill Basin', region: 'Brooklyn', zip: '11234', tier: 1,
     coords: [40.61, -73.91],
-    blurb: 'Mill Basin homes tend to be larger, with more doors to secure and more ground to cover on camera. High-security locks and full CCTV coverage are common requests out here.',
+    blurb: 'Mill Basin homes tend to be larger, with more doors to secure. High-security locks, keyed-alike sets and smart locks are common requests out here.',
     landmarks: ['Avenue T', 'Mill Avenue', 'the Mill Basin inlet', 'Kings Plaza'],
     nearby: ['Marine Park', 'Bergen Beach', 'Flatlands', 'Canarsie'],
     character: 'large waterfront and semi-waterfront single-family homes',
@@ -226,7 +226,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'canarsie', name: 'Canarsie', region: 'Brooklyn', zip: '11236', tier: 1,
     coords: [40.64, -73.902],
-    blurb: 'Canarsie is largely two-family homes with rental units, which means tenant turnover — and tenant turnover means rekeys. We do a lot of them here, plus intercoms and cameras.',
+    blurb: 'Canarsie is largely two-family homes with rental units, which means tenant turnover — and tenant turnover means rekeys. We do a lot of them here, plus intercoms.',
     landmarks: ['Rockaway Parkway', 'Flatlands Avenue', 'Avenue L', 'Canarsie Pier'],
     nearby: ['Flatlands', 'Bergen Beach', 'East Flatbush', 'Mill Basin'],
     character: 'two-family homes with rental units and neighborhood retail on the avenues',
@@ -286,7 +286,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'gowanus', name: 'Gowanus', region: 'Brooklyn', zip: '11215', tier: 1,
     coords: [40.674, -73.99],
-    blurb: 'Gowanus has shifted from pure industrial to a mix of workshops, studios, and residential conversions — which means roll-down gates, commercial hardware, and camera systems.',
+    blurb: 'Gowanus has shifted from pure industrial to a mix of workshops, studios, and residential conversions — which means roll-down gates, commercial hardware, and access control.',
     landmarks: ['3rd Avenue', 'the Gowanus Canal', '9th Street', 'Union Street'],
     nearby: ['Park Slope', 'Carroll Gardens', 'Sunset Park', 'Boerum Hill'],
     character: 'converted industrial buildings, workshops, and newer residential',
@@ -306,7 +306,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'red-hook', name: 'Red Hook', region: 'Brooklyn', zip: '11231', tier: 1,
     coords: [40.676, -74.009],
-    blurb: 'Red Hook is warehouses, workshops, and waterfront buildings, so most of our work here is commercial — roll-down gates, heavy-duty padlocks, access control, and camera coverage.',
+    blurb: 'Red Hook is warehouses, workshops, and waterfront buildings, so most of our work here is commercial — roll-down gates, heavy-duty padlocks, access control, and exit hardware.',
     landmarks: ['Van Brunt Street', 'Beard Street', 'the Red Hook piers', 'Valentino Pier'],
     nearby: ['Carroll Gardens', 'Gowanus', 'Cobble Hill'],
     character: 'warehouses, studios, and waterfront commercial buildings',
@@ -392,7 +392,7 @@ export const serviceAreas: ServiceArea[] = [
     character: 'brick row houses with Smith Street and Atlantic Avenue retail', traits: ['rowhouse', 'commercial'], eta: 'about 25 minutes' },
   { slug: 'dumbo', name: 'DUMBO', region: 'Brooklyn', zip: '11201', tier: 2,
     coords: [40.703, -73.989],
-    blurb: 'DUMBO is converted warehouses and offices under the bridges, so most of our work here is access control, camera systems, and commercial door hardware.',
+    blurb: 'DUMBO is converted warehouses and offices under the bridges, so most of our work here is access control, intercoms, and commercial door hardware.',
     landmarks: ['Water Street', 'Jay Street', 'the Manhattan Bridge', 'Brooklyn Bridge Park'], nearby: ['Brooklyn Heights', 'Vinegar Hill', 'Downtown Brooklyn'],
     character: 'converted warehouse lofts and creative offices', traits: ['industrial', 'highrise'], eta: 'about 28 minutes' },
   { slug: 'vinegar-hill', name: 'Vinegar Hill', region: 'Brooklyn', zip: '11201', tier: 2,
@@ -442,7 +442,7 @@ export const serviceAreas: ServiceArea[] = [
     character: 'private gated single-family homes on the waterfront', traits: ['singlefamily', 'waterfront', 'gated'], eta: 'about 22 minutes' },
   { slug: 'madison', name: 'Madison', region: 'Brooklyn', zip: '11229', tier: 2,
     coords: [40.607, -73.948],
-    blurb: 'Madison is quiet blocks of one- and two-family houses off Kings Highway, mostly rekeys, deadbolts, and the occasional camera install.',
+    blurb: 'Madison is quiet blocks of one- and two-family houses off Kings Highway, mostly rekeys, deadbolts, and the occasional smart lock.',
     landmarks: ['Kings Highway', 'Avenue P', 'Ocean Avenue'], nearby: ['Homecrest', 'Midwood', 'Marine Park'],
     character: 'one- and two-family houses on quiet residential blocks', traits: ['multifamily'], eta: 'about 18 minutes' },
 
@@ -540,7 +540,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'willowbrook', name: 'Willowbrook', region: 'Staten Island', zip: '10314', tier: 1,
     coords: [40.603, -74.138],
-    blurb: 'Willowbrook is quiet single-family blocks near the college and the park, where camera systems and high-security front doors are the common requests.',
+    blurb: 'Willowbrook is quiet single-family blocks near the college and the park, where smart locks and high-security front doors are the common requests.',
     landmarks: ['Victory Boulevard', 'the College of Staten Island', 'Willowbrook Park'],
     nearby: ['Bulls Head', 'New Springville', 'Westerleigh'],
     character: 'single-family homes near the college and parkland',
@@ -560,7 +560,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'todt-hill', name: 'Todt Hill', region: 'Staten Island', zip: '10304', tier: 1,
     coords: [40.598, -74.103],
-    blurb: 'Todt Hill is the highest ground on the eastern seaboard and the Island’s most security-conscious neighborhood — high-security locks, gates, and full camera coverage.',
+    blurb: 'Todt Hill is the highest ground on the eastern seaboard and the Island’s most security-conscious neighborhood — high-security locks, gates, and smart locks.',
     landmarks: ['Todt Hill Road', 'Ocean Terrace', 'the Greenbelt'],
     nearby: ['Dongan Hills', 'Emerson Hill', 'Grasmere'],
     character: 'large estate homes with gated driveways and extensive grounds',
@@ -580,7 +580,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'new-dorp', name: 'New Dorp', region: 'Staten Island', zip: '10306', tier: 1,
     coords: [40.574, -74.117],
-    blurb: 'New Dorp Lane is one of the Island’s busiest small-business strips, so commercial hardware, gates, and cameras make up a big share of our work here.',
+    blurb: 'New Dorp Lane is one of the Island’s busiest small-business strips, so commercial hardware, gates, and storefront locks make up a big share of our work here.',
     landmarks: ['New Dorp Lane', 'Hylan Boulevard', 'Miller Field'],
     nearby: ['Oakwood', 'Grant City', 'Midland Beach'],
     character: 'a dense small-business strip surrounded by single-family homes',
@@ -640,7 +640,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'eltingville', name: 'Eltingville', region: 'Staten Island', zip: '10312', tier: 1,
     coords: [40.545, -74.165],
-    blurb: 'Eltingville is solidly residential with a busy transit hub, and most of what we do here is rekeys, deadbolt upgrades, and home camera systems.',
+    blurb: 'Eltingville is solidly residential with a busy transit hub, and most of what we do here is rekeys, deadbolt upgrades, and smart locks.',
     landmarks: ['Amboy Road', 'Richmond Avenue', 'the Eltingville Transit Center'],
     nearby: ['Annadale', 'Great Kills', 'Arden Heights'],
     character: 'semi-detached and single-family homes around a transit hub',
@@ -650,7 +650,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'annadale', name: 'Annadale', region: 'Staten Island', zip: '10312', tier: 1,
     coords: [40.54, -74.178],
-    blurb: 'Annadale is quiet, residential, and full of single-family homes with garages and side entrances — keying alike and camera coverage are the usual asks.',
+    blurb: 'Annadale is quiet, residential, and full of single-family homes with garages and side entrances — keying alike and smart locks are the usual asks.',
     landmarks: ['Annadale Road', 'Amboy Road', 'Hylan Boulevard'],
     nearby: ['Huguenot', 'Eltingville', 'Arden Heights'],
     character: 'single-family homes with garages and multiple exterior doors',
@@ -660,7 +660,7 @@ export const serviceAreas: ServiceArea[] = [
   {
     slug: 'huguenot', name: 'Huguenot', region: 'Staten Island', zip: '10312', tier: 1,
     coords: [40.534, -74.191],
-    blurb: 'Huguenot is deep on the South Shore with larger properties and more ground to cover, which is why cameras and gate hardware come up often here.',
+    blurb: 'Huguenot is deep on the South Shore with larger properties and more ground to cover, which is why gate hardware and keyed-alike sets come up often here.',
     landmarks: ['Huguenot Avenue', 'Amboy Road', 'Woodrow Road'],
     nearby: ['Annadale', 'Prince’s Bay', 'Woodrow'],
     character: 'larger single-family properties with driveways and gates',
@@ -726,7 +726,7 @@ export const serviceAreas: ServiceArea[] = [
     character: 'residential blocks beside light commercial frontage', traits: ['commercial'], eta: 'about 38 minutes' },
   { slug: 'bloomfield', name: 'Bloomfield', region: 'Staten Island', zip: '10314', tier: 2,
     coords: [40.607, -74.187],
-    blurb: 'Bloomfield is largely commercial and industrial along the West Shore, where our work is gates, warehouse doors, and camera coverage.',
+    blurb: 'Bloomfield is largely commercial and industrial along the West Shore, where our work is gates, warehouse doors, and exit hardware.',
     landmarks: ['the West Shore Expressway', 'South Avenue', 'the Teleport'], nearby: ['Travis', 'Graniteville', 'Chelsea'],
     character: 'warehouses and commercial buildings along the West Shore', traits: ['waterfront', 'commercial', 'industrial'], eta: 'about 42 minutes' },
   { slug: 'travis', name: 'Travis', region: 'Staten Island', zip: '10314', tier: 2,

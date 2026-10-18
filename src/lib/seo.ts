@@ -108,7 +108,7 @@ export function localBusinessSchema() {
       'Emergency lockout service', 'Lock rekeying', 'Lock replacement',
       'Deadbolt installation', 'High-security locks', 'Car key replacement',
       'Key fob programming', 'Smart lock installation', 'Intercom systems',
-      'Access control', 'Security cameras', 'Commercial locksmith',
+      'Access control', 'Commercial locksmith',
     ],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',

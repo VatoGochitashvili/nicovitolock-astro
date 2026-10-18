@@ -180,13 +180,13 @@ export const guides: Record<string, NeighborhoodGuide & { district: District }> 
     district: 'south',
     heading: 'Manhattan Beach: detached homes by the ocean',
     paragraphs: [
-      'Manhattan Beach is a quiet grid of detached houses between Sheepshead Bay and Kingsborough Community College. Owners here tend to want real security — high-security cylinders, reinforced strikes, smart locks and cameras — rather than the cheapest fix.',
+      'Manhattan Beach is a quiet grid of detached houses between Sheepshead Bay and Kingsborough Community College. Owners here tend to want real security — high-security cylinders, reinforced strikes, smart locks and keyed-alike sets — rather than the cheapest fix.',
       'Ocean exposure is constant, so exterior locks and smart-lock keypads need to be rated for weather. We recommend hardware that tolerates salt air and fit it so rain does not run into the keyway.',
     ],
     route: 'We reach Manhattan Beach by the Belt Parkway, past Sheepshead Bay.',
     faqs: [
       { q: 'Which smart locks survive near the ocean?', a: 'Models with a weather rating and a metal exterior. We help you choose one and fit it with a proper strike so it is as strong as a normal deadbolt.' },
-      { q: 'Can you install cameras as well as locks?', a: 'Yes — we put in door and driveway cameras so you can see who is at the house as well as control who gets in.' },
+      { q: 'Can you install smart locks as well as regular locks?', a: 'Yes — keypad and app-controlled smart locks, so you can let people in without handing out keys.' },
     ],
   },
   'homecrest': {
@@ -220,7 +220,7 @@ export const guides: Record<string, NeighborhoodGuide & { district: District }> 
     heading: 'Mill Basin’s waterfront homes',
     paragraphs: [
       'Mill Basin is a peninsula of large detached homes, many on the water, around the inlets off Jamaica Bay. These houses often have several entrances, gated driveways and sometimes a dock, and the owners usually want them on a coherent, high-security key system.',
-      'Smart locks, keypad entries for housekeepers and contractors, and cameras on the driveway and the dock are common requests here, along with weather-rated hardware for anything facing the water.',
+      'Smart locks and keypad entries for housekeepers and contractors are common requests here, along with weather-rated hardware for anything facing the water.',
     ],
     route: 'Mill Basin is out along the Belt Parkway near Kings Plaza.',
     faqs: [
@@ -316,7 +316,7 @@ export const guides: Record<string, NeighborhoodGuide & { district: District }> 
     route: 'Canarsie is at the eastern end of our Belt Parkway run, off at Rockaway Parkway.',
     faqs: [
       { q: 'I rent out my basement. Can the tenant have a key only for their door?', a: 'Yes. We key the basement entrance separately and can give you a master key that opens both.' },
-      { q: 'Do you install cameras for houses?', a: 'Yes — front door and driveway cameras, set up so you can view them on your phone.' },
+      { q: 'Do you install smart locks for houses?', a: 'Yes — keypad and app-controlled smart locks, set up and paired before we leave.' },
     ],
   },
   'kensington': {
@@ -435,7 +435,7 @@ export const guides: Record<string, NeighborhoodGuide & { district: District }> 
     route: 'Red Hook is close by: the Gowanus Expressway to Hamilton Avenue, then a short drive in.',
     faqs: [
       { q: 'Can you service roll-down gate locks on a warehouse?', a: 'Yes. We repair or replace gate locks and padlocks and recommend corrosion-resistant hardware near the water.' },
-      { q: 'Do you install cameras for businesses?', a: 'Yes — cameras covering doors, loading areas and gates, viewable on your phone.' },
+      { q: 'Do you install access control for businesses?', a: 'Yes — keypad and fob entry on doors and gates, so you decide who gets in and when.' },
     ],
   },
   'gowanus': {

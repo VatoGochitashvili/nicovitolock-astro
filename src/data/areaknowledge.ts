@@ -44,7 +44,7 @@ export const AREA_TRAIT_NOTES: Record<AreaTrait, string[]> = {
     'Exterior hardware in %CITY% has to be specified for exposure rather than picked from a shelf. Solid brass, marine-grade stainless or a properly coated finish costs a little more once and saves replacing the same lock every few winters.',
     'Wind-driven rain in %CITY% gets into places sheltered doors never see. Water tracking down a keyway freezes overnight and lifts the pins out of alignment, which is why exterior locks near the water fail in the cold rather than in the storm.',
     'Storm and screen doors are common on the exposed blocks of %CITY%, and they add a second lock and a second failure point to every entrance. They also protect the main door, which is why the hardware behind them usually lasts noticeably longer.',
-    'Anything mounted outside in %CITY% — a keypad, a camera, an intercom station — needs a genuinely weather-rated housing and a sealed cable entry. Water in a back-box is the single most common cause of failure on these streets.',
+    'Anything mounted outside in %CITY% — a keypad or an intercom station — needs a genuinely weather-rated housing and a sealed cable entry. Water in a back-box is the single most common cause of failure on these streets.',
   ],
   commercial: [
     'The retail strips through %CITY% run a completely different class of hardware from the houses behind them. A shop door opens and closes hundreds of times a day, which is a decade of domestic wear compressed into a year, and commercial-grade locks and closers exist for exactly that reason.',
@@ -68,7 +68,7 @@ export const AREA_TRAIT_NOTES: Record<AreaTrait, string[]> = {
     'Workspaces in %CITY% usually have several people needing access at different hours, which turns a lock conversation into an access conversation fairly quickly. Who should be able to open what, and when, is the actual question.',
     'Doors in converted %CITY% buildings are often original to the industrial use and enormous by domestic standards. Standard hardware fitted to them looks fine and then tears out, because the leaf weighs several times what the lock was designed for.',
     'Shared and sublet spaces around %CITY% mean several tenants behind one entrance, each needing access to their own area and not to anybody else’s. That is a keying hierarchy question and it is worth designing before the first lock goes on.',
-    'Yards and loading areas in %CITY% are dark and unobserved outside working hours, so lighting and camera placement matter as much as the locks. A camera covering an unlit dock at distance records very little.',
+    'Yards and loading areas in %CITY% are dark and unobserved outside working hours, so the gate hardware and padlocks there take more abuse than any front door, and need to be heavy-duty and weather-rated.',
   ],
   highrise: [
     'Larger buildings in %CITY% come with obligations that houses do not. Every door on an egress path has to release in one motion, fire-rated assemblies cannot be modified freely, and hardware has to carry the right listing — constraints that a general handyman will get wrong.',
@@ -115,7 +115,6 @@ export const TRAIT_SERVICE_PRIORITY: Record<AreaTrait, { slug: string; why: stri
   commercial: [
     { slug: 'commercial-locksmith', why: 'Storefront cylinders, gate locks, closers and exit devices, scheduled around trading hours.' },
     { slug: 'access-control-systems', why: 'Staff credentials that can be revoked the day somebody leaves, with a log of who opened what.' },
-    { slug: 'security-camera-installation', why: 'Coverage at the register, the entrance at head height, and the rear door.' },
   ],
   prewar: [
     { slug: 'lock-replacement-and-repair', why: 'Mortise cases serviced and rebuilt rather than replaced, because the originals are better made.' },

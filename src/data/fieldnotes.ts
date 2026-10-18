@@ -177,16 +177,6 @@ export const SERVICE_FIELD_NOTES: Record<string, string[]> = {
     'Keep a mechanical override. Electronics fail, and a %CITY% building whose only way in is a reader is a building waiting for a bad morning. We specify a mechanical fallback on primary doors as a matter of course.',
   ],
 
-  'security-camera-installation': [
-    'Mounting height decides whether a camera is useful. Too high and it records the tops of heads, which identifies nobody. Roughly head height at the point of entry, angled slightly down, is what produces an image worth having.',
-    'Four well-aimed cameras beat eight badly placed ones, and cost less to install, power and store. Covering the actual ways into a %CITY% property — front, rear, side path, driveway — is the whole design brief for most homes.',
-    'Cameras behind glass do not work at night. The infrared reflects straight back off the pane and washes out the image, which is why an indoor camera pointed through a window is one of the most common wasted installations.',
-    'Retention is a storage question and it is worth deciding before buying. More cameras at higher resolution means fewer days kept. Finding out you have three days of footage is generally something that happens on the day you needed fourteen.',
-    'Wired connections do not drop and do not need charging. Wireless is the right answer where cable genuinely cannot be run, and the wrong answer where it can — we will say which situation a %CITY% building is in after looking at it.',
-    'Recording your own property and its approach is normal. Deliberately covering a neighbour’s windows is not, and audio has separate rules from video. We aim cameras to cover what is yours and point out where that line falls.',
-    'A camera is not a lock. It documents what happened; it does not stop it. For most %CITY% properties the right order of spending is the door and the strike first, then the cameras — a reversal of how these jobs are usually sold.',
-    'Existing systems can often be extended rather than replaced. If the recorder has spare channels and the format matches, adding cameras is far cheaper than starting again, and it is worth checking before accepting a replacement quote.',
-  ],
 
   'commercial-locksmith': [
     'Commercial hardware is not residential hardware in a different finish. A %CITY% storefront door cycles more in a month than a house door does in a decade, and Grade 1 hardware exists because Grade 3 does not survive that. It is the cheaper choice measured over a year.',
