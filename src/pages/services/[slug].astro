@@ -41,7 +41,9 @@ const sceneFor: Record<string, 'residential' | 'automotive' | 'commercial' | 'se
 
 import { fieldNotesFor } from '@/data/fieldnotes';
 // The hub carries the full set; the local pages draw two each.
-const notes = fieldNotesFor(service.slug, 'Brooklyn', 'Brooklyn and Staten Island');
+// First three on the hub; the local pages draw from the rest, so a local
+// page never repeats the hub word for word.
+const notes = fieldNotesFor(service.slug, 'Brooklyn', 'Brooklyn and Staten Island').slice(0, 3);
 // Same-category services first (so the commercial pages link to each other),
 // then the rest.
 const related = [

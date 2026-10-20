@@ -16,6 +16,10 @@ interface Props {
    *  homepage hero does — so the card is not repeating a CTA that sits a few
    *  inches to its left, and the whole form fits a laptop viewport. */
   hideContactRow?: boolean;
+  /** Service and neighborhood already known (service × area pages): send them
+   *  as hidden fields instead of rendering two dropdowns that list every
+   *  service and all 107 neighborhoods — ~250 identical words on every page. */
+  fixed?: boolean;
   class?: string;
 }
 const {
@@ -25,10 +29,13 @@ const {
   variant = 'full',
   tone = 'light',
   hideContactRow = false,
+  fixed = false,
   class: className = '',
 } = Astro.props;
 
 const short = variant === 'short';
+const areaInfo = serviceAreas.find((a) => a.slug === area || a.name === area);
+const isFixed = fixed && !!service && !!areaInfo;
 
 // Unique per instance so two forms can coexist on one page; derived from props
 // rather than randomised so the markup stays byte-stable across builds.
@@ -110,7 +117,16 @@ const step = short ? 'mt-3' : 'mt-3.5';
       </div>
     )}
 
-    <div class:list={[short && 'grid sm:grid-cols-2 gap-3 mt-4']}>
+    {isFixed && (
+      <div class="mt-4">
+        <input type="hidden" name="service" value={service} />
+        <input type="hidden" name="area" value={`${areaInfo!.name}, ${areaInfo!.region}`} />
+        <p class:list={['text-[0.92rem]', tone === 'dark' ? 'text-navy-200' : 'text-muted']}>
+          <span class:list={['font-semibold', tone === 'dark' ? 'text-white' : 'text-navy-900']}>{service}</span> in {areaInfo!.name}
+        </p>
+      </div>
+    )}
+    {!isFixed && (<div class:list={[short && 'grid sm:grid-cols-2 gap-3 mt-4']}>
     <!-- Step 1 — what -->
     <fieldset class:list={[!short && step]}>
       <legend class={label}>
@@ -168,7 +184,7 @@ const step = short ? 'mt-3' : 'mt-3.5';
         <span data-qf-eta-text></span>
       </p>
     </fieldset>
-    </div>
+    </div>)}
 
     <!-- Step 3 — who -->
     <fieldset class={step}>

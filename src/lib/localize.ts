@@ -425,7 +425,7 @@ export function localCopy(service: Service, area: ServiceArea): LocalCopy {
     traitNotes: rotated
       .slice(0, 2)
       .map((t, i) => (i === 0 ? t : thinCity(t, city, seed, 61 + i))),
-    fieldNotes: pickMany(fieldNotesFor(service.slug, city, region), seed, 53, 3)
+    fieldNotes: pickMany(fieldNotesFor(service.slug, city, region).slice(3), seed, 53, 3)
       .map((t, i) => (i === 0 ? t : thinCity(t, city, seed, 71 + i))),
     quoteBlurb: pick(quoteBlurbs, seed, 31),
     ctaBody: pick(ctaBodies, seed, 33),
@@ -655,8 +655,8 @@ export function traitNote(service: Service, area: ServiceArea): string {
 export function localLists(service: Service, area: ServiceArea) {
   const seed = seededHash(`lists::${service.slug}::${area.slug}`);
   return {
-    features: pickMany(service.features, seed, 21, 6),
-    scenarios: pickMany(service.scenarios, seed, 37, 5),
+    features: pickMany(service.features, seed, 21, 4),
+    scenarios: pickMany(service.scenarios, seed, 37, 3),
   };
 }
 
