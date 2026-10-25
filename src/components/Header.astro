@@ -1,6 +1,8 @@
 ---
 import { business } from '@/data/business';
-import { services } from '@/data/services';
+import { services, serviceBySlug } from '@/data/services';
+import { serviceAreas } from '@/data/locations';
+import { vehicles } from '@/data/vehicles';
 import Icon from './Icon.astro';
 import SocialLinks from './SocialLinks.astro';
 
@@ -8,6 +10,38 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 // hrefs carry a trailing slash, so compare on a normalised path.
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(href);
+
+// ---- Fold-out menus. Slugs are checked at build time: a typo fails the build
+// rather than shipping a dead menu link.
+const pick = <T,>(list: T[], find: (slug: string) => T | undefined, slugs: string[], what: string) =>
+  slugs.map((slug) => {
+    const hit = find(slug);
+    if (!hit) throw new Error(`Header: unknown ${what} "${slug}"`);
+    return hit;
+  });
+const svc = (slugs: string[]) => pick(services, serviceBySlug, slugs, 'service');
+const area = (slugs: string[]) => pick(serviceAreas, (x) => serviceAreas.find((a) => a.slug === x), slugs, 'area');
+
+const serviceGroups = [
+  { title: 'Home & lockouts', items: svc(['emergency-lockout-service', 'lock-rekeying', 'lock-replacement-and-repair',
+      'deadbolt-installation', 'high-security-locks', 'smart-lock-installation', 'key-duplication', 'broken-key-extraction']) },
+  { title: 'Car keys', items: svc(['car-key-replacement', 'key-fob-and-remote-programming', 'car-lockout']) },
+  { title: 'Business', items: svc(['commercial-locksmith', 'commercial-lockout', 'storefront-lock-repair', 'panic-bar-installation',
+      'door-closer-repair', 'master-key-systems', 'commercial-rekeying', 'access-control-systems', 'intercom-systems']) },
+];
+const businessServices = serviceGroups[2].items;
+const brooklynTop = area(['bay-ridge', 'dyker-heights', 'bensonhurst', 'sunset-park', 'borough-park', 'sheepshead-bay',
+  'brighton-beach', 'coney-island', 'downtown-brooklyn', 'brooklyn-heights', 'park-slope', 'dumbo']);
+const statenTop = area(['st-george', 'stapleton', 'port-richmond', 'westerleigh', 'todt-hill', 'new-dorp',
+  'great-kills', 'eltingville', 'annadale', 'tottenville']);
+const makes = vehicles.slice(0, 16);
+
+const menus: Record<string, 'services' | 'areas' | 'cars' | 'business'> = {
+  '/services/': 'services',
+  '/service-areas/': 'areas',
+  '/car-keys/': 'cars',
+  '/services/commercial-locksmith/': 'business',
+};
 
 const nav = [
   { href: '/services/', label: 'Services' },
@@ -57,21 +91,90 @@ const nav = [
     </a>
 
     <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main">
-      {nav.map((item) => (
-        <a
-          href={item.href}
-          class:list={[
-            'relative px-2.5 xl:px-3.5 py-2 text-[0.92rem] xl:text-[0.95rem] font-semibold whitespace-nowrap transition-colors',
-            isActive(item.href) ? 'text-navy-900' : 'text-muted hover:text-navy-900',
-          ]}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-        >
-          {item.label}
-          {isActive(item.href) && (
-            <span class="absolute left-2.5 right-2.5 xl:left-3.5 xl:right-3.5 -bottom-px h-[2px] bg-brass-400 rounded-full"></span>
-          )}
-        </a>
-      ))}
+      {nav.map((item) => {
+        const menu = menus[item.href];
+        const active = item.href === '/services/' ? isActive(item.href) && !path.startsWith('/services/commercial') : isActive(item.href);
+        const link = (
+          <a
+            href={item.href}
+            class:list={[
+              'relative inline-flex items-center gap-1 pl-2.5 xl:pl-3.5 py-2 text-[0.92rem] xl:text-[0.95rem] font-semibold whitespace-nowrap transition-colors',
+              menu ? 'pr-1' : 'pr-2.5 xl:pr-3.5',
+              active ? 'text-navy-900' : 'text-muted hover:text-navy-900',
+            ]}
+            aria-current={active ? 'page' : undefined}
+          >
+            {item.label}
+            {active && <span class="absolute left-2.5 right-1 xl:left-3.5 -bottom-px h-[2px] bg-brass-400 rounded-full"></span>}
+          </a>
+        );
+        if (!menu) return link;
+        return (
+          <div class="dd relative" data-dd>
+            <div class="flex items-center">
+              {link}
+              <button type="button" class="dd-btn pr-2 xl:pr-2.5 py-2 text-muted hover:text-navy-900" aria-expanded="false"
+                aria-label={`${item.label} menu`} data-dd-btn>
+                <Icon name="chevron" size={14} />
+              </button>
+            </div>
+            <div class:list={['dd-panel', menu === 'services' && 'dd-panel--wide', menu === 'areas' && 'dd-panel--areas', menu === 'cars' && 'dd-panel--cars', menu === 'business' && 'dd-panel--biz']} data-dd-panel>
+              {menu === 'services' && (
+                <div class="grid grid-cols-3 gap-8">
+                  {serviceGroups.map((g) => (
+                    <div>
+                      <p class="dd-h">{g.title}</p>
+                      <ul class="mt-2">
+                        {g.items.map((sv) => (
+                          <li><a href={`/services/${sv.slug}/`} class="dd-a"><Icon name={sv.icon} size={15} class="text-brass-500 shrink-0" />{sv.name}</a></li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  <a href="/services/" class="dd-all col-span-3 justify-self-start">All {services.length} services <Icon name="arrow" size={15} /></a>
+                </div>
+              )}
+              {menu === 'business' && (
+                <div>
+                  <p class="dd-h">For shops, offices &amp; buildings</p>
+                  <ul class="mt-2">
+                    {businessServices.map((sv) => (
+                      <li><a href={`/services/${sv.slug}/`} class="dd-a"><Icon name={sv.icon} size={15} class="text-brass-500 shrink-0" />{sv.name}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {menu === 'areas' && (
+                <div class="grid grid-cols-2 gap-8">
+                  <div>
+                    <p class="dd-h">Brooklyn</p>
+                    <ul class="mt-2 grid grid-cols-2 gap-x-4">
+                      {brooklynTop.map((a) => <li><a href={`/service-areas/${a.slug}/`} class="dd-a">{a.name}</a></li>)}
+                    </ul>
+                    <a href="/service-areas/brooklyn/" class="dd-all">All Brooklyn neighborhoods <Icon name="arrow" size={15} /></a>
+                  </div>
+                  <div>
+                    <p class="dd-h">Staten Island</p>
+                    <ul class="mt-2 grid grid-cols-2 gap-x-4">
+                      {statenTop.map((a) => <li><a href={`/service-areas/${a.slug}/`} class="dd-a">{a.name}</a></li>)}
+                    </ul>
+                    <a href="/service-areas/staten-island/" class="dd-all">All Staten Island neighborhoods <Icon name="arrow" size={15} /></a>
+                  </div>
+                </div>
+              )}
+              {menu === 'cars' && (
+                <div>
+                  <p class="dd-h">Car keys by make</p>
+                  <ul class="mt-2 grid grid-cols-3 gap-x-4">
+                    {makes.map((v) => <li><a href={`/car-keys/${v.slug}/`} class="dd-a"><Icon name="car" size={14} class="text-brass-500 shrink-0" />{v.make}</a></li>)}
+                  </ul>
+                  <a href="/car-keys/" class="dd-all">All {vehicles.length} makes <Icon name="arrow" size={15} /></a>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </nav>
 
     <div class="flex items-center gap-2">
@@ -120,9 +223,47 @@ const nav = [
 
 
   <!-- Mobile drawer -->
-  <div id="mobile-nav" class="lg:hidden hidden border-t border-line-cool bg-white">
+  <div id="mobile-nav" class="lg:hidden hidden border-t border-line-cool bg-white max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain">
     <nav class="container-x py-2 flex flex-col" aria-label="Mobile">
-      {nav.map((item) => (
+      <details class="m-dd">
+        <summary class="m-sum">Services</summary>
+        <div class="pb-3">
+          {serviceGroups.map((g) => (
+            <div class="mt-2">
+              <p class="dd-h">{g.title}</p>
+              <ul class="mt-1">
+                {g.items.map((sv) => <li><a href={`/services/${sv.slug}/`} class="m-a">{sv.name}</a></li>)}
+              </ul>
+            </div>
+          ))}
+          <a href="/services/" class="m-all">All services →</a>
+        </div>
+      </details>
+      <details class="m-dd">
+        <summary class="m-sum">Service Areas</summary>
+        <div class="pb-3">
+          <p class="dd-h mt-2">Brooklyn</p>
+          <ul class="mt-1 grid grid-cols-2 gap-x-4">{brooklynTop.map((a) => <li><a href={`/service-areas/${a.slug}/`} class="m-a">{a.name}</a></li>)}</ul>
+          <a href="/service-areas/brooklyn/" class="m-all">All Brooklyn →</a>
+          <p class="dd-h mt-4">Staten Island</p>
+          <ul class="mt-1 grid grid-cols-2 gap-x-4">{statenTop.map((a) => <li><a href={`/service-areas/${a.slug}/`} class="m-a">{a.name}</a></li>)}</ul>
+          <a href="/service-areas/staten-island/" class="m-all">All Staten Island →</a>
+        </div>
+      </details>
+      <details class="m-dd">
+        <summary class="m-sum">Car Keys</summary>
+        <div class="pb-3">
+          <ul class="mt-2 grid grid-cols-3 gap-x-4">{makes.map((v) => <li><a href={`/car-keys/${v.slug}/`} class="m-a">{v.make}</a></li>)}</ul>
+          <a href="/car-keys/" class="m-all">All makes →</a>
+        </div>
+      </details>
+      <details class="m-dd">
+        <summary class="m-sum">Commercial</summary>
+        <div class="pb-3">
+          <ul class="mt-2">{businessServices.map((sv) => <li><a href={`/services/${sv.slug}/`} class="m-a">{sv.name}</a></li>)}</ul>
+        </div>
+      </details>
+      {nav.filter((item) => !menus[item.href]).map((item) => (
         <a
           href={item.href}
           class:list={[
@@ -133,16 +274,6 @@ const nav = [
           {item.label}
         </a>
       ))}
-      <p class="pt-5 pb-2 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-muted">
-        Popular services
-      </p>
-      <div class="grid grid-cols-2 gap-x-4 pb-4">
-        {services.slice(0, 8).map((s) => (
-          <a href={`/services/${s.slug}/`} class="py-2 text-[0.92rem] text-muted hover:text-navy-900">
-            {s.short}
-          </a>
-        ))}
-      </div>
 
       <!-- The header icons are hidden below sm, so the drawer carries them
            with labels rather than dropping them on mobile entirely. -->
@@ -172,6 +303,38 @@ const nav = [
   </div>
 </header>
 
+<style is:global>
+  .dd-panel {
+    display: none; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+    min-width: 18rem; padding: 1.25rem 1.4rem 1.1rem; margin-top: 0.35rem;
+    background: #fff; border: 1px solid var(--color-line-cool, #d8e2e6); border-radius: 1rem;
+    box-shadow: 0 24px 60px -28px rgb(16 35 48 / 0.45); z-index: 70;
+  }
+  .dd-panel::before { content: ''; position: absolute; left: 0; right: 0; top: -0.6rem; height: 0.6rem; } /* hover bridge */
+  .dd-panel--wide { width: min(60rem, 94vw); left: -0.75rem; transform: none; }
+  .dd-panel--wide .dd-a { white-space: normal; line-height: 1.3; }
+  .dd-panel--areas { width: 40rem; }
+  .dd-panel--areas .dd-a, .dd-panel--cars .dd-a { white-space: normal; line-height: 1.3; }
+  .dd-panel--cars { width: 30rem; }
+  .dd-panel--biz { width: 22rem; }
+  .dd:hover > .dd-panel, .dd:focus-within > .dd-panel, .dd.is-open > .dd-panel { display: block; }
+  .dd:hover .dd-btn, .dd.is-open .dd-btn { color: var(--color-navy-900); }
+  .dd-btn svg { transition: transform 0.2s ease; }
+  .dd:hover .dd-btn svg, .dd.is-open .dd-btn svg { transform: rotate(180deg); }
+  .dd-h { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-brass-600, #b8791a); }
+  .dd-a { display: flex; align-items: center; gap: 0.5rem; padding: 0.38rem 0; font-size: 0.9rem; font-weight: 500; color: var(--color-navy-800); white-space: nowrap; }
+  .dd-a:hover { color: var(--color-brass-600, #b8791a); }
+  .dd-all { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.8rem; font-size: 0.86rem; font-weight: 700; color: var(--color-navy-900); border-bottom: 2px solid var(--color-brass-400); }
+  .m-dd { border-bottom: 1px solid rgb(216 226 230 / 0.7); }
+  .m-sum { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem 0; font-weight: 600; color: var(--color-navy-800); cursor: pointer; list-style: none; }
+  .m-sum::-webkit-details-marker { display: none; }
+  .m-sum::after { content: '+'; font-size: 1.3rem; line-height: 1; color: var(--color-brass-500); }
+  .m-dd[open] > .m-sum::after { content: '−'; }
+  .m-a { display: block; padding: 0.45rem 0; font-size: 0.93rem; color: var(--color-muted); }
+  .m-a:hover { color: var(--color-navy-900); }
+  .m-all { display: inline-block; margin-top: 0.5rem; font-size: 0.88rem; font-weight: 700; color: var(--color-navy-900); }
+</style>
+
 <script is:inline>
   (function () {
     function initNav() {
@@ -187,6 +350,37 @@ const nav = [
         btn.setAttribute('aria-label', isHidden ? 'Open menu' : 'Close menu');
       });
     }
+    // Fold-out menus: hover opens them on desktop (CSS); the chevron button
+    // opens them for keyboard and touch; Escape and an outside click close.
+    function initDropdowns() {
+      var dds = document.querySelectorAll('[data-dd]');
+      dds.forEach(function (dd) {
+        if (dd.dataset.bound) return;
+        dd.dataset.bound = '1';
+        var b = dd.querySelector('[data-dd-btn]');
+        b.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = !dd.classList.contains('is-open');
+          dds.forEach(function (o) { o.classList.remove('is-open'); o.querySelector('[data-dd-btn]').setAttribute('aria-expanded', 'false'); });
+          dd.classList.toggle('is-open', open);
+          b.setAttribute('aria-expanded', String(open));
+        });
+      });
+      if (!document.body.dataset.ddBound) {
+        document.body.dataset.ddBound = '1';
+        document.addEventListener('click', function (e) {
+          if (e.target.closest && e.target.closest('[data-dd]')) return;
+          document.querySelectorAll('[data-dd].is-open').forEach(function (o) { o.classList.remove('is-open'); o.querySelector('[data-dd-btn]').setAttribute('aria-expanded', 'false'); });
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key !== 'Escape') return;
+          document.querySelectorAll('[data-dd].is-open').forEach(function (o) { o.classList.remove('is-open'); var bb = o.querySelector('[data-dd-btn]'); bb.setAttribute('aria-expanded', 'false'); bb.focus(); });
+          if (document.activeElement && document.activeElement.closest && document.activeElement.closest('[data-dd-panel]')) document.activeElement.blur();
+        });
+      }
+    }
+    initDropdowns();
+    document.addEventListener('astro:page-load', initDropdowns);
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initNav);
     } else {
