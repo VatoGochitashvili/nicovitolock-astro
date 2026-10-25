@@ -59,6 +59,29 @@ export const workPhotos: WorkPhoto[] = [
     orientation: 'portrait',
   },
   {
+    slug: 'lockout-picked-front-door-knob',
+    alt: 'Locksmith picking the knob lock of a white front door with a tension wrench and pick, opening a home lockout without drilling',
+    caption: 'Home lockout picked open at the front door, no drilling',
+    services: ['emergency-lockout-service'],
+    orientation: 'portrait',
+    hero: true,
+  },
+  {
+    slug: 'jimmy-proof-deadbolt-apartment-door',
+    alt: 'Brass jimmy-proof deadbolt with interlocking vertical bolt installed on an apartment entry door above the knob',
+    caption: 'Jimmy-proof deadbolt fitted to an apartment door',
+    services: ['deadbolt-installation', 'lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'chevrolet-smart-key-programmed',
+    alt: 'New Chevrolet push-to-start smart key held in front of the steering wheel of a Chevrolet truck, programmed with a diagnostic tool',
+    caption: 'Chevrolet smart key programmed in the driver’s seat',
+    services: ['key-fob-and-remote-programming', 'car-key-replacement'],
+    makes: ['chevrolet'],
+    orientation: 'portrait',
+  },
+  {
     slug: 'van-laptop-programming',
     alt: 'A key programming laptop set up on the dashboard of a Chevrolet SUV, with the Chevrolet badge on the steering wheel',
     caption: 'Chevrolet key programmed from the driver’s seat',
@@ -450,7 +473,7 @@ export const shareablePhoto = (photos: WorkPhoto[]) =>
  * job is worse than no image.
  */
 export const serviceCardPhoto: Record<string, string> = {
-  'emergency-lockout-service': 'picking-lock-open-entry-door',
+  'emergency-lockout-service': 'lockout-picked-front-door-knob',
   'lock-rekeying': 'brass-rim-lock-wood-door',
   'lock-replacement-and-repair': 'mortise-lock-wood-frame',
   'deadbolt-installation': 'brass-deadbolt-and-knob',
@@ -474,6 +497,7 @@ export const serviceCardPhoto: Record<string, string> = {
 
 /** Pixel size of each /work original, for the <img> width/height. */
 const NON_STANDARD_DIMS: Record<string, [number, number]> = {
+  'lockout-picked-front-door-knob': [1200, 1702],
   'luxury-car-key-fob': [1200, 1800],
   'mortise-lock-wood-frame': [1200, 1830],
   'storefront-door-closer': [1200, 1722],
@@ -488,6 +512,9 @@ const own = (p: WorkPhoto) => !p.stock && !p.aiGenerated && p.slug !== 'van-inte
  * is missing for long; the six car shots re-sent in Sep 2026 are all here.
  */
 export const homeHeroPhotos: string[] = [
+  'lockout-picked-front-door-knob',
+  'chevrolet-smart-key-programmed',
+  'jimmy-proof-deadbolt-apartment-door',
   'brass-deadbolt-and-knob',
   'jeep-key-programming-autel',
   'picking-lock-open-entry-door',
@@ -520,6 +547,7 @@ const HERO_ORDER: Record<string, string[]> = {
     'honda-remote-keys-cut',
   ],
   'key-fob-and-remote-programming': [
+    'chevrolet-smart-key-programmed',
     'chrysler-key-fobs',
     'jeep-smart-fob-replaced',
     'nissan-smart-key-fob',
