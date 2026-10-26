@@ -234,7 +234,7 @@ export const workPhotos: WorkPhoto[] = [
     slug: 'ignition-cylinder-removed',
     alt: 'A worn ignition lock cylinder removed from a steering column during an ignition repair',
     caption: 'Worn ignition cylinder out — the fault behind a key that will not turn',
-    services: ['car-key-replacement', 'emergency-lockout-service'],
+    services: ['car-key-replacement'],
     orientation: 'portrait',
   },
   {
