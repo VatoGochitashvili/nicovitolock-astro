@@ -1,0 +1,303 @@
+---
+// "From our Instagram": a swipeable strip of our real posts. Tapping a card
+// opens a viewer: reels play with sound, carousels swipe slide by slide, and
+// every post links back to Instagram. Data and the hosting rules: instagram.ts.
+import Icon from './Icon.astro';
+import { instagramPosts, instagramEmbedUrl } from '@/data/instagram';
+import { business } from '@/data/business';
+
+interface Props {
+  heading?: string;
+  intro?: string;
+  tone?: 'cream' | 'white';
+}
+const {
+  heading = 'From our Instagram',
+  intro = 'Real jobs, quick tips and the story of the two brothers behind the van. Tap a post to watch or swipe through it.',
+  tone = 'cream',
+} = Astro.props;
+const profile = business.social.instagram;
+const handle = '@' + (profile?.split('/').filter(Boolean).pop() ?? 'nicovitolocksmith');
+const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+---
+{instagramPosts.length > 0 && (
+  <section class:list={['ig py-16 md:py-20 overflow-hidden', tone === 'cream' ? 'bg-cream' : 'bg-white']} data-ig>
+    <div class="container-x">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div class="max-w-2xl">
+          <p class="eyebrow mb-3">Instagram</p>
+          <h2 class="display text-navy-900 text-3xl md:text-[2.6rem]">{heading}</h2>
+          <p class="mt-4 text-muted leading-relaxed">{intro}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" class="ig-nav" data-ig-scroll="-1" aria-label="Scroll posts left">
+            <Icon name="chevron" size={18} class="rotate-90" />
+          </button>
+          <button type="button" class="ig-nav" data-ig-scroll="1" aria-label="Scroll posts right">
+            <Icon name="chevron" size={18} class="-rotate-90" />
+          </button>
+        </div>
+      </div>
+
+      <ul class="ig-strip mt-9" data-ig-strip>
+        {instagramPosts.map((p, i) => (
+          <li class="ig-item">
+            <button type="button" class="ig-card" data-ig-open={i}
+              aria-label={`${p.kind === 'reel' ? 'Watch reel' : 'View post'}: ${p.caption}`}>
+              {p.kind === 'reel' ? (
+                <>
+                  <img src={p.poster} alt={p.alt} loading="lazy" decoding="async" width="360" height="640" />
+                  {p.preview && (
+                    <video class="ig-preview" data-src={p.preview} muted loop playsinline preload="none" aria-hidden="true"></video>
+                  )}
+                  <span class="ig-badge"><Icon name="instagram" size={14} /> Reel{p.duration && ` · ${p.duration}`}</span>
+                  <span class="ig-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg></span>
+                </>
+              ) : (
+                <>
+                  <img src={p.slides[0].src} alt={p.slides[0].alt} loading="lazy" decoding="async" width="720" height="900" />
+                  <span class="ig-badge"><Icon name="instagram" size={14} /> 1 / {p.slides.length}</span>
+                </>
+              )}
+            </button>
+            <p class="ig-cap">{p.caption}</p>
+            <p class="ig-date">{fmt(p.date)}</p>
+          </li>
+        ))}
+        {profile && (
+          <li class="ig-item">
+            <a href={profile} target="_blank" rel="noopener" class="ig-card ig-follow">
+              <Icon name="instagram" size={38} />
+              <span class="font-display font-bold text-lg">{handle}</span>
+              <span class="text-[0.9rem] opacity-80">More jobs and tips on Instagram</span>
+              <span class="btn btn-brass mt-2">Follow us</span>
+            </a>
+          </li>
+        )}
+      </ul>
+    </div>
+
+    {instagramPosts.map((p, i) => (
+      <template data-ig-tpl={i}>
+        <div class="ig-media" data-kind={p.kind}>
+          {p.kind === 'reel' && p.video && (
+            <video src={p.video} poster={p.poster} controls playsinline autoplay preload="metadata"></video>
+          )}
+          {p.kind === 'reel' && !p.video && p.embed && (
+            <iframe src={instagramEmbedUrl(p.url)} title={p.alt} loading="lazy" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          )}
+          {p.kind === 'carousel' && (
+            <div class="ig-slides">
+              <div class="ig-track" data-ig-track>
+                {p.slides.map((s, j) => (
+                  <img src={s.src} alt={s.alt} width="720" height="900" decoding="async" loading={j < 2 ? 'eager' : 'lazy'} />
+                ))}
+              </div>
+              <button type="button" class="ig-arrow ig-arrow--prev" data-ig-step="-1" aria-label="Previous slide">
+                <Icon name="chevron" size={20} class="rotate-90" />
+              </button>
+              <button type="button" class="ig-arrow ig-arrow--next" data-ig-step="1" aria-label="Next slide">
+                <Icon name="chevron" size={20} class="-rotate-90" />
+              </button>
+              <div class="ig-dots" aria-hidden="true">
+                {p.slides.map(() => <span></span>)}
+              </div>
+            </div>
+          )}
+        </div>
+        <div class="ig-side">
+          <p class="font-display font-bold text-navy-900">{handle}</p>
+          <p class="mt-2 text-muted leading-relaxed">{p.caption}</p>
+          <p class="ig-date mt-2">{fmt(p.date)}</p>
+          <a href={p.url} target="_blank" rel="noopener" class="btn btn-outline mt-5">
+            <Icon name="instagram" size={18} /> View on Instagram
+          </a>
+        </div>
+      </template>
+    ))}
+
+    <dialog class="ig-dialog" data-ig-dialog aria-label="Instagram post">
+      <button type="button" class="ig-close" data-ig-close aria-label="Close">
+        <Icon name="close" size={22} />
+      </button>
+      <div class="ig-body" data-ig-body></div>
+    </dialog>
+  </section>
+)}
+
+<style>
+  .ig-nav {
+    display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 999px;
+    border: 1.5px solid var(--color-navy-900); color: var(--color-navy-900);
+    transition: background-color .2s, color .2s;
+  }
+  .ig-nav:hover { background: var(--color-navy-900); color: #fff; }
+  @media (max-width: 767px) { .ig-nav { display: none; } }
+
+  .ig-strip {
+    display: grid; grid-auto-flow: column; grid-auto-columns: min(15.5rem, 72vw); gap: 1.25rem;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    padding-bottom: .5rem; margin-inline: -1.25rem; padding-inline: 1.25rem; scroll-padding-inline: 1.25rem;
+    scrollbar-width: none; overscroll-behavior-x: contain;
+  }
+  .ig-strip::-webkit-scrollbar { display: none; }
+  .ig-item { scroll-snap-align: start; }
+
+  .ig-card {
+    position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; overflow: hidden;
+    border-radius: 1rem; background: var(--color-navy-900); text-align: left;
+    box-shadow: 0 1px 2px rgb(15 30 45 / .08);
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s;
+  }
+  .ig-card:hover, .ig-card:focus-visible { transform: translateY(-4px); box-shadow: 0 14px 30px -12px rgb(15 30 45 / .35); }
+  .ig-card img, .ig-preview {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .ig-card:hover img, .ig-card:hover .ig-preview { transform: scale(1.04); }
+  .ig-preview { opacity: 0; transition: opacity .5s, transform .6s cubic-bezier(.2,.7,.2,1); }
+  .ig-preview.is-on { opacity: 1; }
+
+  .ig-badge {
+    position: absolute; left: .7rem; top: .7rem; display: inline-flex; align-items: center; gap: .35rem;
+    padding: .3rem .6rem; border-radius: 999px; font-size: .74rem; font-weight: 600;
+    color: #fff; background: rgb(10 22 34 / .62); backdrop-filter: blur(6px);
+  }
+  .ig-play {
+    position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center;
+    width: 3.5rem; height: 3.5rem; border-radius: 999px; padding-left: 3px;
+    color: var(--color-navy-900); background: rgb(255 255 255 / .92);
+    transition: scale .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .ig-card:hover .ig-play { scale: 1.1; }
+
+  .ig-follow {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem;
+    padding: 1.5rem; text-align: center; color: #fff;
+    background: linear-gradient(160deg, var(--color-navy-800), var(--color-navy-900));
+  }
+  .ig-cap {
+    margin-top: .8rem; font-size: .92rem; line-height: 1.45; color: var(--color-navy-900);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .ig-date { margin-top: .25rem; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); }
+
+  .ig-dialog {
+    width: min(58rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; border: 0;
+    border-radius: 1.25rem; background: #fff; overflow: hidden;
+    opacity: 0; translate: 0 14px; scale: .98;
+    transition: opacity .3s, translate .3s cubic-bezier(.2,.7,.2,1), scale .3s cubic-bezier(.2,.7,.2,1), display .3s allow-discrete, overlay .3s allow-discrete;
+  }
+  .ig-dialog[open] { opacity: 1; translate: 0 0; scale: 1; }
+  @starting-style { .ig-dialog[open] { opacity: 0; translate: 0 14px; scale: .98; } }
+  .ig-dialog::backdrop { background: rgb(8 18 28 / .78); backdrop-filter: blur(4px); }
+  .ig-close {
+    position: absolute; right: .6rem; top: .6rem; z-index: 3; display: grid; place-items: center;
+    width: 2.6rem; height: 2.6rem; border-radius: 999px; color: #fff; background: rgb(10 22 34 / .6);
+  }
+  .ig-body { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; }
+  @media (max-width: 760px) {
+    .ig-body { grid-template-columns: 1fr; }
+    .ig-dialog { width: 100vw; max-width: 100vw; max-height: 100dvh; height: 100dvh; margin: 0; border-radius: 0; }
+    .ig-body { height: 100%; grid-template-rows: minmax(0, 1fr) auto; }
+  }
+  .ig-media { background: #000; display: grid; place-items: center; min-height: 0; }
+  .ig-media video { width: 100%; max-height: calc(100dvh - 2rem); aspect-ratio: 9 / 16; object-fit: contain; }
+  .ig-media iframe { width: 100%; height: min(46rem, calc(100dvh - 2rem)); border: 0; background: #fff; }
+  .ig-side { padding: 1.75rem 1.5rem; overflow-y: auto; }
+  @media (max-width: 760px) {
+    .ig-media { position: relative; overflow: hidden; }
+    .ig-media video { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; aspect-ratio: auto; }
+    .ig-media iframe { height: 100%; }
+    .ig-side { padding: 1rem 1.25rem 1.5rem; }
+  }
+
+  .ig-slides { position: relative; width: 100%; }
+  .ig-track {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    scrollbar-width: none; overscroll-behavior-x: contain;
+  }
+  .ig-track::-webkit-scrollbar { display: none; }
+  .ig-track img { flex: 0 0 100%; width: 100%; aspect-ratio: 4 / 5; max-height: calc(100dvh - 2rem); object-fit: contain; scroll-snap-align: center; }
+  .ig-arrow {
+    position: absolute; top: 50%; translate: 0 -50%; display: grid; place-items: center;
+    width: 2.5rem; height: 2.5rem; border-radius: 999px; color: var(--color-navy-900);
+    background: rgb(255 255 255 / .9); transition: opacity .2s;
+  }
+  .ig-arrow[disabled] { opacity: 0; pointer-events: none; }
+  .ig-arrow--prev { left: .6rem; }
+  .ig-arrow--next { right: .6rem; }
+  .ig-dots { position: absolute; bottom: .75rem; left: 0; right: 0; display: flex; justify-content: center; gap: .35rem; }
+  .ig-dots span { width: .45rem; height: .45rem; border-radius: 999px; background: rgb(255 255 255 / .5); transition: background-color .2s, width .2s; }
+  .ig-dots span.is-on { width: 1.1rem; background: #fff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ig-strip, .ig-track { scroll-behavior: auto; }
+    .ig-card, .ig-card img, .ig-dialog { transition: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ig]').forEach((root) => {
+    const strip = root.querySelector<HTMLElement>('[data-ig-strip]')!;
+    const dialog = root.querySelector<HTMLDialogElement>('[data-ig-dialog]')!;
+    const body = root.querySelector<HTMLElement>('[data-ig-body]')!;
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    root.querySelectorAll<HTMLButtonElement>('[data-ig-scroll]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const step = (strip.querySelector('.ig-item') as HTMLElement).offsetWidth + 20;
+        strip.scrollBy({ left: Number(b.dataset.igScroll) * step * 2 });
+      }));
+
+    // Muted previews play only while their card is on screen.
+    if (!calm && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) {
+          if (!v.src) v.src = v.dataset.src!;
+          v.play().then(() => v.classList.add('is-on')).catch(() => {});
+        } else v.pause();
+      }), { threshold: 0.6 });
+      root.querySelectorAll('.ig-preview').forEach((v) => io.observe(v));
+    }
+
+    const open = (i: string) => {
+      const tpl = root.querySelector<HTMLTemplateElement>(`[data-ig-tpl="${i}"]`);
+      if (!tpl) return;
+      body.replaceChildren(tpl.content.cloneNode(true));
+      dialog.showModal();
+      const track = body.querySelector<HTMLElement>('[data-ig-track]');
+      if (track) {
+        const dots = [...body.querySelectorAll('.ig-dots span')];
+        const prev = body.querySelector<HTMLButtonElement>('[data-ig-step="-1"]')!;
+        const next = body.querySelector<HTMLButtonElement>('[data-ig-step="1"]')!;
+        const sync = () => {
+          const n = Math.round(track.scrollLeft / track.clientWidth);
+          dots.forEach((d, j) => d.classList.toggle('is-on', j === n));
+          prev.disabled = n === 0;
+          next.disabled = n === dots.length - 1;
+        };
+        body.querySelectorAll<HTMLButtonElement>('[data-ig-step]').forEach((b) =>
+          b.addEventListener('click', () => track.scrollBy({ left: Number(b.dataset.igStep) * track.clientWidth })));
+        track.addEventListener('scroll', sync, { passive: true });
+        track.tabIndex = 0;
+        track.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') next.click();
+          if (e.key === 'ArrowLeft') prev.click();
+        });
+        sync();
+      }
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('[data-ig-open]').forEach((b) =>
+      b.addEventListener('click', () => open(b.dataset.igOpen!)));
+    root.querySelector('[data-ig-close]')!.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    // Stop the reel and drop the iframe when the viewer closes.
+    dialog.addEventListener('close', () => {
+      body.querySelectorAll('video').forEach((v) => v.pause());
+      setTimeout(() => { if (!dialog.open) body.replaceChildren(); }, 300);
+    });
+  });
+</script>

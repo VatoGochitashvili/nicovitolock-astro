@@ -18,6 +18,7 @@ import { ownPhotos, photoDims, shareablePhoto, type WorkPhoto } from '@/data/wor
 import { services } from '@/data/services';
 import { vehicles } from '@/data/vehicles';
 import { business } from '@/data/business';
+import InstagramFeed from '@/components/InstagramFeed.astro';
 import { breadcrumbSchema, localBusinessSchema, pickDescription, ogPhoto, faqSchema } from '@/lib/seo';
 
 const GROUPS: { id: string; title: string; intro: string; body: string[]; match: string[] }[] = [
@@ -214,6 +215,8 @@ const description = pickDescription([
       </dl>
     </div>
   </section>
+
+  <InstagramFeed tone="white" heading="More on our Instagram" />
 
   <CtaBand heading="Want this done on your door or car?" />
 </BaseLayout>
