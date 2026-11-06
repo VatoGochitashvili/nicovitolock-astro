@@ -178,6 +178,16 @@ export const vehicles: Vehicle[] = [
     caveat: 'FBS4 Mercedes (roughly 2015 onward) are dealer-only for key origination. We will say so on the phone rather than take your money for a call-out that cannot succeed.',
   },
   {
+    slug: 'audi', make: 'Audi', system: 'Immobilizer 4 / BCM2, Advanced Key (Kessy)',
+    keyTypes: ['Flip remote keys', 'Advanced Key proximity fobs', 'Spare key programming'],
+    notes: 'Audi key work is decided by the immobiliser generation. Older cars with a flip key in the Immobilizer 4 era (broadly to 2008) program through the diagnostic port. The BCM2 cars that followed, including most A4, A5, Q5 and A6 models, need data read from the car before a new key can be added, which takes specialist equipment rather than a dealer.',
+    common: ['Lost Audi key fob', 'Spare Advanced Key for an A4 or Q5', 'Flip key blade broken or worn', 'Fob not detected or remote not working'],
+    allKeysLost: false,
+    models: ["A4", "Q5", "A6", "Q7", "A3", "A5", "Q3"],
+    yearNotes: "Flip-key Audis up to about 2008 are usually straightforward. BCM2 cars from around 2009 take longer because the immobiliser data is read first, and all-keys-lost on some of them means taking the module out. The newest platforms, roughly 2017 onward on the Q7, A4 and A5, can be dealer-only.",
+    caveat: 'A spare key for most Audis is routine. All-keys-lost depends on the year and module, and a few recent models are dealer-only. Call with the year and VIN and we will tell you which one yours is before anyone drives out.',
+  },
+  {
     slug: 'lexus', make: 'Lexus', system: 'Toyota H-chip / Smart Access',
     keyTypes: ['H-chip transponder keys', 'Smart Access proximity fobs'],
     notes: 'Lexus shares Toyota\'s key platform, so RX, ES and IS models follow the same rules — including the G to H chip transition. Smart Access fobs are programmable on site for most model years.',

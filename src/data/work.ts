@@ -325,11 +325,11 @@ export const workPhotos: WorkPhoto[] = [
     orientation: 'portrait',
   },
   {
-    // No Audi page yet, so no make tag.
     slug: 'audi-smart-key-steering-wheel',
     alt: 'An Audi smart key held at the wheel of an Audi, with the four rings on the steering wheel',
     caption: 'Audi smart key programmed in the driver’s seat',
     services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['audi'],
     orientation: 'portrait',
   },
   {

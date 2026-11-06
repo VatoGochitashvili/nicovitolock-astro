@@ -40,6 +40,8 @@ export const MAKE_OWNER_NOTES: Record<string, string> = {
     'BMW is the make people most expect to need a dealer for, and frequently it does not. We originate and code keys for most model ranges at the vehicle, including CAS-based systems. The genuine caveat is the newest platforms, where the security architecture does restrict what anybody outside the dealer network can do — and we say so before you book rather than after we arrive.',
   'mercedes-benz':
     'Mercedes keys are a specialist area, and the honest position is that it depends heavily on the year and the platform. Some are routine for us at the roadside; others involve infrared FBS systems where the realistic answer is a dealer. Telling you which one your car is, on the phone, before anybody spends anything, is more useful than optimism.',
+  audi:
+    'The Audi call we get most is a lost Advanced Key on an A4 or Q5, and it usually comes after the owner has been told by somebody else that only the dealer can help. For most of those cars that is not true: the immobiliser data is read at the car, the new fob is added and tested, and the dealer tow is skipped. The exceptions are the newest platforms and some all-keys-lost cases, and we name those on the phone.',
   lexus:
     'Lexus follows Toyota engineering, so the same G-chip and H-chip distinction applies, and Smart Key models behave much like their Toyota equivalents with more of the security routine enforced. RX and ES are the two we key most. All-keys-lost is achievable on most years at the vehicle, with a wait built into the procedure rather than into our schedule.',
   acura:
