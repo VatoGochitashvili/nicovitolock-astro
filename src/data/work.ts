@@ -299,6 +299,47 @@ export const workPhotos: WorkPhoto[] = [
     services: ['car-key-replacement'],
     orientation: 'portrait',
   },
+  // Added 2026-11-06 from the Google Business Profile photos.
+  {
+    slug: 'honda-smart-keys-odyssey',
+    alt: 'Two Honda smart keys, a new one and the original, held in front of the grille of a white Honda minivan',
+    caption: 'Honda smart key programmed alongside the original',
+    services: ['key-fob-and-remote-programming', 'car-key-replacement'],
+    makes: ['honda'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'ford-transponder-key-steering-wheel',
+    alt: 'A newly cut Ford transponder key held in front of the Ford badge on the steering wheel',
+    caption: 'Ford transponder key cut and coded at the car',
+    services: ['car-key-replacement'],
+    makes: ['ford'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'bmw-750i-smart-key',
+    alt: 'A BMW smart key with its emergency blade pulled out, held behind a white BMW 750i',
+    caption: 'BMW 750i key made on site',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    makes: ['bmw'],
+    orientation: 'portrait',
+  },
+  {
+    // No Audi page yet, so no make tag.
+    slug: 'audi-smart-key-steering-wheel',
+    alt: 'An Audi smart key held at the wheel of an Audi, with the four rings on the steering wheel',
+    caption: 'Audi smart key programmed in the driver’s seat',
+    services: ['car-key-replacement', 'key-fob-and-remote-programming'],
+    orientation: 'portrait',
+  },
+  {
+    // No Suzuki page, so no make tag.
+    slug: 'suzuki-transponder-keys',
+    alt: 'Two newly cut Suzuki transponder keys held in front of the Suzuki badge on the steering wheel',
+    caption: 'Suzuki keys cut and programmed',
+    services: ['car-key-replacement'],
+    orientation: 'portrait',
+  },
   // ---------------------------- residential ---------------------------
   {
     slug: 'brass-rim-lock-wood-door',
@@ -365,6 +406,27 @@ export const workPhotos: WorkPhoto[] = [
     services: ['lock-replacement-and-repair'],
     orientation: 'portrait',
   },
+  {
+    slug: 'french-door-lever-handleset',
+    alt: 'A lever handleset with a thumb-latch fitted to a white glass-panel French door',
+    caption: 'Lever handleset fitted to a French door',
+    services: ['lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'jimmy-proof-deadbolt-cream-door',
+    alt: 'A brass jimmy-proof deadbolt on a cream apartment door, above a glass doorknob',
+    caption: 'Jimmy-proof deadbolt on an apartment door',
+    services: ['deadbolt-installation', 'lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'lobby-door-lock-job-tools',
+    alt: 'Locksmith working on the lock of a glass lobby door in an apartment building, tool bags open on the tiled floor',
+    caption: 'Lobby door lock job in an apartment building',
+    services: ['lock-replacement-and-repair', 'commercial-locksmith'],
+    orientation: 'portrait',
+  },
   // ---------------------------- commercial ----------------------------
   {
     slug: 'keypad-access-control',
@@ -408,6 +470,55 @@ export const workPhotos: WorkPhoto[] = [
     alt: 'A mortise lock body and lever handle on the edge of a grey commercial door',
     caption: 'Mortise lock and lever on a commercial door',
     services: ['commercial-locksmith', 'lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'storefront-mortise-lock-red-door',
+    alt: 'A mortise lock in the edge of a red aluminium storefront door, with a key turned in the new cylinder',
+    caption: 'Storefront mortise lock tested with the new key',
+    services: ['commercial-locksmith', 'storefront-lock-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'storefront-cylinder-new-keys',
+    alt: 'A new lock cylinder in a red aluminium storefront door, with the cut keys hanging on a coiled key ring',
+    caption: 'New cylinder and keys on a storefront door',
+    services: ['commercial-locksmith', 'storefront-lock-repair', 'lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'securitech-lock-storefront-door',
+    alt: 'A Securitech lock with a lever handle being fitted to a glass-and-metal storefront door',
+    caption: 'Securitech lock fitted to a storefront door',
+    services: ['commercial-locksmith', 'storefront-lock-repair', 'high-security-locks'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'storefront-double-door-pull-handles',
+    alt: 'Pull handles and a lock cylinder on a pair of glass storefront doors',
+    caption: 'Storefront double doors, handles and lock',
+    services: ['commercial-locksmith', 'storefront-lock-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'mortise-lock-metal-door-install',
+    alt: 'A mortise lock fitted in the edge of a grey metal door, with the cylinder hole and wiring still exposed',
+    caption: 'Mortise lock going into a metal door',
+    services: ['commercial-locksmith', 'lock-replacement-and-repair'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'smart-lever-lock-metal-door',
+    alt: 'A gold-finish electronic smart lever lock installed on a brown metal door',
+    caption: 'Smart lever lock on a metal door',
+    services: ['smart-lock-installation', 'access-control-systems'],
+    orientation: 'portrait',
+  },
+  {
+    slug: 'commercial-door-hardware-install',
+    alt: 'Lock cylinders, a battery-powered electronic module and a cordless drill laid out on a carton during a door hardware install',
+    caption: 'Door hardware laid out mid-install',
+    services: ['commercial-locksmith'],
     orientation: 'portrait',
   },
 ];
@@ -501,6 +612,8 @@ const NON_STANDARD_DIMS: Record<string, [number, number]> = {
   'luxury-car-key-fob': [1200, 1800],
   'mortise-lock-wood-frame': [1200, 1830],
   'storefront-door-closer': [1200, 1722],
+  'mortise-lock-metal-door-install': [1200, 2134],
+  'jimmy-proof-deadbolt-cream-door': [1200, 2133],
 };
 export const photoDims = (slug: string): [number, number] => NON_STANDARD_DIMS[slug] ?? [1200, 1600];
 
