@@ -1,0 +1,117 @@
+---
+/**
+ * The owner's job photos as a crisp, tilted card on the right of a hero —
+ * in full colour, never dimmed, never behind the type. With several photos
+ * the card cross-fades between them (pure CSS, held under reduced motion).
+ *
+ * Desktop only (lg+). Below that the hero is text on HeroArt; the photos
+ * appear in the strips and galleries further down. A <picture> source keeps
+ * phones from downloading the image at all.
+ *
+ * Only the owner's own photographs are accepted: stock and AI images throw.
+ */
+import { photoBySlug } from '@/data/work';
+
+interface Props {
+  photos: string[];
+  eager?: boolean;
+  /** seconds each photo is held */
+  hold?: number;
+}
+const { photos, eager = false, hold = 5 } = Astro.props;
+
+const ps = photos.map((slug) => {
+  const p = photoBySlug(slug);
+  if (!p) throw new Error(`PhotoCard: unknown photo "${slug}"`);
+  if (p.stock || p.aiGenerated) throw new Error(`PhotoCard: "${slug}" is not one of the owner's own photographs`);
+  return p;
+});
+
+const n = ps.length;
+const fade = 1.2;
+const total = hold * n;
+const pct = (sec: number) => ((sec / total) * 100).toFixed(3);
+const css = n > 1 ? `
+@keyframes pcFade {
+  0% { opacity: 0 }
+  ${pct(fade)}% { opacity: 1 }
+  ${pct(hold)}% { opacity: 1 }
+  ${pct(hold + fade)}% { opacity: 0 }
+  100% { opacity: 0 }
+}
+.pc-slide { opacity: 0; animation: pcFade ${total}s linear infinite; }
+.pc-slide[data-slide="0"] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .pc-slide { animation: none; opacity: 0; }
+  .pc-slide[data-slide="0"] { opacity: 1; }
+}` : '';
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+---
+<figure class="hero-card" role="group" aria-label="Photographs from our recent jobs">
+  <span class="hc-back" aria-hidden="true"></span>
+  <div class="hc-frame">
+    {ps.map((p, i) => (
+      <picture class="pc-slide" data-slide={i} style={n > 1 ? `animation-delay:${(i * hold - fade).toFixed(2)}s` : undefined}>
+        <source media="(max-width: 1023px)" srcset={BLANK} />
+        <img
+          src={`/work/${p.slug}-800.webp`}
+          srcset={`/work/${p.slug}-800.webp 800w, /work/${p.slug}.webp 1200w`}
+          sizes="340px"
+          alt={p.alt}
+          width={600}
+          height={800}
+          loading={eager && i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={eager && i === 0 ? 'high' : 'low'}
+          decoding="async"
+        />
+      </picture>
+    ))}
+  </div>
+  <figcaption class="hc-tag"><span aria-hidden="true"></span>Real job photo</figcaption>
+</figure>
+
+{css && <style is:inline set:html={css}></style>}
+
+<style>
+  .hero-card {
+    display: none;
+    position: absolute; z-index: 2; margin: 0;
+    top: 50%;
+    right: max(2rem, calc((100% - 1200px) / 2 + 1.75rem));
+    height: min(calc(100% - 7.5rem), 25rem);
+    aspect-ratio: 3 / 4;
+    transform: translateY(-50%) rotate(2.5deg);
+  }
+  @media (min-width: 1024px) { .hero-card { display: block; } }
+
+  .hc-back {
+    position: absolute; inset: 0;
+    border-radius: 1.25rem;
+    border: 1px solid rgb(242 174 57 / 0.45);
+    background: rgb(242 174 57 / 0.06);
+    transform: rotate(-7deg) translate(-6%, 2%);
+  }
+  .hc-frame {
+    position: absolute; inset: 0; overflow: hidden;
+    border-radius: 1.25rem;
+    background: var(--color-navy-800);
+    box-shadow:
+      0 0 0 6px rgb(255 255 255 / 0.08),
+      0 0 0 7px rgb(255 255 255 / 0.14),
+      0 40px 70px -24px rgb(0 0 0 / 0.65);
+  }
+  .pc-slide, .pc-slide img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+  }
+  .pc-slide img { object-fit: cover; object-position: center; }
+
+  .hc-tag {
+    position: absolute; left: 1rem; bottom: -0.85rem;
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.4rem 0.8rem; border-radius: 999px;
+    background: var(--color-brass-400); color: var(--color-navy-950);
+    font: 700 0.72rem/1 var(--font-display, inherit); letter-spacing: 0.06em; text-transform: uppercase;
+    box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.6);
+  }
+  .hc-tag span { width: 0.45rem; height: 0.45rem; border-radius: 99px; background: var(--color-navy-950); }
+</style>

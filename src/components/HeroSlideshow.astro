@@ -1,68 +1,20 @@
 ---
 /**
- * Cross-fading hero background of the owner's own job photos.
- *
- * Each frame is a PhotoFrame: the photograph shown whole, never cropped, over
- * a blurred fill of itself. See PhotoFrame.
- *
- * Performance rules that matter here:
- *  - Only the FIRST frame is eager. It is the LCP element; the rest are lazy.
- *  - The fade is pure CSS keyframes — no JS, still works if scripts fail.
- *  - prefers-reduced-motion holds it on the first frame.
- *
- * Keyframe stops are computed HERE and emitted as literal percentages: CSS
- * custom properties are not valid as @keyframes selectors.
+ * Hero background with several of the owner's job photos: the HeroArt plate
+ * plus a PhotoCard that cross-fades between them. See PhotoBg / PhotoCard.
  */
-import PhotoFrame from './PhotoFrame.astro';
-import Scrim from './Scrim.astro';
+import HeroArt from './HeroArt.astro';
+import PhotoCard from './PhotoCard.astro';
 
 interface Props {
-  /** /work slugs, in order */
   photos: string[];
   layout?: 'right' | 'beside-form';
-  /** seconds each frame is held */
   hold?: number;
   strength?: number;
 }
-const { photos, layout = 'right', hold = 5, strength = 50 } = Astro.props;
-
-const n = Math.max(1, photos.length);
-const fade = 1.2;
-const total = hold * n;
-const pct = (sec: number) => ((sec / total) * 100).toFixed(3);
-const kf = `
-@keyframes heroFade {
-  0% { opacity: 0 }
-  ${pct(fade)}% { opacity: 1 }
-  ${pct(hold)}% { opacity: 1 }
-  ${pct(hold + fade)}% { opacity: 0 }
-  100% { opacity: 0 }
-}`;
+const { photos, hold = 5 } = Astro.props;
 ---
-<div class="hero-bg absolute inset-0 overflow-hidden" role="group" aria-label="Photographs from our recent jobs">
-  {photos.map((slug, i) => (
-    <PhotoFrame
-      photo={slug}
-      layout={layout}
-      eager={i === 0}
-      slide={i}
-      class="hero-slide"
-      style={`animation-delay:${(i * hold - fade).toFixed(2)}s`}
-    />
-  ))}
-  <Scrim strength={strength} />
+<div class="hero-bg absolute inset-0 overflow-hidden">
+  <HeroArt />
 </div>
-
-<style is:inline set:html={n > 1 ? `
-${kf}
-.hero-slide {
-  opacity: 0;
-  animation: heroFade ${total}s linear infinite;
-  will-change: opacity;
-}
-.hero-slide[data-slide="0"] { opacity: 1; }
-@media (prefers-reduced-motion: reduce) {
-  .hero-slide { animation: none; opacity: 0; }
-  .hero-slide[data-slide="0"] { opacity: 1; }
-}
-` : ''}></style>
+<PhotoCard photos={photos} hold={hold} eager />

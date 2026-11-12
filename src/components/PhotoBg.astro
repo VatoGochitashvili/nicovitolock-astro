@@ -1,25 +1,27 @@
 ---
 /**
- * Photographic band background: one PhotoFrame plus the text scrim.
- * See PhotoFrame for why photos are shown whole rather than cropped.
+ * Hero background: the designed HeroArt plate, plus — when a photo is given —
+ * the owner's photograph as a crisp card on the right (PhotoCard).
+ *
+ * Photos are no longer dimmed behind the text. The old blurred-fill + scrim
+ * treatment read as a muddy, darkened picture; this keeps the type on a clean
+ * designed surface and shows the job photo in full colour beside it.
+ * `texture`, `layout` and `strength` are accepted for compatibility.
  */
-import PhotoFrame from './PhotoFrame.astro';
-import Scrim from './Scrim.astro';
+import HeroArt from './HeroArt.astro';
+import PhotoCard from './PhotoCard.astro';
 
 interface Props {
-  /** /work slug of one of the owner's photographs */
   photo?: string;
-  /** Full-bleed blurred texture from the owner's own shots */
   texture?: 'vanblur' | 'storefront-blur';
   layout?: 'right' | 'beside-form';
-  /** 0–100: how much photo shows through. */
   strength?: number;
   eager?: boolean;
   class?: string;
 }
-const { photo, texture, layout = 'right', strength = 55, eager = false, class: cls = '' } = Astro.props;
+const { photo, eager = false, class: cls = '' } = Astro.props;
 ---
 <div class:list={['hero-bg absolute inset-0 overflow-hidden', cls]}>
-  <PhotoFrame photo={photo} texture={texture} layout={layout} eager={eager} />
-  <Scrim strength={strength} />
+  <HeroArt />
 </div>
+{photo && <PhotoCard photos={[photo]} eager={eager} />}

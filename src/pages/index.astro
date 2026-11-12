@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import Backdrop from '@/components/Backdrop.astro';
 import PhotoBg from '@/components/PhotoBg.astro';
+import HeroArt from '@/components/HeroArt.astro';
 import JobsStrip from '@/components/JobsStrip.astro';
 import CoverageMap from '@/components/CoverageMap.astro';
 import IntroVideo from '@/components/IntroVideo.astro';
@@ -92,8 +93,8 @@ const description =
        the form. No photographs or line art behind the type — the owner found
        those busy. Everything is still under prefers-reduced-motion. -->
   <section class="hero relative isolate overflow-hidden bg-navy-900">
-    <!-- Dimmed mosaic of real job photos: texture, not a picture to read -->
-    <div class="hero-mosaic" aria-hidden="true"></div>
+    <!-- Designed plate: gradient light, dot grid, grain. No dimmed photos. -->
+    <HeroArt keyPos="centre" class="-z-[2]" />
     <div class="hero-aurora" aria-hidden="true">
       <span class="orb orb-a"></span>
       <span class="orb orb-b"></span>
@@ -502,20 +503,6 @@ const description =
   /* ── Hero light: three large, heavily blurred orbs drifting very slowly.
      Transform-only animation, so it runs on the compositor and costs no
      layout. Kept behind everything (z -1 inside the isolated section). */
-  .hero-mosaic {
-    position: absolute; inset: 0; z-index: -2; pointer-events: none;
-    background: url('/brand/hero-mosaic.webp') center / cover no-repeat;
-    opacity: 0.68;
-    animation: mosaic-drift 40s ease-in-out infinite alternate;
-  }
-  .hero-mosaic::after {
-    /* vignette: darkest behind the copy and the ticket, lightest at the centre */
-    content: ''; position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 55% 70% at 50% 55%, rgb(26 51 65 / 0.25), rgb(16 35 48 / 0.85) 100%),
-      linear-gradient(to bottom, rgb(16 35 48 / 0.35), rgb(16 35 48 / 0.75));
-  }
-  @keyframes mosaic-drift { from { transform: scale(1.04) translateX(-1%); } to { transform: scale(1.08) translateX(1%); } }
   .hero-aurora { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
   .hero-aurora::after {
     /* gentle fade into the photo strip below */
@@ -591,7 +578,7 @@ const description =
   .hero-cta { box-shadow: 0 14px 30px -12px rgb(231 181 76 / 0.55); }
 
   @media (prefers-reduced-motion: reduce) {
-    .orb, .hero-glow, .hero-form, .hero-pill .hero-dot::after, .hero-mosaic { animation: none; }
+    .orb, .hero-glow, .hero-form, .hero-pill .hero-dot::after { animation: none; }
     .hero-underline path { animation: none; stroke-dashoffset: 0; }
   }
 </style>
